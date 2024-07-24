@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\updateSalleRequest;
 use App\Http\Resources\salleResource;
 use App\Models\salle;
 use Illuminate\Http\JsonResponse;
@@ -17,7 +18,7 @@ class SalleController extends BaseController
      */
     public function index(): JsonResponse
     {
-        $salles = salle::all();
+        $salles = Salle::all();
     
         return $this->sendResponse(salleResource::collection($salles), 'salles retrieved successfully.');
     }
@@ -70,15 +71,9 @@ class SalleController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, salle $salle): JsonResponse
+    public function update(updateSalleRequest $request, salle $salle): JsonResponse
     {
-        $input = $request->all();
-        if($input['libelle']){
-            $salle->libelle = $input['libelle'];
-        }
-        if($input['nombre_lits']){
-            $salle->nombre_lits  = $input['nombre_lits'];
-        }
+        $salle->update($request->validated());
 
         $salle->save();
    
