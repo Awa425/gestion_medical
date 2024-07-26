@@ -30,9 +30,7 @@ class userController extends Controller
         //     $request->validated(),
         //     ['password' => bcrypt('Passer')]
         // ));
-        // $user->assignRole([$request->roles]);
-
-        // // event(new Registered($user));
+        // $user->assignRole([$request->type_id]);
 
         // return ResponseUtils::formatResponse(message: 'Utilisateur inscrit avec succès', status: 201, data: new UserResource($user));
     }

@@ -42,7 +42,7 @@ class SalleController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());       
         }
    
-        $salle = salle::create($input);
+        $salle = Salle::create($input);
    
         return $this->sendResponse(new SalleResource($salle), 'salle created successfully.');
     }
@@ -61,7 +61,7 @@ class SalleController extends BaseController
             return $this->sendError('Salle not found.');
         }
    
-        return $this->sendResponse(new SalleResource($salle), 'SAlle retrieved successfully.');
+        return $this->sendResponse(new SalleResource($salle), 'Salle retrieved successfully.');
     }
 
      /**

@@ -28,6 +28,8 @@ class UserStoreRequest extends FormRequest
             'telephone' =>['string'],
             'email' =>['string'],
             'password' =>['string'],
+            'type_id' =>['integer'],
+            'isActive' =>['boolean'],
         ];
     }
 }

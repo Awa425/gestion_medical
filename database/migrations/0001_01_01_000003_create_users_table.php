@@ -15,11 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('prenom');
-            $table->string('adresse');
-            $table->string('telephone');
+            $table->string('adresse')->nullable();
+            $table->string('telephone')->nullable();
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->timestamp('email_verified_at')->nullable();
+            $table->unsignedBigInteger('type_id');
+            $table->foreign('type_id')->references('id')->on('types');
+            $table->boolean('isActive')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });
