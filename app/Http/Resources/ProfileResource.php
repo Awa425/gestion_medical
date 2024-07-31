@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TypeResource extends JsonResource
+class ProfileResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,11 +15,11 @@ class TypeResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->id, 
-            "libelle" => ucfirst($this->libelle), // La 1er lettre en majuscule
-            'profile_id' =>  ProfileResource::make($this->profile_id),
-            "isActive" => $this->isActive, 
-
+            'id' => $this->id,
+            'libelle' => $this->libelle,
+            'isActive' =>$this->isActive,
+            'created_at' => $this->created_at->format('d/m/Y'),
+            'updated_at' => $this->updated_at->format('d/m/Y'),
         ];
     }
 }

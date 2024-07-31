@@ -7,7 +7,7 @@ use Illuminate\Support\ServiceProvider;
 class TypeServiceProvider extends ServiceProvider
 {
   
-    const ADMIN = "medecin";
+    const ADMIN = "admin";
     const MEDECIN = "medecin";
     const INFIRMIER = "infirmier";
     const AIDE_SOIGNANT = "aide soignant";

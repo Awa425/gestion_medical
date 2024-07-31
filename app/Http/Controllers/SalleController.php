@@ -16,7 +16,7 @@ class SalleController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(): JsonResponse
+    public function index()
     {
         $salles = Salle::all();
     
@@ -29,7 +29,7 @@ class SalleController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request)
     {
         $input = $request->all();
    
@@ -53,7 +53,7 @@ class SalleController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id): JsonResponse
+    public function show($id)
     {
         $salle = Salle::find($id);
   
@@ -71,7 +71,7 @@ class SalleController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(updateSalleRequest $request, salle $salle): JsonResponse
+    public function update(updateSalleRequest $request, salle $salle)
     {
         $salle->update($request->validated());
 

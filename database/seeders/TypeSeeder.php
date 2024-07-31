@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Profile;
 use App\Models\Type;
+use App\Providers\ProfileServiceProvider;
 use App\Providers\TypeServiceProvider;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,21 +16,13 @@ class TypeSeeder extends Seeder
      */
     public function run(): void
     {
+        $admin = Profile::where('libelle', ProfileServiceProvider::PERSONNEL_ADMINISTRATIF)->pluck('id')->first();
+        $sante = Profile::where('libelle', ProfileServiceProvider::PERSONNEL_SANTE)->pluck('id')->first();
+
         Type::insert([
-            ['libelle'=> TypeServiceProvider::MEDECIN],
-            ['libelle'=> TypeServiceProvider::INFIRMIER],
-            ['libelle'=> TypeServiceProvider::AIDE_SOIGNANT],
-            ['libelle'=> TypeServiceProvider::PARAMEDICAUX],
-            ['libelle'=> TypeServiceProvider::BRANCARDIER],
-            ['libelle'=> TypeServiceProvider::AMBULANCIER],
-            ['libelle'=> TypeServiceProvider::TECHNICIEN_DE_SURFACE],
-            ['libelle'=> TypeServiceProvider::SECRETAIRE],
-            ['libelle'=> TypeServiceProvider::COMPTABLE],
-            ['libelle'=> TypeServiceProvider::CAISSIER],
-            ['libelle'=> TypeServiceProvider::AGENT_SECURITE],
-            ['libelle'=> TypeServiceProvider::ACCUEIL],
-            ['libelle'=> TypeServiceProvider::DG],
-            ['libelle'=> TypeServiceProvider::DRG]
+            ['libelle'=> TypeServiceProvider::MEDECIN,'profile_id' => $sante],
+            ['libelle'=> TypeServiceProvider::INFIRMIER,'profile_id'=> $sante],
+            ['libelle'=> TypeServiceProvider::DG,'profile_id'=> $admin],
         ]);
     }
 }

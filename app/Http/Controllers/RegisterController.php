@@ -27,7 +27,7 @@ class RegisterController extends BaseController
             'email' => 'required|email',
             'password' => 'required',
             'c_password' => 'required|same:password',
-            'type_id' => 'required|exists:types,id',
+            'type_id' => 'exists:types,id',
         ]);
         
         if($validator->fails()){
@@ -49,7 +49,7 @@ class RegisterController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function login(Request $request): JsonResponse
+    public function login(Request $request)
     {
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
             $user = Auth::user(); 
