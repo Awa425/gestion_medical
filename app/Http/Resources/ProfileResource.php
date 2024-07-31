@@ -18,8 +18,6 @@ class ProfileResource extends JsonResource
             'id' => $this->id,
             'libelle' => $this->libelle,
             'isActive' =>$this->isActive,
-            'created_at' => $this->created_at->format('d/m/Y'),
-            'updated_at' => $this->updated_at->format('d/m/Y'),
         ];
     }
 }
