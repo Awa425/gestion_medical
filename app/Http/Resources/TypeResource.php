@@ -16,8 +16,8 @@ class TypeResource extends JsonResource
     {
         return [
             "id" => $this->id, 
-            "libelle" => ucfirst($this->libelle), // La 1er lettre en majuscule
-            'profile_id' =>  ProfileResource::make($this->profile_id),
+            "libelle" => ucfirst($this->libelle), 
+            'profile_id' =>  ProfileResource::make($this->profile),
             "isActive" => $this->isActive, 
 
         ];

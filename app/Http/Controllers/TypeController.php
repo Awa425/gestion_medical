@@ -7,6 +7,7 @@ use App\Http\Resources\TypeResource;
 use App\Models\Type;
 use App\Utils\ResponseUtils;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TypeController extends BaseController
 {
@@ -16,8 +17,22 @@ class TypeController extends BaseController
     public function index()
     {
         $types = Type::all();
-        return ResponseUtils::formatResponse(message: 'types retrieved successfully' , data: TypeCollection::collection(Type::all()));
+        return ResponseUtils::formatResponse(message: 'types retrieved successfully' , data: TypeResource::collection($types));
+    }
 
-        // return $this->sendResponse(TypeResource::collection($types), 'types retrieved successfully.');
+    public function store(Request $request){
+        
+        $input = $request->all();
+        $validator = Validator::make($input, [
+            'libelle' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
+
+        $type = Type::create($input);
+        return $this->sendResponse(new TypeResource($type), 'Type created successfully.');
+
     }
 }

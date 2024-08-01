@@ -13,6 +13,7 @@ class Type extends Model
 
     protected $fillable = [
         'libelle',
+        'profile_id',
         'isActive',
     ];
 

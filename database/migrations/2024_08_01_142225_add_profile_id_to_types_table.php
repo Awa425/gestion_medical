@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('types', function (Blueprint $table) {
-            $table->id();
-            $table->string('libelle');
-            $table->boolean('isActive')->default(true);
-            $table->timestamps();
+        Schema::table('types', function (Blueprint $table) {
+            $table->unsignedBigInteger('profile_id');
+            $table->foreign('profile_id')->references('id')->on('profiles')->nullable();
         });
     }
 
@@ -24,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('types');
+        Schema::table('types', function (Blueprint $table) {
+            $table->dropColumn('profile_id');
+        });
     }
 };

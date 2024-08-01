@@ -17,6 +17,7 @@ class ProfileController extends BaseController
     public function index()
     {
         $profile = Profile::all();
+       
         return $this->sendResponse(ProfileResource::collection($profile), 'Profile retrieved successfully.');
     }
 

@@ -17,7 +17,6 @@ class TypeCollection extends ResourceCollection
         return [
             "id" => $this->id, 
             "libelle" => ucfirst($this->libelle), 
-            'profile_id' =>  ProfileResource::make($this->id),
             "isActive" => $this->isActive, 
 
         ];
