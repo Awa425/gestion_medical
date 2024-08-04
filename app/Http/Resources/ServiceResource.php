@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SpecialiteResource extends JsonResource
+class ServiceResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +15,9 @@ class SpecialiteResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'nom' => ucfirst($this->libelle),
-            'service_id' =>  ServiceResource::make($this->service),
-            'isActive' => $this->isActive,
+            "id" => $this->id, 
+            "libelle" => ucfirst($this->libelle), 
+            "isActive" => $this->isActive, 
         ];
     }
 }

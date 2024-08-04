@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateTypeRequest;
 use App\Http\Resources\TypeCollection;
 use App\Http\Resources\TypeResource;
 use App\Models\Type;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class TypeController extends BaseController
 {
-        /**
+    /**
      * Display a listing of the resource.
      */
     public function index()
@@ -34,5 +35,38 @@ class TypeController extends BaseController
         $type = Type::create($input);
         return $this->sendResponse(new TypeResource($type), 'Type created successfully.');
 
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $salle = Type::find($id);
+  
+        if (is_null($salle)) {
+            return $this->sendError('Type not found.');
+        }
+   
+        return $this->sendResponse(new TypeResource($salle), 'Type retrieved successfully.');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(UpdateTypeRequest $request, Type $type)
+    {
+        $type->update($request->validated());
+
+        $type->save();
+   
+        return $this->sendResponse(new TypeResource($type), 'type updated successfully.');
     }
 }
