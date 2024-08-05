@@ -35,6 +35,7 @@ class SpecialiteController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());       
         }
         
+        dd($input);
         $specialite = Specialite::create($input);
    
         return $this->sendResponse(new SpecialiteResource($specialite), 'specialite crée avec succes.');

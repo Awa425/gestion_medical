@@ -16,7 +16,7 @@ class SpecialiteResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'nom' => ucfirst($this->libelle),
+            'nom' => ucfirst($this->nom),
             'service_id' =>  ServiceResource::make($this->service),
             'isActive' => $this->isActive,
         ];
