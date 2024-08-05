@@ -29,6 +29,7 @@ class UpdateUserRequest extends FormRequest
             'email' =>['string'],
             'password' =>['string'],
             'type' =>['integer'],
+            'isActive' =>['boolean'],
         ];
     }
 }

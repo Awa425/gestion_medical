@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -15,7 +16,10 @@ class userController extends Controller
      */
     public function index()
     {
-        return ResponseUtils::formatResponse( data: UserResource::collection(User::all()),);
+        $users = User::where('isActive', 1)
+        ->orderBy('id', 'DESC')
+        ->get();
+        return ResponseUtils::formatResponse( data: UserResource::collection($users),);
 
     }
 
@@ -46,9 +50,14 @@ class userController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        $user->update($request->validated());
+
+        $user->save();
+
+        return ResponseUtils::formatResponse( data: UserResource::collection($user),);
+
     }
 
     /**
