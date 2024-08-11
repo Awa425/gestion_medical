@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use App\Utils\ResponseUtils;
+use App\Utils\FormatData;
 use Illuminate\Http\Request;
 
 class userController extends Controller
@@ -15,7 +15,7 @@ class userController extends Controller
      */
     public function index()
     {
-        return ResponseUtils::formatResponse( data: UserResource::collection(User::all()),);
+        return FormatData::formatResponse( data: UserResource::collection(User::all()),);
 
     }
 

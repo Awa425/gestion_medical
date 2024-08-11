@@ -6,7 +6,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Response;
 
 
-class ResponseUtils
+class FormatData
 {
 
     public static function formatResponse(bool $success = true, int $status = 200, string $message = '',  $data = null,)
