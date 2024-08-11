@@ -25,6 +25,11 @@ class Personnel extends Model
         'isActive'
     ];
 
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
+
     public function type()
     {
         return $this->belongsTo(TypePersonnel::class, 'type_personnel_id');

@@ -23,9 +23,7 @@ class UserStoreRequest extends FormRequest
     {
         return [
             'name' =>['string'],
-            'prenom' =>['string'],
-            'adresse' =>['string'],
-            'telephone' =>['string'],
+            'prenom' =>['string','required'],
             'email' =>['string'],
             'password' =>['string'],
         ];

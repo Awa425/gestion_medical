@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserStoreRequest;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Validator;
+
 use App\Models\User;
 use App\Utils\FormatData;
 use Illuminate\Http\Request;
@@ -24,17 +25,26 @@ class userController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(UserStoreRequest $request)
+    public function store(Request $request)
     {
-        // $user = User::create(array_merge(
-        //     $request->validated(),
-        //     ['password' => bcrypt('Passer')]
-        // ));
-        // $user->assignRole([$request->roles]);
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+            'c_password' => 'required|same:password',
+            'personnel_id' => 'exists:personnels,id',
+        ]);
+        if($validator->fails()){
+            return $request->sendError('Validation Error.', $validator->errors());       
+        }
+        
+        $input = $request->all();
+        $input['password'] = bcrypt($input['password']);
+        // $user = User::create($input);
 
-        // // event(new Registered($user));
+        // $success['token'] =  $user->createToken('MyApp')->plainTextToken;
+        // $success['data'] =  $user;
 
-        // return ResponseUtils::formatResponse(message: 'Utilisateur inscrit avec succès', status: 201, data: new UserResource($user));
+        // return $this->sendResponse($success, 'User register successfully.');
     }
 
     /**

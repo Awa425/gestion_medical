@@ -54,7 +54,13 @@ class PersonnelController extends BaseController
      */
     public function show(string $id)
     {
-        //
+         $personnel = Personnel::find($id);
+  
+        if (is_null($personnel)) {
+            return $this->sendError('Personnel not found.');
+        }
+   
+        return $this->sendResponse(new PersonnelResource($personnel), 'Personnel retrieved successfully.');
     }
 
     /**

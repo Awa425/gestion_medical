@@ -17,6 +17,8 @@ class TypePersonnelResource extends JsonResource
         return [
             'id' => $this->id,
             'libelle' => $this->libelle,
+            'categorie_id' =>  CategorieResource::make($this->categorie),
+
         ];    
     }
 }
