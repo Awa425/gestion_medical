@@ -14,6 +14,7 @@ Route::controller(RegisterController::class)->group(function(){
 
 Route::resource('personnels', PersonnelController::class);
 
+
 Route::middleware('auth:sanctum')->group( function () {
 
     // Route::resource('salles', SalleController::class);

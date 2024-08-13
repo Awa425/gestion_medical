@@ -52,7 +52,7 @@ class Personnel extends Model
 
     public function formations()
     {
-        return $this->belongsToMany(Formation::class, 'personnel_formation');
+        return $this->belongsToMany(Formation::class, 'personnel_formations');
     }
 
 }

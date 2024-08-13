@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('personnel_qualifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('personnel_id')->constrained('personnels');
-            $table->foreignId('qualification_id')->constrained('qualifications');
-            $table->date('date_obtention');
+            $table->foreignId('personnel_id')->constrained('personnels')->onDelete('cascade');
+            $table->foreignId('qualification_id')->constrained('qualifications')->onDelete('cascade');
+            $table->date('date_obtention')->nullable();
             $table->timestamps();
         });
     }
