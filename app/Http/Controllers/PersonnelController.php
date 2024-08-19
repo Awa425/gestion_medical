@@ -16,19 +16,16 @@ use Illuminate\Support\Facades\Validator;
 
 class PersonnelController extends BaseController
 {
-    // protected $personnelService;
-
-    public function __construct(protected PersonnelService $personnelService)
-    {
-        // $this->personnelService = $personnelService;
-    }
+    public function __construct(protected PersonnelService $personnelService){}
 
     public function index()
     {
         $personnels = Personnel::where('isActive', 1)
         ->orderBy('id', 'DESC')
         ->get();
-        return FormatData::formatResponse( data: PersonnelResource::collection($personnels),);
+        $personnels->load('type','qualifications', 'formations', 'certifications');
+
+        return FormatData::formatResponse(message: 'Liste du personnels', data: $personnels);
     }
 
     public function store(Request $request){
@@ -69,21 +66,41 @@ class PersonnelController extends BaseController
             'certifications' => $request->get('certifications'),
         ]);
 
-
-       
-
-       
-
-         
         return response()->json([
             'message' => 'Personnel créé avec succès.',
             'personnel' => $personnel,
         ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
+    public function update(Request $request, Personnel $personnel)
+    {
+        
+       // Utiliser le service pour gérer la logique de mise à jour
+       $updatedPersonnel = $this->personnelService->updatePersonnelWithDetails($personnel, [
+        'personnel' => $request->only([
+            'name', 
+            'prenom', 
+            'datte_naissance', 
+            'lieu_naissance', 
+            'adresse', 
+            'telephone', 
+            'email', 
+            'CNI', 
+            'matricule', 
+            'date_embauche',
+            'type_personnel_id'
+        ]),
+        'qualifications' => $request->get('qualifications'),
+        'formations' => $request->get('formations'),
+        'certifications' => $request->get('certifications'),
+    ]);
+
+    return response()->json([
+        'message' => 'Personnel mis à jour avec succès.',
+        'personnel' => $updatedPersonnel,
+    ], 200);
+    }
+
     public function show(string $id)
     {
          $personnel = Personnel::find($id);
@@ -91,31 +108,16 @@ class PersonnelController extends BaseController
         if (is_null($personnel)) {
             return $this->sendError('Personnel not found.');
         }
-   
-        return $this->sendResponse(new PersonnelResource($personnel), 'Personnel retrieved successfully.');
+
+        return $personnel->load('type','qualifications', 'formations', 'certifications');
+
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePersonnelRequest $request, Personnel $personnel)
-    {
-        $personnel->update($request->validated());
-        
-        $personnel->save();
-
-        return $this->sendResponse(new PersonnelResource($personnel), 'personnel updated successfully.');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Request $request, Personnel $personnel)
     {
         $personnel->update([
             'isActive' => !$personnel->isActive,
         ]);
-
         return response()->json(['message' => 'Désactiver avec succès'], 200);
     }
 }
