@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class PersonnelService{
 
-// Creation de personnel avec ou sans les details(qualification, formation ou certification)
+// Creation de personnel avec ou sans les details(users, qualification, formation ou certification)
     public function createPersonnelWithDetails(array $data){
            
             return DB::transaction(function() use ($data) {
@@ -91,12 +91,58 @@ class PersonnelService{
         
     }
 
-    // Méthode pour mettre à jour un personnel avec ses qualifications et formations
+    // Méthode pour mettre à jour un personnel 
     public function updatePersonnelWithDetails(Personnel $personnel, array $data)
-    {
+    {  
         return DB::transaction(function() use ($personnel, $data) {
+
             // Mettre à jour les informations du personnel
             $personnel->update($data['personnel']);
+
+              // Mettre à jour l'utilisateur associé
+            if (isset($data['user'])) {
+                $userData = $data['user'];
+                $user = $personnel->user;
+
+                // Si l'utilisateur n'existe pas, on le crée
+                if (!$user) {
+                    $user = User::create([
+                        'email' => $userData['email'],
+                        'password' => bcrypt($userData['password']),
+                        'personnel_id' => $personnel->id,
+                    ]);
+                } else {
+                   if (isset($userData['email'])) {
+                        $user->update([
+                            'email' => $userData['email'],
+                            'password' => isset($userData['password']) ? bcrypt($userData['password']) : $user->password,
+                        ]);
+                   }
+                }
+
+                // Assigner les rôles à l'utilisateur
+                if (isset($userData['roles'])) {
+
+                    // Récupérer les rôles actuels de l'utilisateur
+                    $currentRoles = $user->roles()->pluck('roles.id')->toArray();
+
+                     // Rôles à ajouter
+                    $rolesToAdd = array_diff($userData['roles'], $currentRoles);
+
+                     // Rôles à supprimer
+                    $rolesToRemove = array_diff($currentRoles, $userData['roles']);
+
+                      // Ajouter les nouveaux rôles
+                    if (!empty($rolesToAdd)) {
+                        $user->roles()->attach($rolesToAdd);
+                    }
+
+                      // Supprimer les anciens rôles
+                    if (!empty($rolesToRemove)) {
+                        $user->roles()->detach($rolesToRemove);
+                    }
+                }
+            }
 
             // Mettre à jour les qualifications
             if (isset($data['qualifications'])) {
@@ -148,7 +194,7 @@ class PersonnelService{
                 }
             }
 
-            return $personnel->load('qualifications', 'formations', 'certifications');
+            return $personnel->load('user','qualifications', 'formations', 'certifications');
         });
     }
 

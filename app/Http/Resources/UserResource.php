@@ -16,10 +16,24 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'prenom' => $this->prenom,
             'email' => $this->email,
-            'personnel_id' => new PersonnelResource($this->whenLoaded('personnel')), // Charger les détails du personnel lié
+            'name' => $this->name,
+            'roles' => $this->roles->pluck('libelle'), // Liste des rôles associés
+            'personnel' => [
+                'id' => $this->personnel->id,
+                'name' => $this->personnel->nom,
+                'prenom' => $this->personnel->prenom,
+                'email' => $this->personnel->email,
+                'telephone' => $this->personnel->telephone,
+                'adresse' => $this->personnel->adresse,
+                'CNI' =>$this->personnel->cni,
+                'matricule' =>$this->personnel->matricule,
+                'formations' => $this->personnel->formations,
+                'certifications' => $this->personnel->certifications,
+                'qualifications' => $this->personnel->qualifications,
+            ],
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

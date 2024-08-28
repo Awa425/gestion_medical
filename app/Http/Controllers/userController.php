@@ -16,9 +16,14 @@ class userController extends BaseController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return FormatData::formatResponse( data: UserResource::collection(User::all()),);
+       
+        $users = User::where('isActive', 1)
+        ->orderBy('id', 'DESC')
+        ->get();
+
+        return FormatData::formatResponse(message: 'Liste des utilisateurs', data: UserResource::collection($users));
 
     }
 
@@ -65,8 +70,11 @@ class userController extends BaseController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        $user->update([
+            'isActive' => !$user->isActive,
+        ]);
+        return response()->json(['message' => 'Désactiver avec succès'], 200);
     }
 }

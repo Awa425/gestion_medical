@@ -75,7 +75,7 @@ class PersonnelController extends BaseController
 
     public function update(Request $request, Personnel $personnel)
     {
-        
+        // dd( $personnel);
        // Utiliser le service pour gérer la logique de mise à jour
        $updatedPersonnel = $this->personnelService->updatePersonnelWithDetails($personnel, [
         'personnel' => $request->only([
@@ -111,7 +111,7 @@ class PersonnelController extends BaseController
             return $this->sendError('Personnel not found.');
         }
 
-        return $personnel->load('type','qualifications', 'formations', 'certifications');
+        return $personnel->load('user','qualifications', 'formations', 'certifications');
 
     }
 
