@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('datte_naissance')->nullable();
             $table->string('lieu_naissance')->nullable();
             $table->date('date_embauche')->nullable();
-            // $table->foreignId('type_personnel_id')->constrained('type_personnels');
             $table->boolean('isActive')->default(true);
             $table->timestamps();
         });

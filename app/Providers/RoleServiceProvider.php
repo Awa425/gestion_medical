@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 class RoleServiceProvider extends ServiceProvider
 {
 
+    const SUPER_ADMIN = "SUPER ADMIN";
     const ADMIN = "ADMIN";
     const MEDECIN = "MEDECIN";
     const INFIRMIER = "INFIRMIER";

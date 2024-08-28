@@ -31,6 +31,10 @@ class PersonnelRequest extends FormRequest
             'type_personnel_id' => 'required|exists:type_personnels,id',
             'date_embauche' => 'date',
             'isActive' => 'boolean',
+            'user.email' => 'sometimes|required|email|unique:users,email',
+            'user.password' => 'sometimes|required|string|',
+            'user.roles' => 'sometimes|array',
+            'user.roles.*' => 'exists:roles,id', // Vérifie que chaque rôle existe
         ];
     }
 }

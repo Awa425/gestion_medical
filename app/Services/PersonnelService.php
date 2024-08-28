@@ -5,17 +5,33 @@ use App\Models\Certification;
 use App\Models\Formation;
 use App\Models\Personnel;
 use App\Models\Qualification;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class PersonnelService{
 
 // Creation de personnel avec ou sans les details(qualification, formation ou certification)
     public function createPersonnelWithDetails(array $data){
-
+           
             return DB::transaction(function() use ($data) {
-                
+
                 // Créer le personnel
                 $personnel = Personnel::create($data['personnel']);
+
+                // Si les informations d'utilisateur sont fournies, créer l'utilisateur
+                if (isset($data['user'])) {
+                    $userData = $data['user'];
+                    $user=User::create([
+                        'email' => $data['user']['email'],
+                        'password' => bcrypt($data['user']['password']),
+                        'personnel_id' => $personnel->id, // Liaison avec le personnel
+                    ]);
+                    
+                    // Assigner les rôles à l'utilisateur
+                    if (isset($userData['roles'])) {
+                        $user->roles()->sync($userData['roles']);
+                    }
+                } 
     
                 // Assigner ou créer les qualifications
                 if (isset($data['qualifications'])) {
@@ -69,7 +85,7 @@ class PersonnelService{
                     }
                 }
     
-                return $personnel->load('type','qualifications', 'formations', 'certifications');
+                return $personnel->load('type','user','qualifications', 'formations', 'certifications');
             });
     
         

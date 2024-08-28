@@ -22,8 +22,6 @@ class UserStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' =>['string'],
-            'prenom' =>['string','required'],
             'email' =>['string'],
             'password' =>['string'],
         ];

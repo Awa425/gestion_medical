@@ -20,7 +20,8 @@ class User extends Authenticatable
     protected $fillable = [
         'email',
         'password',
-        'personnel_id'
+        'personnel_id',
+
     ];
 
     /**
@@ -48,5 +49,10 @@ class User extends Authenticatable
     public function personnel()
     {
         return $this->belongsTo(Personnel::class);
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_users');
     }
 }

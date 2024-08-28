@@ -23,7 +23,7 @@ class PersonnelController extends BaseController
         $personnels = Personnel::where('isActive', 1)
         ->orderBy('id', 'DESC')
         ->get();
-        $personnels->load('type','qualifications', 'formations', 'certifications');
+        $personnels->load('type','user','qualifications', 'formations', 'certifications');
 
         return FormatData::formatResponse(message: 'Liste du personnels', data: $personnels);
     }
@@ -60,11 +60,12 @@ class PersonnelController extends BaseController
                 'matricule', 
                 'date_embauche',
                 'type_personnel_id'
-            ]),
+            ]), 
+            'user' => $request->get('user'),
             'qualifications' => $request->get('qualifications'),
             'formations' => $request->get('formations'),
             'certifications' => $request->get('certifications'),
-        ]);
+        ]);  
 
         return response()->json([
             'message' => 'Personnel créé avec succès.',
@@ -90,6 +91,7 @@ class PersonnelController extends BaseController
             'date_embauche',
             'type_personnel_id'
         ]),
+        'user' => $request->get('user'),
         'qualifications' => $request->get('qualifications'),
         'formations' => $request->get('formations'),
         'certifications' => $request->get('certifications'),

@@ -13,9 +13,8 @@ class Role extends Model
     protected $fillable= ['libelle'];
 
 
-
-    public function users(): HasMany
+    public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class, 'role_users');
     }
 }
