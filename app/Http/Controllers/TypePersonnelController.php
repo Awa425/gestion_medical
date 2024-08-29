@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TypePersonnel;
 use Illuminate\Http\Request;
+use App\Utils\FormatData;
 
-class TypePersonnelController extends Controller
+class TypePersonnelController extends BaseController
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-    }
+        $types = TypePersonnel::all();
+        return FormatData::formatResponse(message: 'Liste des types', data: $types);}
 
     /**
      * Store a newly created resource in storage.

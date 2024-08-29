@@ -165,7 +165,7 @@ class PersonnelService{
                         ['nom_formation' => $formationData['nom_formation']],
                         [
                             'organisme_formateur' => $formationData['organisme_formateur'] ?? null,
-                            'date_debut' => $formationData['date_fin'] ?? null,
+                            'date_debut' => $formationData['date_debut'] ?? null,
                             'statut' => $formationData['statut'] ?? null,
                         ]
                     );

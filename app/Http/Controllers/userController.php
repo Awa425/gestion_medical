@@ -18,7 +18,25 @@ class userController extends BaseController
      */
     public function index(Request $request)
     {
-       
+
+          // Optionnel : Filtrage, recherche ou tri des utilisateurs
+        $query = User::query();
+
+        if ($request->has('search')) {
+            $query->where('email', 'like', '%' . $request->search . '%')
+                ->orWhere('name', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->has('sortBy')) {
+            $sortBy = $request->sortBy;
+            $sortOrder = $request->get('sortOrder', 'asc'); // Par défaut, tri croissant
+            $query->orderBy($sortBy, $sortOrder);
+        }
+
+        // Récupérer la liste des utilisateurs avec pagination
+        $usersPag = $query->paginate(10);
+
+
         $users = User::where('isActive', 1)
         ->orderBy('id', 'DESC')
         ->get();
