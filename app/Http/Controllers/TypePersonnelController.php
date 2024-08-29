@@ -14,7 +14,8 @@ class TypePersonnelController extends BaseController
     public function index()
     {
         $types = TypePersonnel::all();
-        return FormatData::formatResponse(message: 'Liste des types', data: $types);}
+        return FormatData::formatResponse(message: 'Liste des types', data: $types);
+    }
 
     /**
      * Store a newly created resource in storage.
