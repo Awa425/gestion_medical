@@ -44,7 +44,7 @@ class PersonnelController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $request->sendError('Validation Error.', $validator->errors());       
+            return response()->json(['Error' => 'Erreur de validation'], 404);      
         }
 
         $personnel = $this->personnelService->createPersonnelWithDetails([

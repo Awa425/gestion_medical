@@ -9,3 +9,7 @@
 # php artisan make:migration create_products_table
 
 # Route::resource('products', ProductController::class);
+
+# fatal: unable to access 'https://github.com/Awa425/gestion_medical.git/': Could not resolve host: github.com
+
+` git config --global --unset http.proxy`

@@ -12,9 +12,9 @@ class PersonnelService{
 
 // Creation de personnel avec ou sans les details(users, qualification, formation ou certification)
     public function createPersonnelWithDetails(array $data){
-           
+          
             return DB::transaction(function() use ($data) {
-
+                
                 // Créer le personnel
                 $personnel = Personnel::create($data['personnel']);
 
@@ -55,7 +55,7 @@ class PersonnelService{
                             ['nom_formation' => $formationData['nom_formation']],
                             [
                                 'organisme_formateur' => $formationData['organisme_formateur'] ?? null,
-                                'date_debut' => $formationData['date_fin'] ?? null,
+                                'date_debut' => $formationData['date_debut'] ?? null,
                                 'statut' => $formationData['statut'] ?? null,
                             ]
                             );

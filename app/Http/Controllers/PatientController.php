@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Patient;
 use App\Services\PatientService;
+use App\Utils\FormatData;
 use Illuminate\Http\Request;
 
 class PatientController extends Controller
 {
     public function __construct(protected PatientService $patientService){}
 
+
+    public function index()
+    {
+        $patients = Patient::all();
+        return FormatData::formatResponse(message: 'Liste des patients', data: $patients);
+    }
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -23,9 +30,24 @@ class PatientController extends Controller
             'groupe_sanguin' => 'nullable|string|max:3',
         ]);
 
-        $patient = $this->patientService->createPatient($validatedData);
+        $patient = $this->patientService->createPatient([
+            'patient' => $request->only([
+                'nom', 
+                'prenom', 
+                'date_naissance', 
+                'adresse', 
+                'telephone', 
+                'email', 
+                'sexe', 
+                'groupe_sanguin', 
+            ]), 
+            'dossierMedical' => $request->get('dossierMedical'),
+        ]);
 
-        return response()->json(['patient' => $patient], 201);
+        return response()->json([
+            'message' => 'Patient créé avec succès.',
+            'patient' => $patient,
+        ], 201);
     }
 
     public function update(Request $request, $id)

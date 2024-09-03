@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\DossierMedicalController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\RegisterController;
@@ -16,6 +17,7 @@ Route::post('login', [AuthController::class, 'login']);
 
 Route::resource('personnels', PersonnelController::class);
 Route::resource('patients', PatientController::class);
+Route::resource('dossierMedical', DossierMedicalController::class);
 Route::get('users', [UserController::class, 'index']);
 Route::get('types', [TypePersonnelController::class, 'index']);
 Route::get('categories', [CategorieController::class, 'index']);
