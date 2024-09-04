@@ -32,16 +32,15 @@ class PatientService{
     public function updatePatient(Patient $patient, array $data)
     {
         return DB::transaction(function() use ($patient, $data) {
-    
+            
             // Mise à jour des informations du patient
             $patient->update($data['patient']);
     
             // Si les données du dossier médical sont présentes, on gère la mise à jour ou la création du dossier
             if (isset($data['dossierMedical'])) {
-                if ($patient->dossierMedical) {
-                    // Mise à jour du dossier médical existant
-                    $patient->dossierMedical->update($data['dossierMedical']);
-                } else {
+                $patient->dossierMedical->update($data['dossierMedical']);
+             } 
+             else {
                     // Création d'un nouveau dossier médical si le patient n'en a pas encore
                     DossierMedical::create([
                         'numero_dossier' => $data['dossierMedical']['numero_dossier'],
@@ -51,7 +50,6 @@ class PatientService{
                         'prescriptions' => $data['dossierMedical']['prescriptions'],
                         'patient_id' => $patient->id,
                     ]);
-                }
             }
     
             return $patient->load('dossierMedical');

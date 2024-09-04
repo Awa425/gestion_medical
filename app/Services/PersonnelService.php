@@ -12,7 +12,7 @@ class PersonnelService{
 
 // Creation de personnel avec ou sans les details(users, qualification, formation ou certification)
     public function createPersonnelWithDetails(array $data){
-          
+         
             return DB::transaction(function() use ($data) {
                 
                 // Créer le personnel

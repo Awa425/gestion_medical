@@ -50,24 +50,27 @@ class PatientController extends Controller
         ], 201);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Patient $patient)
     {
-        $patient = Patient::findOrFail($id);
-
-        $validatedData = $request->validate([
-            'nom' => 'required|string|max:255',
-            'prenom' => 'required|string|max:255',
-            'date_naissance' => 'required|date',
-            'adresse' => 'nullable|string|max:255',
-            'telephone' => 'nullable|string|max:20',
-            'email' => 'nullable|email|unique:patients,email,' . $patient->id,
-            'sexe' => 'nullable|in:M,F',
-            'groupe_sanguin' => 'nullable|string|max:3',
+        // Mise à jour du patient (et création ou mise à jour du dossier médical si fourni)
+        $updatePatient = $this->patientService->updatePatient($patient,[
+            'patient' => $request->only([
+                'nom', 
+                'prenom', 
+                'date_naissance', 
+                'adresse', 
+                'telephone', 
+                'email',
+                'sexe',
+                'groupe_sanguin'
+            ]),
+            'dossierMedical' => $request->get('dossierMedical')
         ]);
-
-        $patient = $this->patientService->updatePatient($patient, $validatedData);
-
-        return response()->json(['patient' => $patient], 200);
+    
+        return response()->json([
+            'message' => 'Patient mis à jour avec succès.',
+            'patient' => $updatePatient,
+        ], 200);   
     }
 
     public function show($id)
