@@ -14,6 +14,13 @@ class DossierMedical extends Model
         'traitements', 'prescriptions'
     ];
 
+    protected $casts = [
+        'antecedents' => 'array',
+        'diagnostics' => 'array',
+        'traitements' => 'array',
+        'prescriptions' => 'array',
+    ];
+
     public function patient()
     {
         return $this->belongsTo(Patient::class);
