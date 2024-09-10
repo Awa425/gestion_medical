@@ -79,6 +79,80 @@
                 },
                 "type": "object"
             },
+            "Certification": {
+                "title": "Certification",
+                "description": "Schéma pour la Certification d'un personnel",
+                "properties": {
+                    "id": {
+                        "description": "ID de la Certification",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "nom_certification": {
+                        "description": "Nom de la certification",
+                        "type": "string",
+                        "example": "Certification A"
+                    },
+                    "organisme_delivrant": {
+                        "description": "Date de delivrance de la certification",
+                        "type": "string",
+                        "format": "date",
+                        "example": "1985-10-15"
+                    },
+                    "date_obtention": {
+                        "description": "date obtention",
+                        "type": "string",
+                        "format": "date",
+                        "example": "1985-10-15"
+                    },
+                    "date_expiration": {
+                        "description": "date d'expiration",
+                        "type": "string",
+                        "format": "date",
+                        "example": "1985-10-15"
+                    }
+                },
+                "type": "object"
+            },
+            "Formation": {
+                "title": "Formation",
+                "description": "Schéma pour la formation d'un personnel",
+                "properties": {
+                    "id": {
+                        "description": "ID de la Formation",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "nom_formation": {
+                        "description": "Nom de la formation",
+                        "type": "string",
+                        "example": "Formation chirugie"
+                    },
+                    "organisme_formateur": {
+                        "description": "La formation est organisée par ENDSS",
+                        "type": "string",
+                        "example": "Chirurgie..."
+                    },
+                    "date_obtention": {
+                        "description": "date obtention",
+                        "type": "string",
+                        "format": "date",
+                        "example": "1985-10-15"
+                    },
+                    "date_debut": {
+                        "description": "date de debut",
+                        "type": "string",
+                        "format": "date",
+                        "example": "1985-10-15"
+                    },
+                    "statut": {
+                        "description": "en cours ou terminé...",
+                        "type": "string",
+                        "example": "en cour"
+                    }
+                },
+                "type": "object"
+            },
             "Personnel": {
                 "title": "Personnel",
                 "description": "Schéma représentant un membre du personnel",
@@ -145,6 +219,20 @@
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/Qualification"
+                        }
+                    },
+                    "formations": {
+                        "description": "Liste des formations du personnel",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Formation"
+                        }
+                    },
+                    "certifications": {
+                        "description": "Liste des certification du personnel",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Certification"
                         }
                     },
                     "user": {

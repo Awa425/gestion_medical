@@ -76,13 +76,25 @@ namespace App\Docs;
  *         ref="#/components/schemas/TypePersonnel",
  *         description="Type personnel associée"
  *     ),
-*    @OA\Property(
+ *    @OA\Property(
  *         property="qualifications",
  *         type="array",
  *         @OA\Items(ref="#/components/schemas/Qualification"), 
  *         description="Liste des qualifications du personnel"
  *     ),
  *     @OA\Property(
+ *         property="formations",
+ *         type="array",
+ *         @OA\Items(ref="#/components/schemas/Formation"), 
+ *         description="Liste des formations du personnel"
+ *     ),
+ *     @OA\Property(
+ *         property="certifications",
+ *         type="array",
+ *         @OA\Items(ref="#/components/schemas/Certification"), 
+ *         description="Liste des certification du personnel"
+ *     ),
+*     @OA\Property(
  *         property="user",
  *         ref="#/components/schemas/User",
  *         description="User personnel associée"
