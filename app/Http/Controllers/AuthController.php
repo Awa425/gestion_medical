@@ -22,8 +22,8 @@ class AuthController extends Controller
             if ($user->must_change_password) {
                 return response()->json([
                     'message' => 'Vous devez changer votre mot de passe pour pouvoir continuer.',
-                    'must_change_password' => true,
                     'token' => $user->createToken('hospital personnel user')->plainTextToken,
+                    'must_change_password' => true,
                 ], 200);
             }
 

@@ -1,0 +1,265 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Gestion du Personnel",
+        "description": "Documentation API pour la gestion du personnel",
+        "contact": {
+            "email": "support@example.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Serveur API"
+        }
+    ],
+    "paths": {
+        "/api/personnels": {
+            "post": {
+                "tags": [
+                    "personnels"
+                ],
+                "summary": "Créer un nouveau membre du personnel",
+                "description": "Enregistre un nouveau membre du personnel dans la base de données.",
+                "operationId": "store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Personnel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Personnel"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Categorie": {
+                "title": "Categorie",
+                "description": "Schéma pour une catégorie",
+                "properties": {
+                    "id": {
+                        "description": "ID de la catégorie",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "libelle": {
+                        "description": "Nom de la catégorie",
+                        "type": "string",
+                        "example": "Personnel Administratif"
+                    }
+                },
+                "type": "object"
+            },
+            "Personnel": {
+                "title": "Personnel",
+                "description": "Schéma représentant un membre du personnel",
+                "required": [
+                    "name",
+                    "prenom"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nom du personnel",
+                        "type": "string",
+                        "example": "Diop"
+                    },
+                    "prenom": {
+                        "description": "Prénom du personnel",
+                        "type": "string",
+                        "example": "Awa"
+                    },
+                    "email": {
+                        "description": "Adresse email du personnel",
+                        "type": "string",
+                        "example": "diop.awa@example.com"
+                    },
+                    "telephone": {
+                        "description": "Numéro de téléphone",
+                        "type": "string",
+                        "example": "+221772345678"
+                    },
+                    "datte_naissance": {
+                        "description": "Date de naissance",
+                        "type": "string",
+                        "format": "date",
+                        "example": "1985-10-15"
+                    },
+                    "lieu_naissance": {
+                        "description": "Lieu de naissance",
+                        "type": "string",
+                        "format": "string",
+                        "example": "1985-10-15"
+                    },
+                    "CNI": {
+                        "description": "Numero carte d'identité",
+                        "type": "string",
+                        "format": "string",
+                        "example": "154367548765"
+                    },
+                    "matricule": {
+                        "description": "Matricule du personnel",
+                        "type": "string",
+                        "format": "string",
+                        "example": "VGFR7548765"
+                    },
+                    "date_embauche": {
+                        "description": "Mdate d'embauche",
+                        "type": "string",
+                        "format": "date",
+                        "example": "1985-10-15"
+                    },
+                    "type_personnel_id": {
+                        "$ref": "#/components/schemas/TypePersonnel"
+                    },
+                    "qualifications": {
+                        "description": "Liste des qualifications du personnel",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Qualification"
+                        }
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    }
+                },
+                "type": "object"
+            },
+            "Qualification": {
+                "title": "Qualification",
+                "description": "Schéma pour la qualification d'un personnel",
+                "properties": {
+                    "id": {
+                        "description": "ID de la qualification",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "nom_qualification": {
+                        "description": "Nom de la qualification",
+                        "type": "string",
+                        "example": "Chirurgie"
+                    },
+                    "description": {
+                        "description": "Description de la qualification",
+                        "type": "string",
+                        "example": "Chirurgie..."
+                    },
+                    "date_obtention": {
+                        "description": "date obtention",
+                        "type": "string",
+                        "format": "date",
+                        "example": "1985-10-15"
+                    }
+                },
+                "type": "object"
+            },
+            "Role": {
+                "title": "Role",
+                "description": "Role de la personne",
+                "properties": {
+                    "id": {
+                        "description": "ID du role",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "libelle": {
+                        "description": "Nom du role",
+                        "type": "string",
+                        "example": "Medecin"
+                    }
+                },
+                "type": "object"
+            },
+            "TypePersonnel": {
+                "title": "Type personnel",
+                "description": "Type du Personnel(Medecin, caissier...)",
+                "properties": {
+                    "id": {
+                        "description": "ID du type",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "libelle": {
+                        "description": "Nom du Type de Personnel",
+                        "type": "string",
+                        "example": "Medecin"
+                    },
+                    "categorie_id": {
+                        "$ref": "#/components/schemas/Categorie"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "title": "User",
+                "description": "Schéma pour un utilisateur",
+                "properties": {
+                    "id": {
+                        "description": "ID de l'utilisateur",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "email": {
+                        "description": "Email de l'utilisateur",
+                        "type": "string",
+                        "example": "user1@hopital.com"
+                    },
+                    "password": {
+                        "description": "Mot de passe de l'utilisateur",
+                        "type": "string",
+                        "example": "password"
+                    },
+                    "roles": {
+                        "description": "Role associée",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Role"
+                        }
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "personnels",
+            "description": "personnels"
+        }
+    ]
+}

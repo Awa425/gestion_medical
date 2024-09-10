@@ -14,6 +14,31 @@ use App\Utils\FormatData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+
+/**
+ * @OA\Info(
+ *      version="1.0.0",
+ *      title="API Gestion du Personnel",
+ *      description="Documentation API pour la gestion du personnel",
+ *      @OA\Contact(
+ *          email="support@example.com"
+ *      ),
+ *      @OA\License(
+ *          name="Apache 2.0",
+ *          url="http://www.apache.org/licenses/LICENSE-2.0.html"
+ *      )
+ * ),
+ * @OA\Server(
+ *      url=L5_SWAGGER_CONST_HOST,
+ *      description="Serveur API"
+ * ),
+ * @OA\SecurityScheme(
+ *      securityScheme="bearerAuth",
+ *      type="http",
+ *      scheme="bearer",
+ *      bearerFormat="JWT"
+ * )
+ */
 class PersonnelController extends BaseController
 {
     public function __construct(protected PersonnelService $personnelService){}
@@ -27,6 +52,32 @@ class PersonnelController extends BaseController
 
         return FormatData::formatResponse(message: 'Liste du personnels', data: $personnels);
     }
+
+
+/**
+ * @OA\Post(
+ *      path="/api/personnels",
+ *      operationId="store",
+ *      tags={"personnels"},
+ *      summary="Créer un nouveau membre du personnel",
+ *      description="Enregistre un nouveau membre du personnel dans la base de données.",
+ *      security={{"bearerAuth":{}}},  
+ *      @OA\RequestBody(
+ *          required=true,
+ *          @OA\JsonContent(ref="#/components/schemas/Personnel")
+ *      ),
+
+ *      @OA\Response(
+ *          response=201,
+ *          description="Succès",
+ *          @OA\JsonContent(ref="#/components/schemas/Personnel")
+ *      ),
+ *      @OA\Response(
+ *          response=400,
+ *          description="Erreur de validation"
+ *      )
+ * )
+ */
 
     public function store(Request $request){
 
