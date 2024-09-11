@@ -16,9 +16,88 @@
         {
             "url": "http://localhost:8000",
             "description": "Serveur API"
+        },
+        {
+            "url": "http://localhost:8000",
+            "description": "Serveur API"
         }
     ],
     "paths": {
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "login"
+                ],
+                "summary": "Se connecter",
+                "description": "Se connecter.",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Auth"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Auth"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
+        "/api/password/change": {
+            "post": {
+                "tags": [
+                    "password/change"
+                ],
+                "summary": "Reset Password",
+                "description": "Reinitialiser votre mot de pass.",
+                "operationId": "resetPassword",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ResetPassword"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResetPassword"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumAuth": []
+                    }
+                ]
+            }
+        },
         "/api/personnels": {
             "post": {
                 "tags": [
@@ -62,6 +141,23 @@
     },
     "components": {
         "schemas": {
+            "Auth": {
+                "title": "Login",
+                "description": "Schéma pour s'authentifier",
+                "properties": {
+                    "email": {
+                        "description": "Login",
+                        "type": "string",
+                        "example": "admin@gmail.com"
+                    },
+                    "password": {
+                        "description": "Mot de passe",
+                        "type": "string",
+                        "example": "password"
+                    }
+                },
+                "type": "object"
+            },
             "Categorie": {
                 "title": "Categorie",
                 "description": "Schéma pour une catégorie",
@@ -269,6 +365,23 @@
                 },
                 "type": "object"
             },
+            "ResetPassword": {
+                "title": "Reset Password",
+                "description": "Changer votre mot de passe ",
+                "properties": {
+                    "password": {
+                        "description": "Reset Password",
+                        "type": "string",
+                        "example": "password123"
+                    },
+                    "password_confirmation": {
+                        "description": "Confirm Password",
+                        "type": "string",
+                        "example": "password123"
+                    }
+                },
+                "type": "object"
+            },
             "Role": {
                 "title": "Role",
                 "description": "Role de la personne",
@@ -337,6 +450,12 @@
             }
         },
         "securitySchemes": {
+            "sanctumAuth": {
+                "type": "http",
+                "description": "Utilisez un token Bearer généré par Sanctum pour l'authentification.",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            },
             "bearerAuth": {
                 "type": "http",
                 "bearerFormat": "JWT",
@@ -345,6 +464,14 @@
         }
     },
     "tags": [
+        {
+            "name": "login",
+            "description": "login"
+        },
+        {
+            "name": "password/change",
+            "description": "password/change"
+        },
         {
             "name": "personnels",
             "description": "personnels"

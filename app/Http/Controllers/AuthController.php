@@ -8,6 +8,29 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+/**
+ * @OA\Post(
+ *      path="/api/login",
+ *      operationId="login",
+ *      tags={"login"},
+ *      summary="Se connecter",
+ *      description="Se connecter.", 
+ *      @OA\RequestBody(
+ *          required=true,
+ *          @OA\JsonContent(ref="#/components/schemas/Auth")
+ *      ),
+
+ *      @OA\Response(
+ *          response=201,
+ *          description="Succès",
+ *          @OA\JsonContent(ref="#/components/schemas/Auth")
+ *      ),
+ *      @OA\Response(
+ *          response=400,
+ *          description="Erreur de validation"
+ *      )
+ * )
+ */
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -36,7 +59,30 @@ class AuthController extends Controller
         return response()->json(['message' => 'login ou password incorrect'], 401);
     }
 
-    // Méthode pour changer le mot de passe
+ /**
+ * @OA\Post(
+ *      path="/api/password/change",
+ *      operationId="resetPassword",
+ *      tags={"password/change"},
+ *      summary="Reset Password",
+ *      description="Reinitialiser votre mot de pass.", 
+ *      security={{"sanctumAuth":{}}},
+ *      @OA\RequestBody(
+ *          required=true,
+ *          @OA\JsonContent(ref="#/components/schemas/ResetPassword")
+ *      ),
+
+ *      @OA\Response(
+ *          response=201,
+ *          description="Succès",
+ *          @OA\JsonContent(ref="#/components/schemas/ResetPassword")
+ *      ),
+ *      @OA\Response(
+ *          response=400,
+ *          description="Erreur de validation"
+ *      )
+ * )
+ */
     public function changePassword(Request $request)
     { 
         $request->validate([
@@ -50,7 +96,8 @@ class AuthController extends Controller
         $user->save();
 
         return response()->json([
-            'message' => 'Password changed successfully'
+            'message' => 'Password changed successfully',
+            'data' => $user
         ], 200);
     }
 }
