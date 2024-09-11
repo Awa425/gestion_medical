@@ -10,13 +10,13 @@ namespace App\Docs;
  *         property="email",
  *         type="string",
  *         description="Login",
- *         example="admin@gmail.com"
+ *         example="admin@hospital.com"
  *     ),
  *     @OA\Property(
  *         property="password",
  *         type="string",
  *         description="Mot de passe",
- *         example="password"
+ *         example="password123"
  *     )
  * )
  */

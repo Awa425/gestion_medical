@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "API Gestion du Personnel",
-        "description": "Documentation API pour la gestion du personnel",
+        "title": "API Gestion Medical",
+        "description": "Documentation API pour la  gestion Medical",
         "contact": {
             "email": "support@example.com"
         },
@@ -13,10 +13,6 @@
         "version": "1.0.0"
     },
     "servers": [
-        {
-            "url": "http://localhost:8000",
-            "description": "Serveur API"
-        },
         {
             "url": "http://localhost:8000",
             "description": "Serveur API"
@@ -61,7 +57,7 @@
         "/api/password/change": {
             "post": {
                 "tags": [
-                    "password/change"
+                    "reset Password"
                 ],
                 "summary": "Reset Password",
                 "description": "Reinitialiser votre mot de pass.",
@@ -99,6 +95,39 @@
             }
         },
         "/api/personnels": {
+            "get": {
+                "tags": [
+                    "personnels"
+                ],
+                "summary": "liste personnel",
+                "description": "Liste de tous les personnels.",
+                "operationId": "listPersonnel",
+                "responses": {
+                    "200": {
+                        "description": "Données récupérées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé, token invalide ou manquant."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumAuth": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "personnels"
@@ -137,6 +166,305 @@
                     }
                 ]
             }
+        },
+        "/api/personnels/{id}": {
+            "get": {
+                "tags": [
+                    "personnels"
+                ],
+                "summary": "Get One by Id",
+                "description": "Afficher les infos d'un personnel.",
+                "operationId": "GetOne",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'utilisateur à afficher",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Personnel trouvé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Personnel trouvé avec succès"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Personnel"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Personnel non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Personnel non trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "personnels"
+                ],
+                "summary": "Modifier les infos d'un membre du personnel",
+                "description": "Modifier les infos d'un membre du personnel.",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'utilisateur à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Personnel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Utilisateur mis à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Personnel mis à jour avec succès"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Personnel"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requête invalide",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Utilisateur non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Utilisateur non trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "personnels"
+                ],
+                "summary": "Activer ou Desactiver un personnel",
+                "description": "Activer ou Desactiver un personnel.",
+                "operationId": "delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'utilisateur à archiver ou restaurer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Etat personnel changée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Personnel trouvé avec succès"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Personnel"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Personnel non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Personnel non trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -148,12 +476,12 @@
                     "email": {
                         "description": "Login",
                         "type": "string",
-                        "example": "admin@gmail.com"
+                        "example": "admin@hospital.com"
                     },
                     "password": {
                         "description": "Mot de passe",
                         "type": "string",
-                        "example": "password"
+                        "example": "password123"
                     }
                 },
                 "type": "object"
@@ -450,12 +778,6 @@
             }
         },
         "securitySchemes": {
-            "sanctumAuth": {
-                "type": "http",
-                "description": "Utilisez un token Bearer généré par Sanctum pour l'authentification.",
-                "bearerFormat": "JWT",
-                "scheme": "bearer"
-            },
             "bearerAuth": {
                 "type": "http",
                 "bearerFormat": "JWT",
@@ -469,8 +791,8 @@
             "description": "login"
         },
         {
-            "name": "password/change",
-            "description": "password/change"
+            "name": "reset Password",
+            "description": "reset Password"
         },
         {
             "name": "personnels",

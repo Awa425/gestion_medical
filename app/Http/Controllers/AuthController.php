@@ -51,9 +51,11 @@ class AuthController extends Controller
             }
 
             $success['token'] = $user->createToken('hospital personnel user')->plainTextToken;
-            $success['email'] =  $user->email;
+            $success['email'] =  $user;
 
-            return response()->json(['token' => $success]);
+            return response()->json([
+                'token' => $success
+            ]);
         }
 
         return response()->json(['message' => 'login ou password incorrect'], 401);
@@ -63,7 +65,7 @@ class AuthController extends Controller
  * @OA\Post(
  *      path="/api/password/change",
  *      operationId="resetPassword",
- *      tags={"password/change"},
+ *      tags={"reset Password"},
  *      summary="Reset Password",
  *      description="Reinitialiser votre mot de pass.", 
  *      security={{"sanctumAuth":{}}},

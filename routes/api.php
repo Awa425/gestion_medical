@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', [AuthController::class, 'login']);
 
 
-Route::resource('personnels', PersonnelController::class);
 Route::resource('patients', PatientController::class);
 Route::resource('dossierMedical', DossierMedicalController::class);
 Route::get('users', [UserController::class, 'index']);
@@ -26,5 +25,6 @@ Route::get('categories', [CategorieController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group( function () {
     Route::post('password/change', [AuthController::class, 'changePassword']);
+    Route::resource('personnels', PersonnelController::class);
 });
 

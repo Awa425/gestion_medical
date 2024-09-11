@@ -15,34 +15,30 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 
-/**
- * @OA\Info(
- *      version="1.0.0",
- *      title="API Gestion du Personnel",
- *      description="Documentation API pour la gestion du personnel",
- *      @OA\Contact(
- *          email="support@example.com"
- *      ),
- *      @OA\License(
- *          name="Apache 2.0",
- *          url="http://www.apache.org/licenses/LICENSE-2.0.html"
- *      )
- * ),
- * @OA\Server(
- *      url=L5_SWAGGER_CONST_HOST,
- *      description="Serveur API"
- * ),
- * @OA\SecurityScheme(
- *      securityScheme="bearerAuth",
- *      type="http",
- *      scheme="bearer",
- *      bearerFormat="JWT"
- * )
- */
+
 class PersonnelController extends BaseController
 {
     public function __construct(protected PersonnelService $personnelService){}
 
+/**
+ * @OA\Get(
+ *     path="/api/personnels",
+ *     summary="liste personnel",
+ *     description="Liste de tous les personnels.",
+ *     operationId="listPersonnel",
+ *     tags={"personnels"},
+ *     security={{"sanctumAuth":{}}},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Données récupérées avec succès.",
+ *         @OA\JsonContent(type="object", @OA\Property(property="data", type="string"))
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé, token invalide ou manquant."
+ *     )
+ * )
+ */
     public function index()
     {
         $personnels = Personnel::where('isActive', 1)
@@ -52,7 +48,6 @@ class PersonnelController extends BaseController
 
         return FormatData::formatResponse(message: 'Liste du personnels', data: $personnels);
     }
-
 
 /**
  * @OA\Post(
@@ -124,6 +119,60 @@ class PersonnelController extends BaseController
         ], 201);
     }
 
+/**
+ * @OA\Put(
+ *      path="/api/personnels/{id}",
+ *      operationId="update",
+ *      tags={"personnels"},
+ *      summary="Modifier les infos d'un membre du personnel",
+ *      description="Modifier les infos d'un membre du personnel.",
+ *      security={{"bearerAuth":{}}},  
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID de l'utilisateur à mettre à jour",
+ *         @OA\Schema(type="integer")
+ *     ),
+ *      @OA\RequestBody(
+ *          required=true,
+ *          @OA\JsonContent(ref="#/components/schemas/Personnel")
+ *      ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Utilisateur mis à jour avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="success"),
+ *             @OA\Property(property="message", type="string", example="Personnel mis à jour avec succès"),
+ *             @OA\Property(property="data", type="object", ref="#/components/schemas/Personnel")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Requête invalide",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Validation error")
+ *         )
+ *     ),
+  *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Non autorisé")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Utilisateur non trouvé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Utilisateur non trouvé")
+ *         )
+ *     )
+ * )
+ */
     public function update(Request $request, Personnel $personnel)
     {
        // Utiliser le service pour gérer la logique de mise à jour
@@ -153,6 +202,48 @@ class PersonnelController extends BaseController
     ], 200);
     }
 
+/**
+ * @OA\Get(
+ *      path="/api/personnels/{id}",
+ *      operationId="GetOne",
+ *      tags={"personnels"},
+ *      summary="Get One by Id",
+ *      description="Afficher les infos d'un personnel.",
+ *      security={{"bearerAuth":{}}},  
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID de l'utilisateur à afficher",
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Personnel trouvé avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="success"),
+ *             @OA\Property(property="message", type="string", example="Personnel trouvé avec succès"),
+ *             @OA\Property(property="data", type="object", ref="#/components/schemas/Personnel")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Non autorisé")
+ *         )
+ *     ),
+  *     @OA\Response(
+ *         response=404,
+ *         description="Personnel non trouvé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Personnel non trouvé")
+ *         )
+ *     )
+ * )
+ */
     public function show(string $id)
     {
          $personnel = Personnel::find($id);
@@ -165,11 +256,57 @@ class PersonnelController extends BaseController
 
     }
 
+    /**
+ * @OA\Delete(
+ *      path="/api/personnels/{id}",
+ *      operationId="delete",
+ *      tags={"personnels"},
+ *      summary="Activer ou Desactiver un personnel",
+ *      description="Activer ou Desactiver un personnel.",
+ *      security={{"bearerAuth":{}}},  
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID de l'utilisateur à archiver ou restaurer",
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Etat personnel changée avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="success"),
+ *             @OA\Property(property="message", type="string", example="Personnel trouvé avec succès"),
+ *             @OA\Property(property="data", type="object", ref="#/components/schemas/Personnel")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Non autorisé")
+ *         )
+ *     ),
+  *     @OA\Response(
+ *         response=404,
+ *         description="Personnel non trouvé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Personnel non trouvé")
+ *         )
+ *     )
+ * )
+ */
     public function destroy(Request $request, Personnel $personnel)
     {
         $personnel->update([
             'isActive' => !$personnel->isActive,
         ]);
-        return response()->json(['message' => 'Désactiver avec succès'], 200);
+        return response()->json([
+            'message' => $personnel->isActive ? 'Désactiver avec succès' : 'Restaurer avec succès',
+            'data' => $personnel
+        ], 200);
+      
     }
 }
