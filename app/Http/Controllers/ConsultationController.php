@@ -5,15 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ConsultationRequest;
 use App\Http\Resources\ConsultationResource;
 use App\Models\Consultation;
+use App\Models\Patient;
+use App\Services\ConsultationService;
+use App\Services\PatientService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ConsultationController extends BaseController
 {
 
-        /**
-     * Display a listing of the resource.
-     */
+    public function __construct(protected PatientService $patientService, protected ConsultationService $consultationService){}
+
     public function index()
     {
         $consultation = Consultation::all();
@@ -21,25 +23,25 @@ class ConsultationController extends BaseController
         return $this->sendResponse(ConsultationResource::collection($consultation), 'Consultation retrieved successfully.');
     }
 
-     /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
-    {
-        $input = $request->all();
+    { 
+
         
-        $validator = Validator::make($input, [
-            'libelle' => 'required',
+        // Appel au service pour créer la consultation avec le patient
+        $consultation = $this->consultationService->createOrUpdateConsultation([
+            'patient' => $request->get('patient'),
+            'patient_id' => $request->get('patient_id'), // Si le patient existe
+            'dossierMedical' => $request->get('dossierMedical'),
+            'consultation' => $request->get('consultation'),
         ]);
-        
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
-        }
-        
-        $consultation = Consultation::create($input);
+
+        return response()->json([
+            'message' => 'Consultation créée avec succès.',
+            'consultation' => $consultation,
+        ], 201);
+}
+
    
-        return $this->sendResponse(new ConsultationResource($consultation), 'Consultation crée avec succes.');
-    }
 
         /**
      * Display the specified resource.

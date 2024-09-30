@@ -8,7 +8,7 @@ namespace App\Docs;
  *      title="API Gestion Medical",
  *      description="Documentation API pour la  gestion Medical",
  *      @OA\Contact(
- *          email="support@example.com"
+ *          email="diopawa425@gmail.com.com"
  *      ),
  *      @OA\License(
  *          name="Apache 2.0",
@@ -19,11 +19,14 @@ namespace App\Docs;
  *      url=L5_SWAGGER_CONST_HOST,
  *      description="Serveur API"
  * ),
- * @OA\SecurityScheme(
- *      securityScheme="bearerAuth",
- *      type="http",
- *      scheme="bearer",
- *      bearerFormat="JWT"
+ * @OA\Components(
+ *     @OA\SecurityScheme(
+ *         securityScheme="sanctumAuth",
+ *         type="http",
+ *         scheme="bearer",
+ *         bearerFormat="JWT",  
+ *         description="Entrez le token Sanctum reçu après connexion."
+ *     )
  * )
  */
 class OpenApiDocumentation{}

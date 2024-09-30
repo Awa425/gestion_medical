@@ -4,7 +4,7 @@
         "title": "API Gestion Medical",
         "description": "Documentation API pour la  gestion Medical",
         "contact": {
-            "email": "support@example.com"
+            "email": "diopawa425@gmail.com.com"
         },
         "license": {
             "name": "Apache 2.0",
@@ -94,6 +94,427 @@
                 ]
             }
         },
+        "/api/patients": {
+            "get": {
+                "tags": [
+                    "patients"
+                ],
+                "summary": "liste patients",
+                "description": "Liste de tous les patients.",
+                "operationId": "listPatients",
+                "responses": {
+                    "200": {
+                        "description": "Données récupérées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "patients"
+                ],
+                "summary": "Créer un nouveau patient",
+                "description": "Créer un nouveau patient.",
+                "operationId": "cratePatient",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Patient"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Patient"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/patients/{id}": {
+            "get": {
+                "tags": [
+                    "patients"
+                ],
+                "summary": "Get One by Id",
+                "description": "Afficher les infos d'un patient.",
+                "operationId": "GetOnePatient",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du patient à afficher",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Personnel trouvé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Patient trouvé avec succès"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Patient"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Personnel non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Patient non trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "patients"
+                ],
+                "summary": "Modifier les infos d'une patient",
+                "description": "Modifier les infos d'une patient.",
+                "operationId": "updatePatient",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du patient à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Patient"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Patient mis à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Patient mis à jour avec succès"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Patient"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requête invalide",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Patient non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Patient non trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/patients/{id}/dossier": {
+            "put": {
+                "tags": [
+                    "patients"
+                ],
+                "summary": "Creation dossier medical",
+                "description": "Creation dossier medical.",
+                "operationId": "createDossier",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du patient à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Patient"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Dossier mis à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Patient mis à jour avec succès"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Patient"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requête invalide",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Patient non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Patient non trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumAuth": []
+                    }
+                ]
+            }
+        },
         "/api/personnels": {
             "get": {
                 "tags": [
@@ -134,7 +555,7 @@
                 ],
                 "summary": "Créer un nouveau membre du personnel",
                 "description": "Enregistre un nouveau membre du personnel dans la base de données.",
-                "operationId": "store",
+                "operationId": "createPersonnel",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -174,7 +595,7 @@
                 ],
                 "summary": "Get One by Id",
                 "description": "Afficher les infos d'un personnel.",
-                "operationId": "GetOne",
+                "operationId": "GetOnePersonnel",
                 "parameters": [
                     {
                         "name": "id",
@@ -263,7 +684,7 @@
                 ],
                 "summary": "Modifier les infos d'un membre du personnel",
                 "description": "Modifier les infos d'un membre du personnel.",
-                "operationId": "update",
+                "operationId": "updatePersonnel",
                 "parameters": [
                     {
                         "name": "id",
@@ -538,6 +959,43 @@
                 },
                 "type": "object"
             },
+            "DossierMedical": {
+                "title": "Dossier Medical",
+                "description": "Dossier medical d'une patient",
+                "properties": {
+                    "id": {
+                        "description": "ID du dossier",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "numero_dossier": {
+                        "description": "Numero du dossier",
+                        "type": "string",
+                        "example": "ABC123"
+                    },
+                    "antecedents": {
+                        "description": "Les antecedents du patients",
+                        "type": "string",
+                        "example": "Antécédents de diabète"
+                    },
+                    "diagnostics": {
+                        "description": "Les diagnostics du patients",
+                        "type": "string",
+                        "example": "hypertension"
+                    },
+                    "traitements": {
+                        "description": "Les traitements du patients",
+                        "type": "string",
+                        "example": "Ortho"
+                    },
+                    "prescriptions": {
+                        "description": "Les prescriptions du patients",
+                        "type": "string",
+                        "example": "Prescrit 5 mg de Lisinopril par jour"
+                    }
+                },
+                "type": "object"
+            },
             "Formation": {
                 "title": "Formation",
                 "description": "Schéma pour la formation d'un personnel",
@@ -577,6 +1035,67 @@
                 },
                 "type": "object"
             },
+            "Patient": {
+                "title": "Patients",
+                "description": "Patients",
+                "required": [
+                    "nom",
+                    "prenom",
+                    "date_naissance"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID du patient",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "nom": {
+                        "description": "Nom du patient",
+                        "type": "string",
+                        "example": "Sow"
+                    },
+                    "prenom": {
+                        "description": "prenom du patient",
+                        "type": "string",
+                        "example": "Abdou"
+                    },
+                    "date_naissance": {
+                        "description": "date naissance du patient",
+                        "type": "string",
+                        "format": "date",
+                        "example": "1985-10-15"
+                    },
+                    "telephone": {
+                        "description": "Numero Telephone du patient",
+                        "type": "string",
+                        "example": "+221777743779"
+                    },
+                    "email": {
+                        "description": "Email de contact du patient",
+                        "type": "string",
+                        "example": "patient1@gmail.com"
+                    },
+                    "sexe": {
+                        "description": "Masculin ou Feminin",
+                        "type": "string",
+                        "example": "M"
+                    },
+                    "groupe_sanguin": {
+                        "description": "Groupe sanguin du patient",
+                        "type": "string",
+                        "example": "A+"
+                    },
+                    "matricule": {
+                        "description": "Matricule du patient",
+                        "type": "string",
+                        "example": "AZER12345"
+                    },
+                    "dossierMedical": {
+                        "$ref": "#/components/schemas/DossierMedical"
+                    }
+                },
+                "type": "object"
+            },
             "Personnel": {
                 "title": "Personnel",
                 "description": "Schéma représentant un membre du personnel",
@@ -598,7 +1117,7 @@
                     "email": {
                         "description": "Adresse email du personnel",
                         "type": "string",
-                        "example": "diop.awa@example.com"
+                        "example": "diop.awa@hospital.com"
                     },
                     "telephone": {
                         "description": "Numéro de téléphone",
@@ -778,8 +1297,9 @@
             }
         },
         "securitySchemes": {
-            "bearerAuth": {
+            "sanctumAuth": {
                 "type": "http",
+                "description": "Entrez le token Sanctum reçu après connexion.",
                 "bearerFormat": "JWT",
                 "scheme": "bearer"
             }
@@ -793,6 +1313,10 @@
         {
             "name": "reset Password",
             "description": "reset Password"
+        },
+        {
+            "name": "patients",
+            "description": "patients"
         },
         {
             "name": "personnels",

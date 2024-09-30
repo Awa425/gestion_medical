@@ -12,7 +12,7 @@ class Personnel extends Model
         'id',
         'name',
         'prenom',
-        'date_naissance', 
+        'datte_naissance', 
         'adresse', 
         'telephone',
         'matricule', 
@@ -53,6 +53,11 @@ class Personnel extends Model
     public function formations()
     {
         return $this->belongsToMany(Formation::class, 'personnel_formations');
+    }
+
+    public function medecin()
+    {
+        return $this->hasMany(Consultation::class);
     }
 
 }

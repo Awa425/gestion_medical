@@ -25,4 +25,10 @@ class DossierMedical extends Model
     {
         return $this->belongsTo(Patient::class);
     }
+
+    // le dossier peut être mis à jour lors des consultations
+    public function consultations()
+    {
+        return $this->hasMany(Consultation::class);
+    }
 }

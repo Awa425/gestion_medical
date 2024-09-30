@@ -52,7 +52,7 @@ class PersonnelController extends BaseController
 /**
  * @OA\Post(
  *      path="/api/personnels",
- *      operationId="store",
+ *      operationId="createPersonnel",
  *      tags={"personnels"},
  *      summary="Créer un nouveau membre du personnel",
  *      description="Enregistre un nouveau membre du personnel dans la base de données.",
@@ -61,7 +61,6 @@ class PersonnelController extends BaseController
  *          required=true,
  *          @OA\JsonContent(ref="#/components/schemas/Personnel")
  *      ),
-
  *      @OA\Response(
  *          response=201,
  *          description="Succès",
@@ -122,7 +121,7 @@ class PersonnelController extends BaseController
 /**
  * @OA\Put(
  *      path="/api/personnels/{id}",
- *      operationId="update",
+ *      operationId="updatePersonnel",
  *      tags={"personnels"},
  *      summary="Modifier les infos d'un membre du personnel",
  *      description="Modifier les infos d'un membre du personnel.",
@@ -155,7 +154,7 @@ class PersonnelController extends BaseController
  *             @OA\Property(property="message", type="string", example="Validation error")
  *         )
  *     ),
-  *     @OA\Response(
+ *     @OA\Response(
  *         response=401,
  *         description="Non autorisé",
  *         @OA\JsonContent(
@@ -205,7 +204,7 @@ class PersonnelController extends BaseController
 /**
  * @OA\Get(
  *      path="/api/personnels/{id}",
- *      operationId="GetOne",
+ *      operationId="GetOnePersonnel",
  *      tags={"personnels"},
  *      summary="Get One by Id",
  *      description="Afficher les infos d'un personnel.",

@@ -28,7 +28,7 @@ namespace App\Docs;
  *         property="email",
  *         type="string",
  *         description="Adresse email du personnel",
- *         example="diop.awa@example.com"
+ *         example="diop.awa@hospital.com"
  *     ),
  *     @OA\Property(
  *         property="telephone",
@@ -94,11 +94,11 @@ namespace App\Docs;
  *         @OA\Items(ref="#/components/schemas/Certification"), 
  *         description="Liste des certification du personnel"
  *     ),
-*     @OA\Property(
+ *     @OA\Property(
  *         property="user",
  *         ref="#/components/schemas/User",
  *         description="User personnel associée"
- *     ),
+ *     )
  * )
  */
 class PersonnelSchema {}
