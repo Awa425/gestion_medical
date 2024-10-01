@@ -2,17 +2,10 @@
 namespace App\Docs;
 /**
  * @OA\Schema(
- *     schema="Patient",
+ *     schema="SalleAttente",
  *     type="object",
- *     title="Patients",
- *     description="Patients",
- *     required={"nom", "prenom", "date_naissance"},
- *     @OA\Property(
- *         property="id",
- *         type="integer",
- *         description="ID du patient",
- *         example=1
- *     ),
+ *     title="SalleAttente",
+ *     description="Salle Attente",
  *     @OA\Property(
  *         property="nom",
  *         type="string",
@@ -38,6 +31,12 @@ namespace App\Docs;
  *         example="+221777743779"
  *     ),
  *     @OA\Property(
+ *         property="adresse",
+ *         type="string",
+ *         description="Adresse du patient",
+ *         example="Dakar"
+ *     ),
+ *     @OA\Property(
  *         property="email",
  *         type="string",
  *         description="Email de contact du patient",
@@ -61,11 +60,12 @@ namespace App\Docs;
  *         description="Matricule du patient",
  *         example="AZER12345"
  *     ),
- *     @OA\Property(
- *         property="dossierMedical",
- *         ref="#/components/schemas/DossierMedical",
- *         description="Dossier medical associée a la patient",
+ *      @OA\Property(
+ *         property="service_id",
+ *         ref="#/components/schemas/Service",
+ *         description="Service a aller",
+ *         example=1
  *     ) 
  * )
  */
-class PatientSchema {}
+class SalleAttenteSchema {}

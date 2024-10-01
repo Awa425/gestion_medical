@@ -21,8 +21,10 @@ class Patient extends Model
     {
         return $this->hasMany(Consultation::class);
     }
+
+
     public function salleAttente()
     {
-        return $this->belongsTo(SalleAttente::class);
+        return $this->hasMany(SalleAttente::class, 'patient_id');
     }
 }

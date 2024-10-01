@@ -25,6 +25,9 @@ Route::post('consultations', [ConsultationController::class, 'store']);
 
 Route::resource('personnels', PersonnelController::class);
 Route::post('salleAttente', [PatientController::class, 'storeWaitingRoom']);
+Route::get('patients/enAttente', [PatientController::class, 'listSalleAttente']);
+Route::get('patients/enAttente/services/{service_id}', [PatientController::class, 'listSalleAttenteByService']);
+
 
 Route::middleware('auth:sanctum')->group( function () {
     Route::post('password/change', [AuthController::class, 'changePassword']);

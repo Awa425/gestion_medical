@@ -184,6 +184,184 @@
                 ]
             }
         },
+        "/api/patients/enAttente": {
+            "get": {
+                "tags": [
+                    "patients"
+                ],
+                "summary": "liste patients",
+                "description": "Liste de tous les patients dans la salle d'attente.",
+                "operationId": "listPatientsEnAttente",
+                "responses": {
+                    "200": {
+                        "description": "Données récupérées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/patients/enAttente/services/{service_id}": {
+            "get": {
+                "tags": [
+                    "patients"
+                ],
+                "summary": "Liste des patient dans en service",
+                "description": "Liste des patient dans en service",
+                "operationId": "GetPatientByService",
+                "parameters": [
+                    {
+                        "name": "service_id",
+                        "in": "path",
+                        "description": "ID d'un service",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste Patients ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Patient trouvé avec succès"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/SalleAttente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Salle attente non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Salle attente non trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/salleAttente": {
+            "post": {
+                "tags": [
+                    "patients"
+                ],
+                "summary": "Enregistrer dans la salle d'attente",
+                "description": "Enregistrer dans la salle d'attente.",
+                "operationId": "storeWaitingRoom",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SalleAttente"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SalleAttente"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumAuth": []
+                    }
+                ]
+            }
+        },
         "/api/patients/{id}": {
             "get": {
                 "tags": [
@@ -1242,6 +1420,79 @@
                         "description": "Nom du role",
                         "type": "string",
                         "example": "Medecin"
+                    }
+                },
+                "type": "object"
+            },
+            "SalleAttente": {
+                "title": "SalleAttente",
+                "description": "Salle Attente",
+                "properties": {
+                    "nom": {
+                        "description": "Nom du patient",
+                        "type": "string",
+                        "example": "Sow"
+                    },
+                    "prenom": {
+                        "description": "prenom du patient",
+                        "type": "string",
+                        "example": "Abdou"
+                    },
+                    "date_naissance": {
+                        "description": "date naissance du patient",
+                        "type": "string",
+                        "format": "date",
+                        "example": "1985-10-15"
+                    },
+                    "telephone": {
+                        "description": "Numero Telephone du patient",
+                        "type": "string",
+                        "example": "+221777743779"
+                    },
+                    "adresse": {
+                        "description": "Adresse du patient",
+                        "type": "string",
+                        "example": "Dakar"
+                    },
+                    "email": {
+                        "description": "Email de contact du patient",
+                        "type": "string",
+                        "example": "patient1@gmail.com"
+                    },
+                    "sexe": {
+                        "description": "Masculin ou Feminin",
+                        "type": "string",
+                        "example": "M"
+                    },
+                    "groupe_sanguin": {
+                        "description": "Groupe sanguin du patient",
+                        "type": "string",
+                        "example": "A+"
+                    },
+                    "matricule": {
+                        "description": "Matricule du patient",
+                        "type": "string",
+                        "example": "AZER12345"
+                    },
+                    "service_id": {
+                        "$ref": "#/components/schemas/Service"
+                    }
+                },
+                "type": "object"
+            },
+            "Service": {
+                "title": "Services",
+                "description": "Les service de l'hopital",
+                "properties": {
+                    "id": {
+                        "description": "ID du service",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "libelle": {
+                        "description": "Nom du service",
+                        "type": "string",
+                        "example": "Cardiologie"
                     }
                 },
                 "type": "object"

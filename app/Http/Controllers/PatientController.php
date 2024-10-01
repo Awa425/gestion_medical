@@ -42,6 +42,92 @@ class PatientController extends Controller
         $patients = Patient::all();
         return FormatData::formatResponse(message: 'Liste des patients', data: $patients);
     }
+
+/**
+ * @OA\Get(
+ *     path="/api/patients/enAttente",
+ *     summary="liste patients",
+ *     description="Liste de tous les patients dans la salle d'attente.",
+ *     operationId="listPatientsEnAttente",
+ *     tags={"patients"},
+ *     security={{"sanctumAuth":{}}},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Données récupérées avec succès.",
+ *         @OA\JsonContent(type="object", @OA\Property(property="data", type="string"))
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Non autorisé")
+ *         )
+ *     )
+ * )
+ */
+public function listSalleAttente()
+{
+        $patients = SalleAttente::with(['patient', 'service'])
+        ->where('etat', 'en attente')
+        ->orderBy('id', 'DESC')
+        ->get();
+        $patients;
+        return FormatData::formatResponse(message: 'Liste des patients dans en attente', data: $patients);
+}
+
+/**
+ * @OA\Get(
+ *      path="/api/patients/enAttente/services/{service_id}",
+ *      operationId="GetPatientByService",
+ *      tags={"patients"},
+ *      summary="Liste des patient dans en service",
+ *      description="Liste des patient dans en service",
+ *     @OA\Parameter(
+ *         name="service_id",
+ *         in="path",
+ *         required=true,
+ *         description="ID d'un service",
+ *         @OA\Schema(type="integer"),
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Liste Patients ",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="success"),
+ *             @OA\Property(property="message", type="string", example="Patient trouvé avec succès"),
+ *             @OA\Property(property="data", type="object", ref="#/components/schemas/SalleAttente")
+ *         ),
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Non autorisé")
+ *         )
+ *     ),
+  *     @OA\Response(
+ *         response=404,
+ *         description="Salle attente non trouvé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Salle attente non trouvé")
+ *         )
+ *     )
+ * )
+ */
+public function listSalleAttenteByService($service)
+{
+        $patients = SalleAttente::with(['patient', 'service'])
+        ->where('etat', 'en attente')
+        ->where('service_id', $service)
+        ->orderBy('id', 'DESC')
+        ->get();
+        $patients;
+        return FormatData::formatResponse(message: 'Liste des patients dans en attente', data: $patients);
+}
+
 /**
  * @OA\Post(
  *      path="/api/patients",
@@ -100,19 +186,38 @@ class PatientController extends Controller
         ], 201);
     }
 
+    /**
+ * @OA\Post(
+ *      path="/api/salleAttente",
+ *      operationId="storeWaitingRoom",
+ *      tags={"patients"},
+ *      summary="Enregistrer dans la salle d'attente",
+ *      description="Enregistrer dans la salle d'attente.",
+ *      security={{"sanctumAuth":{}}},
+ *      @OA\RequestBody(
+ *          required=true,
+ *          @OA\JsonContent(ref="#/components/schemas/SalleAttente")
+ *      ),
+ *      @OA\Response(
+ *          response=201,
+ *          description="Succès",
+ *          @OA\JsonContent(ref="#/components/schemas/SalleAttente")
+ *      ),
+ *      @OA\Response(
+ *          response=400,
+ *          description="Erreur de validation"
+ *      )
+ * )
+ */
     public function storeWaitingRoom(Request $request){
        
        try{ $validatedData = $request->validate([
-            'nom' => 'required|string',
-            'prenom' => 'required|string',
+            'nom' => 'nullable|string',
+            'prenom' => 'nullable|string',
             'date_naissance' => 'nullable|date',
             'adresse' => 'nullable|string',
             'telephone' => 'nullable|string',
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('patients')->ignore($request->get('email'), 'email')
-            ],  
+            'email' => 'nullable|email',  
             'matricule' => [
                 'required',
                 'string',

@@ -12,8 +12,13 @@ class SalleAttente extends Model
     // Etat (en attente ou consulter)
      protected $fillable = ['patient_id', 'service_id', 'date_entree', 'etat'];
 
-        public function patients()
-    {
-        return $this->hasMany(Patient::class);
-    }
+     public function patient()
+     {
+         return $this->belongsTo(Patient::class, 'patient_id');
+     }
+ 
+     public function service()
+     {
+         return $this->belongsTo(Service::class, 'service_id');
+     }
 }

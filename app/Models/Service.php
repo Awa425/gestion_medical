@@ -15,6 +15,10 @@ class Service extends Model
         "isActive"
     ];
 
+    public function salleAttente()
+    {
+        return $this->hasMany(SalleAttente::class, 'service_id');
+    }
     public function specialites(): HasMany
     {
         return $this->hasMany(Specialite::class);

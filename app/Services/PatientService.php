@@ -34,8 +34,7 @@ class PatientService{
         
         return DB::transaction(function() use ($data) {
             // Vérifier si le patient existe déjà
-            $patient = Patient::where('email', $data['email'])
-                                ->where('matricule', $data['matricule'])
+            $patient = Patient::where('matricule', $data['matricule'])
                                 ->first();
 
             // Si le patient n'existe pas, on le crée
