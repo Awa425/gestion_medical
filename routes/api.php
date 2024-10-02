@@ -27,7 +27,7 @@ Route::resource('personnels', PersonnelController::class);
 
 Route::put('patients/{id}/dossier', [PatientController::class, 'createDossier']);
 Route::post('salleAttente', [PatientController::class, 'storeWaitingRoom']);
-Route::get('/patients/salle-attente-list', [PatientController::class, 'listSalleAttente']);
+Route::get('patients/salle-attente-list', [PatientController::class, 'listSalleAttente']);
 Route::resource('patients', PatientController::class);
 Route::get('patients', [PatientController::class, 'listPatients']);
 Route::get('patients/enAttente/services/{service_id}', [PatientController::class, 'listSalleAttenteByService']);

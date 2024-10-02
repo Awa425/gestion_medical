@@ -45,7 +45,7 @@ public function listPatients()
 
 /**
  * @OA\Get(
- *     path="/api/patients/enAttente",
+ *     path="/api/patients/salle-attente-list",
  *     summary="liste patients",
  *     description="Liste de tous les patients dans la salle d'attente.",
  *     operationId="listPatientsEnAttente",

@@ -184,7 +184,7 @@
                 ]
             }
         },
-        "/api/patients/enAttente": {
+        "/api/patients/salle-attente-list": {
             "get": {
                 "tags": [
                     "patients"
