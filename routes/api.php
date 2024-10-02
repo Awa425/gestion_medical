@@ -24,15 +24,18 @@ Route::get('categories', [CategorieController::class, 'index']);
 Route::post('consultations', [ConsultationController::class, 'store']);
 
 Route::resource('personnels', PersonnelController::class);
+
+Route::put('patients/{id}/dossier', [PatientController::class, 'createDossier']);
 Route::post('salleAttente', [PatientController::class, 'storeWaitingRoom']);
-Route::get('patients/enAttente', [PatientController::class, 'listSalleAttente']);
+Route::get('/patients/salle-attente-list', [PatientController::class, 'listSalleAttente']);
+Route::resource('patients', PatientController::class);
+Route::get('patients', [PatientController::class, 'listPatients']);
 Route::get('patients/enAttente/services/{service_id}', [PatientController::class, 'listSalleAttenteByService']);
 
-
+// Acces private
 Route::middleware('auth:sanctum')->group( function () {
     Route::post('password/change', [AuthController::class, 'changePassword']);
-    Route::resource('patients', PatientController::class);
-    Route::put('patients/{id}/dossier', [PatientController::class, 'createDossier']);
+
 });
 
 

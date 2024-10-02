@@ -37,11 +37,11 @@ class PatientController extends Controller
  *     )
  * )
  */
-    public function index()
-    {
-        $patients = Patient::all();
-        return FormatData::formatResponse(message: 'Liste des patients', data: $patients);
-    }
+public function listPatients()
+{   
+    $patients = Patient::all();
+    return FormatData::formatResponse(message: 'Liste des patients', data: $patients);
+}
 
 /**
  * @OA\Get(
@@ -67,7 +67,7 @@ class PatientController extends Controller
  * )
  */
 public function listSalleAttente()
-{
+{      
         $patients = SalleAttente::with(['patient', 'service'])
         ->where('etat', 'en attente')
         ->orderBy('id', 'DESC')
@@ -151,42 +151,42 @@ public function listSalleAttenteByService($service)
  *      )
  * )
  */
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'nom' => 'required|string',
-            'prenom' => 'required|string',
-            'date_naissance' => 'required|date',
-            'adresse' => 'nullable|string',
-            'telephone' => 'nullable|string',
-            'email' => 'nullable|email|unique:patients',
-            'sexe' => 'nullable|in:M,F',
-            'groupe_sanguin' => 'nullable|string|max:3',
-            'matricule'=>'required|string'
-        ]);
+public function store(Request $request)
+{
+    $validatedData = $request->validate([
+        'nom' => 'required|string',
+        'prenom' => 'required|string',
+        'date_naissance' => 'required|date',
+        'adresse' => 'nullable|string',
+        'telephone' => 'nullable|string',
+        'email' => 'nullable|email|unique:patients',
+        'sexe' => 'nullable|in:M,F',
+        'groupe_sanguin' => 'nullable|string|max:3',
+        'matricule'=>'required|string'
+    ]);
 
-        $patient = $this->patientService->createPatient([
-            'patient' => $request->only([
-                'nom', 
-                'prenom', 
-                'date_naissance', 
-                'adresse', 
-                'telephone', 
-                'email', 
-                'sexe', 
-                'groupe_sanguin', 
-                'matricule'
-            ]), 
-            'dossierMedical' => $request->get('dossierMedical'),
-        ]);
+    $patient = $this->patientService->createPatient([
+        'patient' => $request->only([
+            'nom', 
+            'prenom', 
+            'date_naissance', 
+            'adresse', 
+            'telephone', 
+            'email', 
+            'sexe', 
+            'groupe_sanguin', 
+            'matricule'
+        ]), 
+        'dossierMedical' => $request->get('dossierMedical'),
+    ]);
 
-        return response()->json([
-            'message' => 'Patient créé avec succès.',
-            'patient' => $patient,
-        ], 201);
-    }
+    return response()->json([
+        'message' => 'Patient créé avec succès.',
+        'patient' => $patient,
+    ], 201);
+}
 
-    /**
+/**
  * @OA\Post(
  *      path="/api/salleAttente",
  *      operationId="storeWaitingRoom",
@@ -209,42 +209,42 @@ public function listSalleAttenteByService($service)
  *      )
  * )
  */
-    public function storeWaitingRoom(Request $request){
-       
-       try{ $validatedData = $request->validate([
-            'nom' => 'nullable|string',
-            'prenom' => 'nullable|string',
-            'date_naissance' => 'nullable|date',
-            'adresse' => 'nullable|string',
-            'telephone' => 'nullable|string',
-            'email' => 'nullable|email',  
-            'matricule' => [
-                'required',
-                'string',
-                // Ignorer le matricule s'il appartient déjà à un patient existant
-                Rule::unique('patients')->ignore($request->get('matricule'), 'matricule')
-            ],          
-            'sexe' => 'nullable|in:M,F',
-            'groupe_sanguin' => 'nullable|string|max:3',
-            'service_id' => 'required|exists:services,id',
-        ]); }
-        catch (\Illuminate\Validation\ValidationException $e){
-            return response()->json([
-            'message' => 'Erreur de validation',
-            'erreurs' => $e->errors(),
-        ], 422);
-        }
-        // Appel au service pour enregistrer le patient
-        $result = $this->patientService->storeWaitingRoom($validatedData);
-
+public function storeWaitingRoom(Request $request){
+    
+    try{ $validatedData = $request->validate([
+        'nom' => 'nullable|string',
+        'prenom' => 'nullable|string',
+        'date_naissance' => 'nullable|date',
+        'adresse' => 'nullable|string',
+        'telephone' => 'nullable|string',
+        'email' => 'nullable|email',  
+        'matricule' => [
+            'required',
+            'string',
+            // Ignorer le matricule s'il appartient déjà à un patient existant
+            Rule::unique('patients')->ignore($request->get('matricule'), 'matricule')
+        ],          
+        'sexe' => 'nullable|in:M,F',
+        'groupe_sanguin' => 'nullable|string|max:3',
+        'service_id' => 'required|exists:services,id',
+    ]); }
+    catch (\Illuminate\Validation\ValidationException $e){
         return response()->json([
-            'message' => 'Patient enregistré et placé en salle d\'attente.',
-            'patient' => $result['patient'],
-            'salle_attente' => $result['salle_attente'],
-        ], 201);
+        'message' => 'Erreur de validation',
+        'erreurs' => $e->errors(),
+    ], 422);
     }
+    // Appel au service pour enregistrer le patient
+    $result = $this->patientService->storeWaitingRoom($validatedData);
 
-    /**
+    return response()->json([
+        'message' => 'Patient enregistré et placé en salle d\'attente.',
+        'patient' => $result['patient'],
+        'salle_attente' => $result['salle_attente'],
+    ], 201);
+}
+
+/**
  * @OA\Put(
  *      path="/api/patients/{id}",
  *      operationId="updatePatient",
@@ -298,31 +298,31 @@ public function listSalleAttenteByService($service)
  *     )
  * )
  */
-    public function update(Request $request, Patient $patient)
-    {
-        // Mise à jour du patient (et création ou mise à jour du dossier médical si fourni)
-        $updatePatient = $this->patientService->updatePatient($patient,[
-            'patient' => $request->only([
-                'nom', 
-                'prenom', 
-                'date_naissance', 
-                'adresse', 
-                'telephone', 
-                'email',
-                'sexe',
-                'groupe_sanguin',
-                'matricule'
-            ]),
-            // 'dossierMedical' => $request->get('dossierMedical')
-        ]);
-    
-        return response()->json([
-            'message' => 'Patient mis à jour avec succès.',
-            'patient' => $updatePatient,
-        ], 200);   
-    }
+public function update(Request $request, Patient $patient)
+{
+    // Mise à jour du patient (et création ou mise à jour du dossier médical si fourni)
+    $updatePatient = $this->patientService->updatePatient($patient,[
+        'patient' => $request->only([
+            'nom', 
+            'prenom', 
+            'date_naissance', 
+            'adresse', 
+            'telephone', 
+            'email',
+            'sexe',
+            'groupe_sanguin',
+            'matricule'
+        ]),
+        // 'dossierMedical' => $request->get('dossierMedical')
+    ]);
 
-        /**
+    return response()->json([
+        'message' => 'Patient mis à jour avec succès.',
+        'patient' => $updatePatient,
+    ], 200);   
+}
+
+/**
  * @OA\Put(
  *      path="/api/patients/{id}/dossier",
  *      operationId="createDossier",
@@ -378,29 +378,29 @@ public function listSalleAttenteByService($service)
  */
 public function createDossier(Request $request, Patient $patient)
 {
-    // Mise à jour du patient (et création ou mise à jour du dossier médical si fourni)
-    $updatePatient = $this->patientService->ajouterDossierPatient($patient,[
-        'patient' => $request->only([
-            'nom', 
-            'prenom', 
-            'date_naissance', 
-            'adresse', 
-            'telephone', 
-            'email',
-            'sexe',
-            'groupe_sanguin',
-            'matricule'
-        ]),
-        'dossierMedical' => $request->get('dossierMedical')
-    ]);
+// Mise à jour du patient (et création ou mise à jour du dossier médical si fourni)
+$updatePatient = $this->patientService->ajouterDossierPatient($patient,[
+'patient' => $request->only([
+    'nom', 
+    'prenom', 
+    'date_naissance', 
+    'adresse', 
+    'telephone', 
+    'email',
+    'sexe',
+    'groupe_sanguin',
+    'matricule'
+]),
+'dossierMedical' => $request->get('dossierMedical')
+]);
 
-    return response()->json([
-        'message' => 'Creation dossier avec succes.',
-        'patient' => $updatePatient,
-    ], 200);   
+return response()->json([
+'message' => 'Creation dossier avec succes.',
+'patient' => $updatePatient,
+], 200);   
 }
 
-    /**
+/**
  * @OA\Get(
  *      path="/api/patients/{id}",
  *      operationId="GetOnePatient",
@@ -432,20 +432,20 @@ public function createDossier(Request $request, Patient $patient)
  *             @OA\Property(property="message", type="string", example="Non autorisé")
  *         )
  *     ),
-  *     @OA\Response(
- *         response=404,
- *         description="Personnel non trouvé",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Patient non trouvé")
- *         )
- *     )
- * )
- */
-    public function show($id)
-    {
-        $patient = $this->patientService->getPatientWithMedicalRecord($id);
-        return response()->json(['patient' => $patient], 200);
-    }
+ *     @OA\Response(
+*         response=404,
+*         description="Personnel non trouvé",
+*         @OA\JsonContent(
+*             @OA\Property(property="status", type="string", example="error"),
+*             @OA\Property(property="message", type="string", example="Patient non trouvé")
+*         )
+*     )
+* )
+*/
+public function show($id)
+{
+    $patient = $this->patientService->getPatientWithMedicalRecord($id);
+    return response()->json(['patient' => $patient], 200);
+}
 
 }
