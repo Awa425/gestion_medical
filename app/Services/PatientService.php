@@ -56,9 +56,7 @@ class PatientService{
             $salleAttente = SalleAttente::where('patient_id', $patient->id)
                                         ->where('service_id', $data['service_id'])
                                         ->where('etat', 'en attente')
-                                        ->first();
-
-                                        
+                                        ->first();                                        
 
             // Si le patient n'est pas déjà dans la salle d'attente, l'ajouter
             if (!$salleAttente) {

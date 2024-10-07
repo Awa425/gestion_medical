@@ -17,3 +17,4 @@
 # Generer la documentation du swagger
 
 ` php artisan l5-swagger:generate`
+` http://localhost:8000/api/documentation#/`

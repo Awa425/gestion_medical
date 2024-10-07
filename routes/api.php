@@ -30,6 +30,7 @@ Route::post('salleAttente', [PatientController::class, 'storeWaitingRoom']);
 Route::get('patients/salle-attente-list', [PatientController::class, 'listSalleAttente']);
 Route::resource('patients', PatientController::class);
 Route::get('patients', [PatientController::class, 'listPatients']);
+Route::post('patients/create-consultation',[ConsultationController::class,'consulterPatient']);
 Route::get('patients/enAttente/services/{service_id}', [PatientController::class, 'listSalleAttenteByService']);
 
 // Acces private

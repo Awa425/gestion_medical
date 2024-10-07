@@ -56,4 +56,39 @@ class ConsultationService{
     });
 }
 
+public function createConsultation(array $data)
+{
+    return DB::transaction(function () use ($data) {
+        // Vérifier si le patient existe
+        $patient = Patient::find($data['patient_id']);
+
+        // Créer une consultation
+        $consultation = Consultation::create([
+            'patient_id' => $data['patient_id'],
+            'medecin_id' => $data['medecin_id'],
+            'libelle' => $data['notes'],
+            'date_consultation' => now(),
+            'notes' => $data['notes'] ?? null,
+        ]);
+
+        // Si les données du dossier médical sont présentes, on met à jour le dossier médical ou on en crée un
+        if (isset($data['dossierMedical'])) {
+            // Chercher ou créer un dossier médical pour le patient
+            $dossierMedical = $patient->dossierMedical()->updateOrCreate(
+                ['patient_id' => $patient->id],
+                [
+                    'numero_dossier' => $data['dossierMedical']['numero_dossier'],
+                    'antecedents' => $data['dossierMedical']['antecedents'] ?? [],
+                    'diagnostics' => $data['dossierMedical']['diagnostics'] ?? [],
+                    'traitements' => $data['dossierMedical']['traitements'] ?? [],
+                    'prescriptions' => $data['dossierMedical']['prescriptions'] ?? [],
+                ]
+            );
+        }
+
+        return $consultation->load('patient', 'medecin'); // Charger les relations
+    });
+}
+
+
 }

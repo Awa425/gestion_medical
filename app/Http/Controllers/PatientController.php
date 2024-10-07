@@ -70,7 +70,6 @@ public function listSalleAttente()
 {      
         $patients = SalleAttente::with(['patient', 'service'])
         ->where('etat', 'en attente')
-        ->orderBy('id', 'DESC')
         ->get();
         $patients;
         return FormatData::formatResponse(message: 'Liste des patients dans en attente', data: $patients);
@@ -122,7 +121,6 @@ public function listSalleAttenteByService($service)
         $patients = SalleAttente::with(['patient', 'service'])
         ->where('etat', 'en attente')
         ->where('service_id', $service)
-        ->orderBy('id', 'DESC')
         ->get();
         $patients;
         return FormatData::formatResponse(message: 'Liste des patients dans en attente', data: $patients);

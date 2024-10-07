@@ -29,8 +29,13 @@ class Consultation extends Model
         return $this->belongsTo(Personnel::class, 'medecin_id');
     }
 
-    public function dossierMedical()
+    public function diagnostics()
     {
-        return $this->belongsTo(DossierMedical::class);
+        return $this->hasMany(Diagnostic::class);
+    }
+
+    public function examens()
+    {
+        return $this->hasMany(Examen::class);
     }
 }
