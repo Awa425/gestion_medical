@@ -8,6 +8,7 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SalleController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TypePersonnelController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -32,6 +33,8 @@ Route::resource('patients', PatientController::class);
 Route::get('patients', [PatientController::class, 'listPatients']);
 Route::post('patients/create-consultation',[ConsultationController::class,'consulterPatient']);
 Route::get('patients/enAttente/services/{service_id}', [PatientController::class, 'listSalleAttenteByService']);
+
+Route::resource('services', ServiceController::class);
 
 // Acces private
 Route::middleware('auth:sanctum')->group( function () {

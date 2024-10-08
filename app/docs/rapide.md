@@ -14,6 +14,7 @@
 
 ` git config --global --unset http.proxy`
 
+
 # Generer la documentation du swagger
 
 ` php artisan l5-swagger:generate`

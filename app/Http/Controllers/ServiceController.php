@@ -6,70 +6,44 @@ use App\Http\Requests\UpdateServiceRequest;
 use App\Http\Requests\UpdateTypeRequest;
 use App\Http\Resources\ServiceResource;
 use App\Models\Service;
+use App\Utils\FormatData;
 use App\Utils\ResponseUtils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ServiceController extends BaseController
+class ServiceController extends Controller
 {
-     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $services = Service::all();
-        return ResponseUtils::formatResponse(message: 'Services retrieved successfully' , data: ServiceResource::collection($services));
-    }
+   /**
+ * @OA\Get(
+ *     path="/api/services",
+ *     summary="liste services",
+ *     description="Liste de tous les services.",
+ *     operationId="listservices",
+ *     tags={"Services"},
+ *     security={{"sanctumAuth":{}}},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Données récupérées avec succès.",
+ *         @OA\JsonContent(type="object", @OA\Property(property="data", type="string"))
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Non autorisé")
+ *         )
+ *     )
+ * )
+ */
+public function index()
+{   
+    $service = Service::all();
+    return FormatData::formatResponse(message: 'Liste des patients', data: $service);
+}
 
-    /**
-     * Create newresource.
-     */
-    public function store(Request $request){
-        
-        $input = $request->all();
-        $validator = Validator::make($input, [
-            'libelle' => 'required',
-        ]);
 
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
-        }
-
-        $Service = Service::create($input);
-        return $this->sendResponse(new ServiceResource($Service), 'Service created successfully.');
-    }
-
-        /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $service = Service::find($id);
   
-        if (is_null($service)) {
-            return $this->sendError('Service not found.');
-        }
-   
-        return $this->sendResponse(new ServiceResource($service), 'Service retrieved successfully.');
-    }
 
-    
-         /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateServiceRequest $request, Service $service)
-    {
-        $service->update($request->validated());
-
-        $service->save();
-   
-        return $this->sendResponse(new ServiceResource($service), 'service updated successfully.');
-    }
+ 
 }
