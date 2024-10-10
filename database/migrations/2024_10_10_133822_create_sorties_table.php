@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transferes', function (Blueprint $table) {
+        Schema::create('sorties', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('admission_id')->constrained('admissions')->onDelete('cascade');
+            $table->date('date_sortie');
+            $table->string('motif_sortie')->nullable();
+            $table->enum('etat_sortie', ['guéri', 'décédé', 'autre'])->default('guéri');
             $table->timestamps();
         });
     }
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transferes');
+        Schema::dropIfExists('sorties');
     }
 };

@@ -1,5 +1,7 @@
 # php artisan make:model product
 
+# composer create-project laravel/laravel your-api-name
+
 # php artisan make:migration create_products_table
 
 # php artisan migrate
@@ -14,8 +16,9 @@
 
 ` git config --global --unset http.proxy`
 
-
 # Generer la documentation du swagger
 
 ` php artisan l5-swagger:generate`
 ` http://localhost:8000/api/documentation#/`
+
+

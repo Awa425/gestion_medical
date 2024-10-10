@@ -19,6 +19,46 @@
         }
     ],
     "paths": {
+        "/api/patients/addAdmission": {
+            "post": {
+                "tags": [
+                    "dossier_medical"
+                ],
+                "summary": "Ajout admission patient",
+                "description": "Admission patient.",
+                "operationId": "crateAdmissionPatient",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Admission"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Admission"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumAuth": []
+                    }
+                ]
+            }
+        },
         "/api/login": {
             "post": {
                 "tags": [
@@ -1151,10 +1191,112 @@
                     }
                 ]
             }
+        },
+        "/api/patients/addSortie": {
+            "post": {
+                "tags": [
+                    "dossier_medical"
+                ],
+                "summary": "Ajout sortie patient",
+                "description": "Sortie patient.",
+                "operationId": "crateSortiePatient",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Sortie"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Sortie"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/patients/addTransfert": {
+            "post": {
+                "tags": [
+                    "dossier_medical"
+                ],
+                "summary": "Transfert de patients",
+                "description": "Faire un transfert de patient.",
+                "operationId": "crateTransfertPatient",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/transfert"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/transfert"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
         "schemas": {
+            "Admission": {
+                "title": "Admission",
+                "description": "Schéma pour une Admission",
+                "properties": {
+                    "motif_admission": {
+                        "description": "Motif de l'admission",
+                        "type": "string",
+                        "example": "Maladie contagieuse"
+                    },
+                    "dossierMedical_id": {
+                        "description": "Dossier medical du patient en question",
+                        "type": "integer",
+                        "example": "4"
+                    },
+                    "service_id": {
+                        "description": "Service",
+                        "type": "integer",
+                        "example": "2"
+                    }
+                },
+                "type": "object"
+            },
             "Auth": {
                 "title": "Login",
                 "description": "Schéma pour s'authentifier",
@@ -1626,6 +1768,60 @@
                 },
                 "type": "object"
             },
+            "Sortie": {
+                "title": "Sortie de l'admission",
+                "description": "Schéma pour une Sortie d'un patient",
+                "properties": {
+                    "motif_sortie": {
+                        "description": "Motif du Sortie",
+                        "type": "string",
+                        "example": "Le patient a guerie"
+                    },
+                    "etat_sortie": {
+                        "description": "Etat du Sortie",
+                        "type": "string",
+                        "example": "gueri"
+                    },
+                    "admission_id": {
+                        "description": "L'admission correspondant a cette sortie",
+                        "type": "integer",
+                        "example": "4"
+                    }
+                },
+                "type": "object"
+            },
+            "transfert": {
+                "title": "Transfere du patient",
+                "description": "Schéma pour transferer'un patient",
+                "properties": {
+                    "motif_transfert": {
+                        "description": "Motif de transfert",
+                        "type": "string",
+                        "example": "Le patient a guerie"
+                    },
+                    "date_transfert": {
+                        "description": "Date de transfert",
+                        "type": "string",
+                        "example": "gueri"
+                    },
+                    "dossierMedical_id": {
+                        "description": "Dossier medical du patient",
+                        "type": "integer",
+                        "example": "4"
+                    },
+                    "from_service_id": {
+                        "description": "Service de depart",
+                        "type": "integer",
+                        "example": "4"
+                    },
+                    "to_service_id": {
+                        "description": "Service a aller",
+                        "type": "integer",
+                        "example": "4"
+                    }
+                },
+                "type": "object"
+            },
             "TypePersonnel": {
                 "title": "Type personnel",
                 "description": "Type du Personnel(Medecin, caissier...)",
@@ -1686,6 +1882,10 @@
         }
     },
     "tags": [
+        {
+            "name": "dossier_medical",
+            "description": "dossier_medical"
+        },
         {
             "name": "login",
             "description": "login"

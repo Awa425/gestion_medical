@@ -26,6 +26,21 @@ class DossierMedical extends Model
         return $this->belongsTo(Patient::class);
     }
 
+    public function admissions()
+    {
+        return $this->hasMany(Admission::class);
+    }
+
+    public function transferts()
+    {
+        return $this->hasMany(Transfere::class);
+    }
+
+    public function sorties()
+    {
+        return $this->hasMany(Sortie::class);
+    }
+
     // le dossier peut être mis à jour lors des consultations
     public function consultations()
     {

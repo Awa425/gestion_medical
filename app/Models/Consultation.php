@@ -34,8 +34,14 @@ class Consultation extends Model
         return $this->hasMany(Diagnostic::class);
     }
 
+    public function admission()
+    {
+        return $this->hasOne(Admission::class);
+    }
     public function examens()
     {
         return $this->hasMany(Examen::class);
     }
+
+
 }

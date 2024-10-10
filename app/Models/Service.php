@@ -15,6 +15,21 @@ class Service extends Model
         "isActive"
     ];
 
+    public function admissions()
+    {
+        return $this->hasMany(Admission::class);
+    }
+
+    public function transfertsFrom()
+    {
+        return $this->hasMany(Transfere::class, 'from_service_id');
+    }
+
+    public function transfertsTo()
+    {
+        return $this->hasMany(Transfere::class, 'to_service_id');
+    }
+
     public function salleAttente()
     {
         return $this->hasMany(SalleAttente::class, 'service_id');
