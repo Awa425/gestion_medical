@@ -43,7 +43,7 @@ class SortieController extends Controller
         $sortie = $this->sortieService->creerSortie($validatedData);
 
         return response()->json([
-            'message' => 'Sortie enregistrée avec succès.',
+            'message'=>'Success',
             'sortie' => $sortie,
         ], 201);
     }

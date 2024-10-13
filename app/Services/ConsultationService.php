@@ -58,35 +58,40 @@ class ConsultationService{
 
 public function createConsultation(array $data)
 {
-    return DB::transaction(function () use ($data) {
-        // Vérifier si le patient existe
-        $patient = Patient::find($data['patient_id']);
-
-        // Créer une consultation
+      return DB::transaction(function() use ($data) {
+        // Création de la consultation
         $consultation = Consultation::create([
             'patient_id' => $data['patient_id'],
             'medecin_id' => $data['medecin_id'],
-            'libelle' => $data['notes'],
+            'libelle'=> $data['libelle'],
             'date_consultation' => now(),
             'notes' => $data['notes'] ?? null,
         ]);
 
-        // Si les données du dossier médical sont présentes, on met à jour le dossier médical ou on en crée un
-        if (isset($data['dossierMedical'])) {
-            // Chercher ou créer un dossier médical pour le patient
-            $dossierMedical = $patient->dossierMedical()->updateOrCreate(
-                ['patient_id' => $patient->id],
-                [
-                    'numero_dossier' => $data['dossierMedical']['numero_dossier'],
-                    'antecedents' => $data['dossierMedical']['antecedents'] ?? [],
-                    'diagnostics' => $data['dossierMedical']['diagnostics'] ?? [],
-                    'traitements' => $data['dossierMedical']['traitements'] ?? [],
-                    'prescriptions' => $data['dossierMedical']['prescriptions'] ?? [],
-                ]
-            );
+        // Mise à jour ou création du dossier médical du patient
+        $dossierMedical = DossierMedical::where('patient_id', $data['patient_id'])->first();
+        
+        if ($dossierMedical) {
+            // Si le dossier médical existe, on le met à jour
+            $dossierMedical->update([
+                'antecedents' => $data['dossierMedical']['antecedents'] ?? $dossierMedical->antecedents,
+                'diagnostics' => $data['dossierMedical']['diagnostics'] ?? $dossierMedical->diagnostics,
+                'traitements' => $data['dossierMedical']['traitements'] ?? $dossierMedical->traitements,
+                'prescriptions' => $data['dossierMedical']['prescriptions'] ?? $dossierMedical->prescriptions,
+            ]);
+        } else {
+            // Si le dossier médical n'existe pas, on le crée
+            $dossierMedical = DossierMedical::create([
+                'patient_id' => $data['patient_id'],
+                'numero_dossier' => $data['dossierMedical']['numero_dossier'],
+                'antecedents' => $data['dossierMedical']['antecedents'] ?? null,
+                'diagnostics' => $data['dossierMedical']['diagnostics'] ?? null,
+                'traitements' => $data['dossierMedical']['traitements'] ?? null,
+                'prescriptions' => $data['dossierMedical']['prescriptions'] ?? null,
+            ]);
         }
 
-        return $consultation->load('patient', 'medecin'); // Charger les relations
+        return $consultation->load('patient', 'medecin');
     });
 }
 

@@ -8,7 +8,7 @@ namespace App\Docs;
  *      title="API Gestion Medical",
  *      description="Documentation API pour la  gestion Medical",
  *      @OA\Contact(
- *          email="diopawa425@gmail.com.com"
+ *          email="diopawa425@gmail.com"
  *      ),
  *      @OA\License(
  *          name="Apache 2.0",

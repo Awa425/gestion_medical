@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 namespace App\Services;
 
 use App\Models\Admission;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
 class AdmissionService
@@ -24,6 +25,22 @@ class AdmissionService
 
             return $admission->load('dossierMedical', 'service');
         });
+    }
+
+    public function showDetailAdmission($id)
+    {
+        $admission = Admission::find($id);
+        return $admission;
+  
+        // if (is_null($admission)) {
+        //     return response()->json([
+        //         'message' => 'Admission not found.',  
+        //     ], 400);        }
+   
+            // return response()->json([
+            //     'message' => 'Admission trouvé.',  
+            //     'data'=>$admission
+            // ], 201);  
     }
 }
 

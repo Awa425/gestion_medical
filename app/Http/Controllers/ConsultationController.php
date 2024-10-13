@@ -63,6 +63,7 @@ public function consulterPatient(Request $request)
         'patient_id' => $validatedData['patient_id'],
         'medecin_id' => $validatedData['medecin_id'],
         'notes' => $validatedData['notes'] ?? null,
+        'libelle' => $validatedData['libelle'] ?? null,
         'dossierMedical' => $request->get('dossierMedical')
     ]);
 

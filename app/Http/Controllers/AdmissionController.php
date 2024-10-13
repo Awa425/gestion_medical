@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admission;
 use App\Services\AdmissionService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AdmissionController extends Controller
 {
+    public function __construct(private AdmissionService $admissionService){}
+
 /**
  * @OA\Post(
  *      path="/api/patients/addAdmission",
@@ -30,7 +34,6 @@ class AdmissionController extends Controller
  *      )
  * )
  */
-    public function __construct(private AdmissionService $admissionService){}
 
     public function store(Request $request)
     {
@@ -47,4 +50,7 @@ class AdmissionController extends Controller
             'admission' => $admission,
         ], 201);
     }
+
+
+
 }

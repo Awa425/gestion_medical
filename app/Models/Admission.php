@@ -24,4 +24,9 @@ class Admission extends Model
     public function consultation(){
         return $this->belongsTo(Consultation::class, 'consultation_id');
     }
+
+    public function sortie(){
+        return $this->hasOne(Sortie::class);
+
+    }
 }
