@@ -7,12 +7,6 @@ namespace App\Docs;
  *     title="User",
  *     description="Schéma pour un utilisateur",
  *     @OA\Property(
- *         property="id",
- *         type="integer",
- *         description="ID de l'utilisateur",
- *         example=1
- *     ),
- *     @OA\Property(
  *         property="email",
  *         type="string",
  *         description="Email de l'utilisateur",
@@ -26,9 +20,9 @@ namespace App\Docs;
  *     ),
  *     @OA\Property(
  *         property="roles",
- *         type="array",
- *         @OA\Items(ref="#/components/schemas/Role"), 
- *         description="Role associée"
+ *         type="integer", 
+ *         description="Role associée",
+ *         example=1
  *     )
  * )
  */

@@ -50,6 +50,33 @@ class PersonnelController extends BaseController
     }
 
 /**
+ * @OA\Get(
+ *     path="/api/medecin-list",
+ *     summary="liste des medecins",
+ *     description="Liste de tous les medecins.",
+ *     operationId="listMedecin",
+ *     tags={"personnels"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Données récupérées avec succès.",
+ *         @OA\JsonContent(type="object", @OA\Property(property="data", type="string"))
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé, token invalide ou manquant."
+ *     )
+ * )
+ */
+    public function medecinList()
+    {
+        $medecins = Personnel::where('type_personnel_id', 1)
+        ->get(); 
+        $medecins->load('type','user');
+
+        return FormatData::formatResponse(message: 'Liste des medecins', data: $medecins);
+    }
+
+/**
  * @OA\Post(
  *      path="/api/personnels",
  *      operationId="createPersonnel",
@@ -255,7 +282,7 @@ class PersonnelController extends BaseController
 
     }
 
-    /**
+/**
  * @OA\Delete(
  *      path="/api/personnels/{id}",
  *      operationId="delete",

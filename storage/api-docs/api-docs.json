@@ -841,6 +841,36 @@
                 ]
             }
         },
+        "/api/medecin-list": {
+            "get": {
+                "tags": [
+                    "personnels"
+                ],
+                "summary": "liste des medecins",
+                "description": "Liste de tous les medecins.",
+                "operationId": "listMedecin",
+                "responses": {
+                    "200": {
+                        "description": "Données récupérées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé, token invalide ou manquant."
+                    }
+                }
+            }
+        },
         "/api/personnels/{id}": {
             "get": {
                 "tags": [
@@ -1271,6 +1301,36 @@
                     }
                 ]
             }
+        },
+        "/api/type-personnels": {
+            "get": {
+                "tags": [
+                    "personnels"
+                ],
+                "summary": "liste personnel",
+                "description": "Liste des types de personnel.",
+                "operationId": "listTypePersonnel",
+                "responses": {
+                    "200": {
+                        "description": "Données récupérées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé, token invalide ou manquant."
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -1374,12 +1434,6 @@
                         "description": "Nom de la consultation",
                         "type": "string",
                         "example": "Ophtalmologie"
-                    },
-                    "date_consultation": {
-                        "description": "Date de la consultation",
-                        "type": "string",
-                        "format": "date",
-                        "example": "2024-10-12"
                     },
                     "notes": {
                         "description": "Note prise lors de la consultation",
@@ -1563,15 +1617,15 @@
                         "type": "string",
                         "example": "Awa"
                     },
-                    "email": {
-                        "description": "Adresse email du personnel",
-                        "type": "string",
-                        "example": "diop.awa@hospital.com"
-                    },
                     "telephone": {
                         "description": "Numéro de téléphone",
                         "type": "string",
                         "example": "+221772345678"
+                    },
+                    "adresse": {
+                        "description": "Adresse",
+                        "type": "string",
+                        "example": "Dakar"
                     },
                     "datte_naissance": {
                         "description": "Date de naissance",
@@ -1591,12 +1645,6 @@
                         "format": "string",
                         "example": "154367548765"
                     },
-                    "matricule": {
-                        "description": "Matricule du personnel",
-                        "type": "string",
-                        "format": "string",
-                        "example": "VGFR7548765"
-                    },
                     "date_embauche": {
                         "description": "Mdate d'embauche",
                         "type": "string",
@@ -1604,28 +1652,9 @@
                         "example": "1985-10-15"
                     },
                     "type_personnel_id": {
-                        "$ref": "#/components/schemas/TypePersonnel"
-                    },
-                    "qualifications": {
-                        "description": "Liste des qualifications du personnel",
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Qualification"
-                        }
-                    },
-                    "formations": {
-                        "description": "Liste des formations du personnel",
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Formation"
-                        }
-                    },
-                    "certifications": {
-                        "description": "Liste des certification du personnel",
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Certification"
-                        }
+                        "description": "Type personnel associée",
+                        "type": "integer",
+                        "example": "1"
                     },
                     "user": {
                         "$ref": "#/components/schemas/User"
@@ -1837,7 +1866,9 @@
                         "example": "Medecin"
                     },
                     "categorie_id": {
-                        "$ref": "#/components/schemas/Categorie"
+                        "description": "Categorie associée",
+                        "type": "integer",
+                        "example": 1
                     }
                 },
                 "type": "object"
@@ -1846,11 +1877,6 @@
                 "title": "User",
                 "description": "Schéma pour un utilisateur",
                 "properties": {
-                    "id": {
-                        "description": "ID de l'utilisateur",
-                        "type": "integer",
-                        "example": 1
-                    },
                     "email": {
                         "description": "Email de l'utilisateur",
                         "type": "string",
@@ -1863,10 +1889,8 @@
                     },
                     "roles": {
                         "description": "Role associée",
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Role"
-                        }
+                        "type": "integer",
+                        "example": 1
                     }
                 },
                 "type": "object"

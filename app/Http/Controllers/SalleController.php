@@ -11,73 +11,53 @@ use Illuminate\Support\Facades\Validator;
 
 class SalleController extends BaseController
 {
-     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(): JsonResponse
-    {
-        $salles = Salle::all();
-    
-        return $this->sendResponse(salleResource::collection($salles), 'salles retrieved successfully.');
-    }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request): JsonResponse
-    {
-        $input = $request->all();
-   
-        $validator = Validator::make($input, [
-            'libelle' => 'required',
-            'nombre_lits' => 'required'
-        ]);
-   
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
-        }
-   
-        $salle = salle::create($input);
-   
-        return $this->sendResponse(new SalleResource($salle), 'salle created successfully.');
-    }
 
-       /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id): JsonResponse
-    {
-        $salle = Salle::find($id);
+    // public function index(): JsonResponse
+    // {
+    //     $salles = Salle::all();
+    
+    //     return $this->sendResponse(result: salleResource::collection($salles), 'salles retrieved successfully.');
+    // }
+    
+
+    // public function store(Request $request): JsonResponse
+    // {
+    //     $input = $request->all();
+   
+    //     $validator = Validator::make($input, [
+    //         'libelle' => 'required',
+    //         'nombre_lits' => 'required'
+    //     ]);
+   
+    //     if($validator->fails()){
+    //         return $this->sendError('Validation Error.', $validator->errors());       
+    //     }
+   
+    //     $salle = salle::create($input);
+   
+    //     return $this->sendResponse(new SalleResource($salle), 'salle created successfully.');
+    // }
+
+ 
+    // public function show($id): JsonResponse
+    // {
+    //     $salle = Salle::find($id);
   
-        if (is_null($salle)) {
-            return $this->sendError('Salle not found.');
-        }
+    //     if (is_null($salle)) {
+    //         return $this->sendError('Salle not found.');
+    //     }
    
-        return $this->sendResponse(new SalleResource($salle), 'SAlle retrieved successfully.');
-    }
+    //     return $this->sendResponse(new SalleResource($salle), 'SAlle retrieved successfully.');
+    // }
 
-     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(updateSalleRequest $request, salle $salle): JsonResponse
-    {
-        $salle->update($request->validated());
 
-        $salle->save();
+    // public function update(updateSalleRequest $request, salle $salle): JsonResponse
+    // {
+    //     $salle->update($request->validated());
+
+    //     $salle->save();
    
-        return $this->sendResponse(new SalleResource($salle), 'Salle updated successfully.');
-    }
+    //     return $this->sendResponse(new SalleResource($salle), 'Salle updated successfully.');
+    // }
    
 }

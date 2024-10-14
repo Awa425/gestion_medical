@@ -18,13 +18,6 @@ namespace App\Docs;
  *         example="Ophtalmologie"
  *     ),
  *     @OA\Property(
- *         property="date_consultation",
- *         type="string",
- *         format="date",
- *         description="Date de la consultation",
- *         example="2024-10-12"
- *     ),
- *     @OA\Property(
  *         property="notes",
  *         type="string",
  *         description="Note prise lors de la consultation",

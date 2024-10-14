@@ -74,10 +74,22 @@ public function createConsultation(array $data)
         if ($dossierMedical) {
             // Si le dossier médical existe, on le met à jour
             $dossierMedical->update([
-                'antecedents' => $data['dossierMedical']['antecedents'] ?? $dossierMedical->antecedents,
-                'diagnostics' => $data['dossierMedical']['diagnostics'] ?? $dossierMedical->diagnostics,
-                'traitements' => $data['dossierMedical']['traitements'] ?? $dossierMedical->traitements,
-                'prescriptions' => $data['dossierMedical']['prescriptions'] ?? $dossierMedical->prescriptions,
+                'antecedents' => array_merge(
+                    $dossierMedical->antecedents ?? [],
+                    $data['dossierMedical']['antecedents'] ?? []
+                ),
+                'diagnostics' => array_merge(
+                    $dossierMedical->diagnostics ?? [],
+                    $data['dossierMedical']['diagnostics'] ?? []
+                ),
+                'traitements' => array_merge(
+                    $dossierMedical->traitements ?? [],
+                    $data['dossierMedical']['traitements'] ?? []
+                ),
+                'prescriptions' => array_merge(
+                    $dossierMedical->prescriptions ?? [],
+                    $data['dossierMedical']['prescriptions'] ?? []
+                ),
             ]);
         } else {
             // Si le dossier médical n'existe pas, on le crée

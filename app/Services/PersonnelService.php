@@ -9,11 +9,23 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class PersonnelService{
+    private function generateMatricule()
+    {
+        // Générer un matricule unique, par exemple PERS suivi de l'ID ou d'un timestamp
+        $prefix = "PERS_";
+        $timestamp = now()->format('YmdHis');
+        
+        return $prefix . $timestamp . rand(100, 999);
+    }
 
 // Creation de personnel avec ou sans les details(users, qualification, formation ou certification)
     public function createPersonnelWithDetails(array $data){
          
             return DB::transaction(function() use ($data) {
+
+                $matricule = $this->generateMatricule();
+
+                $data['personnel']['matricule'] = $matricule;
                 
                 // Créer le personnel
                 $personnel = Personnel::create($data['personnel']);
@@ -85,7 +97,7 @@ class PersonnelService{
                     }
                 }
     
-                return $personnel->load('type','user','qualifications', 'formations', 'certifications');
+                return $personnel->load('type','user');
             });
     
         

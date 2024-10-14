@@ -8,6 +8,7 @@ use App\Http\Controllers\DossierMedicalController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\RendezVousController;
 use App\Http\Controllers\SalleController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SortieController;
@@ -28,18 +29,24 @@ Route::get('categories', [CategorieController::class, 'index']);
 // Route::post('consultations', [ConsultationController::class, 'store']);
 
 Route::resource('personnels', PersonnelController::class);
+Route::resource('type-personnels', TypePersonnelController::class);
+Route::get('medecin-list', [PersonnelController::class, 'medecinList']);
+
+
+Route::post('salleAttente', [PatientController::class, 'storeWaitingRoom']);
 
 Route::put('patients/{id}/dossier', [PatientController::class, 'createDossier']);
-Route::post('salleAttente', [PatientController::class, 'storeWaitingRoom']);
 Route::get('patients/salle-attente-list', [PatientController::class, 'listSalleAttente']);
 Route::resource('patients', PatientController::class);
 Route::get('patients', [PatientController::class, 'listPatients']);
 Route::post('patients/create-consultation',[ConsultationController::class,'consulterPatient']);
 Route::get('patients/enAttente/services/{service_id}', [PatientController::class, 'listSalleAttenteByService']);
-
 Route::post('patients/addAdmission',[AdmissionController::class, 'store']);
 Route::post('patients/addSortie',[SortieController::class, 'store']);
 Route::post('patients/addTransfert',[TransfereController::class, 'store']);
+
+Route::post('ajouter/rendezVous',[RendezVousController::class, 'store']);
+Route::post('annuler/rendezVous/{id}',[RendezVousController::class, 'annuler']);
 
 Route::resource('services', ServiceController::class);
 

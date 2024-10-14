@@ -6,6 +6,7 @@ use App\Http\Requests\UpdateTypeRequest;
 use App\Http\Resources\TypeCollection;
 use App\Http\Resources\TypeResource;
 use App\Models\Type;
+use App\Models\TypePersonnel;
 use App\Utils\ResponseUtils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -17,8 +18,8 @@ class TypeController extends BaseController
      */
     public function index()
     {
-        $types = Type::all();
-        return ResponseUtils::formatResponse(message: 'types retrieved successfully' , data: TypeResource::collection($types));
+        $typePersonnels=TypePersonnel::all();
+        return response()->json($typePersonnels);
     }
 
     public function store(Request $request){

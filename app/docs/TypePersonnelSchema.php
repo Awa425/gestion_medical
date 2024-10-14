@@ -20,8 +20,9 @@ namespace App\Docs;
  *     ),
  *      @OA\Property(
  *         property="categorie_id",
- *         ref="#/components/schemas/Categorie",
- *         description="Categorie associée"
+ *         type="integer",
+ *         description="Categorie associée",
+ *         example=1
  *     ),
  * )
  */
