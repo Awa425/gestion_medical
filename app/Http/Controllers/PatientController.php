@@ -420,7 +420,7 @@ return response()->json([
  *             @OA\Property(property="status", type="string", example="success"),
  *             @OA\Property(property="message", type="string", example="Patient trouvé avec succès"),
  *             @OA\Property(property="data", type="object", ref="#/components/schemas/Patient")
- *         )
+ *      )
  *     ),
  *     @OA\Response(
  *         response=401,
@@ -437,7 +437,7 @@ return response()->json([
 *             @OA\Property(property="status", type="string", example="error"),
 *             @OA\Property(property="message", type="string", example="Patient non trouvé")
 *         )
-*     )
+*      )
 * )
 */
 public function show($id)

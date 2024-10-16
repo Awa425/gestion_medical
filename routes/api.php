@@ -9,6 +9,7 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\RendezVousController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalleController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SortieController;
@@ -26,7 +27,8 @@ Route::resource('dossierMedical', DossierMedicalController::class);
 Route::get('users', [UserController::class, 'index']);
 Route::get('types', [TypePersonnelController::class, 'index']);
 Route::get('categories', [CategorieController::class, 'index']);
-// Route::post('consultations', [ConsultationController::class, 'store']);
+
+Route::resource('roles', RoleController::class);
 
 Route::resource('personnels', PersonnelController::class);
 Route::resource('type-personnels', TypePersonnelController::class);

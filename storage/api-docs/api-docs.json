@@ -1170,6 +1170,36 @@
                 ]
             }
         },
+        "/api/roles": {
+            "get": {
+                "tags": [
+                    "roles"
+                ],
+                "summary": "liste des Roles",
+                "description": "Liste des roles.",
+                "operationId": "listRoles",
+                "responses": {
+                    "200": {
+                        "description": "Données récupérées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé, token invalide ou manquant."
+                    }
+                }
+            }
+        },
         "/api/services": {
             "get": {
                 "tags": [
@@ -1925,6 +1955,10 @@
         {
             "name": "personnels",
             "description": "personnels"
+        },
+        {
+            "name": "roles",
+            "description": "roles"
         },
         {
             "name": "Services",
