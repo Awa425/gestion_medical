@@ -11,12 +11,34 @@ class RendezVousController extends Controller
 
     public function __construct(protected RendezVousService $rendezVousService){}
 
-    // Créer un nouveau rendez-vous
+ /**
+ * @OA\Post(
+ *      path="/api/ajouter/rendezVous",
+ *      operationId="crateRendezVous",
+ *      tags={"rendez-vous"},
+ *      summary="Créer un nouveau rendez-vous",
+ *      description="Créer un nouveau rendez-vous.",
+ *      @OA\RequestBody(
+ *          required=true,
+ *          @OA\JsonContent(ref="#/components/schemas/RendezVous")
+ *      ),
+ *      @OA\Response(
+ *          response=201,
+ *          description="Succès",
+ *          @OA\JsonContent(ref="#/components/schemas/RendezVous")
+ *      ),
+ *      @OA\Response(
+ *          response=400,
+ *          description="Erreur de validation"
+ *      )
+ * )
+ */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
             'patient_id' => 'required|exists:patients,id',
             'medecin_id' => 'required|exists:personnels,id',
+            'service_id' => 'required|exists:services,id',
             'date_heure' => 'required|date_format:Y-m-d H:i:s',
             'motif' => 'nullable|string',
         ]);

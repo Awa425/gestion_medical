@@ -1170,6 +1170,41 @@
                 ]
             }
         },
+        "/api/ajouter/rendezVous": {
+            "post": {
+                "tags": [
+                    "rendez-vous"
+                ],
+                "summary": "Créer un nouveau rendez-vous",
+                "description": "Créer un nouveau rendez-vous.",
+                "operationId": "crateRendezVous",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RendezVous"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RendezVous"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
         "/api/roles": {
             "get": {
                 "tags": [
@@ -1720,6 +1755,44 @@
                 },
                 "type": "object"
             },
+            "RendezVous": {
+                "title": "Rendez-vous",
+                "description": "Gestion des Rendez-vous",
+                "properties": {
+                    "patient_id": {
+                        "description": "Id du patient",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "medecin_id": {
+                        "description": "Id du medecin",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "service_id": {
+                        "description": "Id du service",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "date_heure": {
+                        "description": "date et heure du rendez-vous",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-10-15 08:00:00"
+                    },
+                    "statut": {
+                        "description": "statut programmé, annulé ou terminé",
+                        "type": "string",
+                        "example": "programmé"
+                    },
+                    "motif": {
+                        "description": "Motif du Rendez-vous",
+                        "type": "string",
+                        "example": "Donner le motif"
+                    }
+                },
+                "type": "object"
+            },
             "ResetPassword": {
                 "title": "Reset Password",
                 "description": "Changer votre mot de passe ",
@@ -1955,6 +2028,10 @@
         {
             "name": "personnels",
             "description": "personnels"
+        },
+        {
+            "name": "rendez-vous",
+            "description": "rendez-vous"
         },
         {
             "name": "roles",

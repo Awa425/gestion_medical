@@ -13,6 +13,7 @@ class RendezVous extends Model
     protected $fillable = [
         'patient_id',
         'medecin_id',
+        'service_id',
         'date_heure',
         'statut',
         'motif',
@@ -28,5 +29,10 @@ class RendezVous extends Model
     public function medecin()
     {
         return $this->belongsTo(Personnel::class,'medecin_id');
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class,'service_id');
     }
 }

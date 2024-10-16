@@ -15,6 +15,7 @@ class RendezVousService
         return RendezVous::create([
             'patient_id' => $data['patient_id'],
             'medecin_id' => $data['medecin_id'],
+            'service_id' => $data['service_id'],
             'date_heure' => $data['date_heure'],
             'motif' => $data['motif'],
             'statut' => 'programmé',

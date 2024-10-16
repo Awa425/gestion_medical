@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
-    /**
+/**
  * @OA\Get(
  *     path="/api/roles",
  *     summary="liste des Roles",

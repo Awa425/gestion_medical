@@ -34,6 +34,11 @@ class Service extends Model
     {
         return $this->hasMany(SalleAttente::class, 'service_id');
     }
+
+    public function rendezVous()
+    {
+        return $this->hasMany(RendezVous::class);
+    }
     public function specialites(): HasMany
     {
         return $this->hasMany(Specialite::class);
