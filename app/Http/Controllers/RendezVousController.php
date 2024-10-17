@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RendezVous;
 use App\Services\RendezVousService;
 use Illuminate\Http\Request;
 
@@ -10,6 +11,29 @@ class RendezVousController extends Controller
    
 
     public function __construct(protected RendezVousService $rendezVousService){}
+    /**
+ * @OA\Get(
+ *     path="/api/rendezVous",
+ *     summary="liste des rendezVous",
+ *     description="Liste des rendezVous.",
+ *     operationId="listRendezVous",
+ *     tags={"rendez-vous"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Données récupérées avec succès.",
+ *         @OA\JsonContent(type="object", @OA\Property(property="data", type="string"))
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé, token invalide ou manquant."
+ *     )
+ * )
+ */
+public function index()
+{
+    $rv=RendezVous::all();
+    return response()->json($rv);
+}
 
  /**
  * @OA\Post(

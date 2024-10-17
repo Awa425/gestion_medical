@@ -1171,6 +1171,34 @@
             }
         },
         "/api/rendezVous": {
+            "get": {
+                "tags": [
+                    "rendez-vous"
+                ],
+                "summary": "liste des rendezVous",
+                "description": "Liste des rendezVous.",
+                "operationId": "listRendezVous",
+                "responses": {
+                    "200": {
+                        "description": "Données récupérées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé, token invalide ou manquant."
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "rendez-vous"
@@ -1226,7 +1254,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Patient mis à jour avec succès",
+                        "description": "RV mis à jour avec succès",
                         "content": {
                             "application/json": {
                                 "schema": {
