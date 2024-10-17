@@ -98,22 +98,6 @@ public function index()
  *             @OA\Property(property="data", type="object", ref="#/components/schemas/RendezVous")
  *         )
  *     ),
- *     @OA\Response(
- *         response=400,
- *         description="Requête invalide",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Validation error")
- *         )
- *     ),
- *     @OA\Response(
- *         response=401,
- *         description="Non autorisé",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Non autorisé")
- *         )
- *     ),
  * )
  */
     public function annuler($id)

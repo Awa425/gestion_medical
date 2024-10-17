@@ -48,7 +48,7 @@ Route::post('patients/addSortie',[SortieController::class, 'store']);
 Route::post('patients/addTransfert',[TransfereController::class, 'store']);
 
 Route::resource('rendezVous',RendezVousController::class);
-Route::post('annuler/rendezVous/{id}',[RendezVousController::class, 'annuler']);
+Route::put('annuler/rendezVous/{id}',[RendezVousController::class, 'annuler']);
 
 Route::resource('services', ServiceController::class);
 
