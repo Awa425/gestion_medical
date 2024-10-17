@@ -47,7 +47,7 @@ Route::post('patients/addAdmission',[AdmissionController::class, 'store']);
 Route::post('patients/addSortie',[SortieController::class, 'store']);
 Route::post('patients/addTransfert',[TransfereController::class, 'store']);
 
-Route::post('ajouter/rendezVous',[RendezVousController::class, 'store']);
+Route::resource('rendezVous',RendezVousController::class);
 Route::post('annuler/rendezVous/{id}',[RendezVousController::class, 'annuler']);
 
 Route::resource('services', ServiceController::class);

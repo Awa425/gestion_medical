@@ -13,7 +13,7 @@ class RendezVousController extends Controller
 
  /**
  * @OA\Post(
- *      path="/api/ajouter/rendezVous",
+ *      path="/api/rendezVous",
  *      operationId="crateRendezVous",
  *      tags={"rendez-vous"},
  *      summary="Créer un nouveau rendez-vous",
@@ -51,7 +51,47 @@ class RendezVousController extends Controller
         }
     }
 
-    // Annuler un rendez-vous
+/**
+ * @OA\Put(
+ *      path="/api/annuler/rendezVous/{id}",
+ *      operationId="updaterendezVous",
+ *      tags={"rendez-vous"},
+ *      summary="Annuler rendez-vous",
+ *      description="Annuler rendez-vous.", 
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID du RV",
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="RV mis à jour avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="success"),
+ *             @OA\Property(property="message", type="string", example="Rendez-vous annuler"),
+ *             @OA\Property(property="data", type="object", ref="#/components/schemas/RendezVous")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Requête invalide",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Validation error")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Non autorisé")
+ *         )
+ *     ),
+ * )
+ */
     public function annuler($id)
     {
         $this->rendezVousService->annulerRendezVous($id);

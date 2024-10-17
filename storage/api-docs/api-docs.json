@@ -1170,7 +1170,7 @@
                 ]
             }
         },
-        "/api/ajouter/rendezVous": {
+        "/api/rendezVous": {
             "post": {
                 "tags": [
                     "rendez-vous"
@@ -1201,6 +1201,92 @@
                     },
                     "400": {
                         "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
+        "/api/annuler/rendezVous/{id}": {
+            "put": {
+                "tags": [
+                    "rendez-vous"
+                ],
+                "summary": "Annuler rendez-vous",
+                "description": "Annuler rendez-vous.",
+                "operationId": "updaterendezVous",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du RV",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Patient mis à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Rendez-vous annuler"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/RendezVous"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requête invalide",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
