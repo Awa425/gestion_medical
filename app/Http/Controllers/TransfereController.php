@@ -13,7 +13,7 @@ class TransfereController extends Controller
  * @OA\Post(
  *      path="/api/patients/addTransfert",
  *      operationId="crateTransfertPatient",
- *      tags={"dossier_medical"},
+ *      tags={"dossier_medical & Consultation"},
  *      summary="Transfert de patients",
  *      description="Faire un transfert de patient.",
  *      security={{"sanctumAuth":{}}},

@@ -22,7 +22,7 @@
         "/api/patients/addAdmission": {
             "post": {
                 "tags": [
-                    "dossier_medical"
+                    "dossier_medical & Consultation"
                 ],
                 "summary": "Ajout admission patient",
                 "description": "Admission patient.",
@@ -134,13 +134,60 @@
                 ]
             }
         },
+        "/api/consultations": {
+            "get": {
+                "tags": [
+                    "dossier_medical & Consultation"
+                ],
+                "summary": "liste consultation",
+                "description": "Liste de tous les consultations.",
+                "operationId": "listConsultation",
+                "responses": {
+                    "200": {
+                        "description": "Données récupérées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/patients/create-consultation": {
             "post": {
                 "tags": [
-                    "patients"
+                    "dossier_medical & Consultation"
                 ],
-                "summary": "Consulter un patient",
-                "description": "Consulter un patient.",
+                "summary": "Consulter, mettre a jour dossier patient",
+                "description": "Consulter et modifier dossier medical d'un patient.",
                 "operationId": "consulterPatient",
                 "requestBody": {
                     "required": true,
@@ -262,7 +309,7 @@
         "/api/patients/salle-attente-list": {
             "get": {
                 "tags": [
-                    "patients"
+                    "salle_attente"
                 ],
                 "summary": "liste patients",
                 "description": "Liste de tous les patients dans la salle d'attente.",
@@ -314,7 +361,7 @@
         "/api/patients/enAttente/services/{service_id}": {
             "get": {
                 "tags": [
-                    "patients"
+                    "salle_attente"
                 ],
                 "summary": "Liste des patient dans en service",
                 "description": "Liste des patient dans en service",
@@ -400,7 +447,7 @@
         "/api/salleAttente": {
             "post": {
                 "tags": [
-                    "patients"
+                    "salle_attente"
                 ],
                 "summary": "Enregistrer dans la salle d'attente",
                 "description": "Enregistrer dans la salle d'attente.",
@@ -524,246 +571,6 @@
                 "security": [
                     {
                         "bearerAuth": []
-                    }
-                ]
-            },
-            "put": {
-                "tags": [
-                    "patients"
-                ],
-                "summary": "Modifier les infos d'une patient",
-                "description": "Modifier les infos d'une patient.",
-                "operationId": "updatePatient",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID du patient à mettre à jour",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/Patient"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Patient mis à jour avec succès",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Patient mis à jour avec succès"
-                                        },
-                                        "data": {
-                                            "$ref": "#/components/schemas/Patient"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Requête invalide",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Validation error"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Non autorisé",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Non autorisé"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Patient non trouvé",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Patient non trouvé"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "sanctumAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/patients/{id}/dossier": {
-            "put": {
-                "tags": [
-                    "patients"
-                ],
-                "summary": "Creation dossier medical",
-                "description": "Creation dossier medical.",
-                "operationId": "createDossier",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID du patient à mettre à jour",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/Patient"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Dossier mis à jour avec succès",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Patient mis à jour avec succès"
-                                        },
-                                        "data": {
-                                            "$ref": "#/components/schemas/Patient"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Requête invalide",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Validation error"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Non autorisé",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Non autorisé"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Patient non trouvé",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Patient non trouvé"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "sanctumAuth": []
                     }
                 ]
             }
@@ -1364,7 +1171,7 @@
         "/api/patients/addSortie": {
             "post": {
                 "tags": [
-                    "dossier_medical"
+                    "dossier_medical & Consultation"
                 ],
                 "summary": "Ajout sortie patient",
                 "description": "Sortie patient.",
@@ -1404,7 +1211,7 @@
         "/api/patients/addTransfert": {
             "post": {
                 "tags": [
-                    "dossier_medical"
+                    "dossier_medical & Consultation"
                 ],
                 "summary": "Transfert de patients",
                 "description": "Faire un transfert de patient.",
@@ -2084,8 +1891,8 @@
     },
     "tags": [
         {
-            "name": "dossier_medical",
-            "description": "dossier_medical"
+            "name": "dossier_medical & Consultation",
+            "description": "dossier_medical & Consultation"
         },
         {
             "name": "login",
@@ -2098,6 +1905,10 @@
         {
             "name": "patients",
             "description": "patients"
+        },
+        {
+            "name": "salle_attente",
+            "description": "salle_attente"
         },
         {
             "name": "personnels",

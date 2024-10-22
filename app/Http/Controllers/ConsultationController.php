@@ -8,6 +8,7 @@ use App\Models\Consultation;
 use App\Models\Patient;
 use App\Services\ConsultationService;
 use App\Services\PatientService;
+use App\Utils\FormatData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,21 +16,48 @@ class ConsultationController extends BaseController
 {
 
     public function __construct(protected PatientService $patientService, protected ConsultationService $consultationService){}
-
+/**
+ * @OA\Get(
+ *     path="/api/consultations",
+ *     summary="liste consultation",
+ *     description="Liste de tous les consultations.",
+ *     operationId="listConsultation",
+ *     tags={"dossier_medical & Consultation"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Données récupérées avec succès.",
+ *         @OA\JsonContent(type="object", @OA\Property(property="data", type="string"))
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Non autorisé")
+ *         )
+ *     )
+ * )
+ */
     public function index()
     {
-        $consultation = Consultation::all();
-    
-        return $this->sendResponse(ConsultationResource::collection($consultation), 'Consultation retrieved successfully.');
+             
+                $consultations = Consultation::with(['patient', 'medecin'])
+                ->orderBy('id','desc')
+                ->get();
+                $consultations;
+                return FormatData::formatResponse(message: 'Liste des patients dans en attente', data: $consultations);
+        
     }
 
-    /**
+
+
+/**
  * @OA\Post(
  *      path="/api/patients/create-consultation",
  *      operationId="consulterPatient",
- *      tags={"patients"},
- *      summary="Consulter un patient",
- *      description="Consulter un patient.", 
+ *      tags={"dossier_medical & Consultation"},
+ *      summary="Consulter, mettre a jour dossier patient",
+ *      description="Consulter et modifier dossier medical d'un patient.", 
  *      @OA\RequestBody(
  *          required=true,
  *          @OA\JsonContent(ref="#/components/schemas/Consultation")
@@ -105,9 +133,8 @@ public function consulterPatient(Request $request)
         return $this->sendResponse(new ConsultationResource($consultation), 'Consultation retrieved successfully.');
     }
 
-        /**
-     * Update the specified resource in storage.
-     */
+
+
     public function update(ConsultationRequest $request, Consultation $consultation)
     {
         $consultation->update($request->validated());

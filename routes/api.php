@@ -37,11 +37,13 @@ Route::get('medecin-list', [PersonnelController::class, 'medecinList']);
 
 Route::post('salleAttente', [PatientController::class, 'storeWaitingRoom']);
 
-Route::put('patients/{id}/dossier', [PatientController::class, 'createDossier']);
+// Route::put('patients/{id}/dossier', [PatientController::class, 'createDossier']);
+Route::put('dossier/{id}', [DossierMedicalController::class, 'updateDossier']);
 Route::get('patients/salle-attente-list', [PatientController::class, 'listSalleAttente']);
 Route::resource('patients', PatientController::class);
 Route::get('patients', [PatientController::class, 'listPatients']);
 Route::post('patients/create-consultation',[ConsultationController::class,'consulterPatient']);
+Route::get('consultations',[ConsultationController::class,'index']);
 Route::get('patients/enAttente/services/{service_id}', [PatientController::class, 'listSalleAttenteByService']);
 Route::post('patients/addAdmission',[AdmissionController::class, 'store']);
 Route::post('patients/addSortie',[SortieController::class, 'store']);

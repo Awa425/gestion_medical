@@ -11,7 +11,8 @@ class RendezVousController extends Controller
    
 
     public function __construct(protected RendezVousService $rendezVousService){}
-    /**
+    
+/**
  * @OA\Get(
  *     path="/api/rendezVous",
  *     summary="liste des rendezVous",

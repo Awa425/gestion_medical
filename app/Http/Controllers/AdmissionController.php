@@ -15,7 +15,7 @@ class AdmissionController extends Controller
  * @OA\Post(
  *      path="/api/patients/addAdmission",
  *      operationId="crateAdmissionPatient",
- *      tags={"dossier_medical"},
+ *      tags={"dossier_medical & Consultation"},
  *      summary="Ajout admission patient",
  *      description="Admission patient.",
  *      security={{"sanctumAuth":{}}},

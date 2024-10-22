@@ -49,7 +49,7 @@ public function listPatients()
  *     summary="liste patients",
  *     description="Liste de tous les patients dans la salle d'attente.",
  *     operationId="listPatientsEnAttente",
- *     tags={"patients"},
+ *     tags={"salle_attente"},
  *     security={{"sanctumAuth":{}}},
  *     @OA\Response(
  *         response=200,
@@ -79,7 +79,7 @@ public function listSalleAttente()
  * @OA\Get(
  *      path="/api/patients/enAttente/services/{service_id}",
  *      operationId="GetPatientByService",
- *      tags={"patients"},
+ *      tags={"salle_attente"},
  *      summary="Liste des patient dans en service",
  *      description="Liste des patient dans en service",
  *     @OA\Parameter(
@@ -188,7 +188,7 @@ public function store(Request $request)
  * @OA\Post(
  *      path="/api/salleAttente",
  *      operationId="storeWaitingRoom",
- *      tags={"patients"},
+ *      tags={"salle_attente"},
  *      summary="Enregistrer dans la salle d'attente",
  *      description="Enregistrer dans la salle d'attente.",
  *      security={{"sanctumAuth":{}}},
@@ -242,60 +242,7 @@ public function storeWaitingRoom(Request $request){
     ], 201);
 }
 
-/**
- * @OA\Put(
- *      path="/api/patients/{id}",
- *      operationId="updatePatient",
- *      tags={"patients"},
- *      summary="Modifier les infos d'une patient",
- *      description="Modifier les infos d'une patient.", 
- *      security={{"sanctumAuth":{}}},
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         required=true,
- *         description="ID du patient à mettre à jour",
- *         @OA\Schema(type="integer")
- *     ),
- *      @OA\RequestBody(
- *          required=true,
- *          @OA\JsonContent(ref="#/components/schemas/Patient")
- *      ),
- *     @OA\Response(
- *         response=200,
- *         description="Patient mis à jour avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="string", example="success"),
- *             @OA\Property(property="message", type="string", example="Patient mis à jour avec succès"),
- *             @OA\Property(property="data", type="object", ref="#/components/schemas/Patient")
- *         )
- *     ),
- *     @OA\Response(
- *         response=400,
- *         description="Requête invalide",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Validation error")
- *         )
- *     ),
- *     @OA\Response(
- *         response=401,
- *         description="Non autorisé",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Non autorisé")
- *         )
- *     ),
- *     @OA\Response(
- *         response=404,
- *         description="Patient non trouvé",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Patient non trouvé")
- *         )
- *     )
- * )
- */
+
 public function update(Request $request, Patient $patient)
 {
     // Mise à jour du patient (et création ou mise à jour du dossier médical si fourni)
@@ -311,7 +258,7 @@ public function update(Request $request, Patient $patient)
             'groupe_sanguin',
             'matricule'
         ]),
-        // 'dossierMedical' => $request->get('dossierMedical')
+        'dossierMedical' => $request->get('dossierMedical')
     ]);
 
     return response()->json([
@@ -320,60 +267,7 @@ public function update(Request $request, Patient $patient)
     ], 200);   
 }
 
-/**
- * @OA\Put(
- *      path="/api/patients/{id}/dossier",
- *      operationId="createDossier",
- *      tags={"patients"},
- *      summary="Creation dossier medical",
- *      description="Creation dossier medical.", 
- *      security={{"sanctumAuth":{}}},
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         required=true,
- *         description="ID du patient à mettre à jour",
- *         @OA\Schema(type="integer")
- *     ),
- *      @OA\RequestBody(
- *          required=true,
- *          @OA\JsonContent(ref="#/components/schemas/Patient")
- *      ),
- *     @OA\Response(
- *         response=200,
- *         description="Dossier mis à jour avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="string", example="success"),
- *             @OA\Property(property="message", type="string", example="Patient mis à jour avec succès"),
- *             @OA\Property(property="data", type="object", ref="#/components/schemas/Patient")
- *         )
- *     ),
- *     @OA\Response(
- *         response=400,
- *         description="Requête invalide",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Validation error")
- *         )
- *     ),
- *     @OA\Response(
- *         response=401,
- *         description="Non autorisé",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Non autorisé")
- *         )
- *     ),
- *     @OA\Response(
- *         response=404,
- *         description="Patient non trouvé",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Patient non trouvé")
- *         )
- *     )
- * )
- */
+
 public function createDossier(Request $request, Patient $patient)
 {
 // Mise à jour du patient (et création ou mise à jour du dossier médical si fourni)

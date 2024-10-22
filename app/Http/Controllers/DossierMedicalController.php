@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Consultation;
 use App\Models\DossierMedical;
 use App\Services\DossierMedicalService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DossierMedicalController extends Controller
 {
@@ -24,22 +26,6 @@ class DossierMedicalController extends Controller
         $dossierMedical = $this->dossierService->createDossierMedical($validatedData);
 
         return response()->json(['dossierMedical' => $dossierMedical], 201);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $dossierMedical = DossierMedical::findOrFail($id);
-
-        $validatedData = $request->validate([
-            'antecedents' => 'nullable|string',
-            'diagnostics' => 'nullable|string',
-            'traitements' => 'nullable|string',
-            'prescriptions' => 'nullable|string',
-        ]);
-
-        $dossierMedical = $this->dossierService->updateDossierMedical($dossierMedical, $validatedData);
-
-        return response()->json(['dossierMedical' => $dossierMedical], 200);
     }
 
     public function show($id)

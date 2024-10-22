@@ -85,7 +85,7 @@ class PatientService{
                 $patient->dossierMedical->update($data['dossierMedical']);
              } 
             
-            return $patient;
+            return $patient->load('dossierMedical');
         });
     }
 

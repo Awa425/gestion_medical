@@ -13,7 +13,7 @@ class SortieController extends Controller
  * @OA\Post(
  *      path="/api/patients/addSortie",
  *      operationId="crateSortiePatient",
- *      tags={"dossier_medical"},
+ *      tags={"dossier_medical & Consultation"},
  *      summary="Ajout sortie patient",
  *      description="Sortie patient.",
  *      security={{"sanctumAuth":{}}},
