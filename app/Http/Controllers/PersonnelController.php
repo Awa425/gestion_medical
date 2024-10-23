@@ -41,8 +41,7 @@ class PersonnelController extends BaseController
  */
     public function index()
     {
-        $personnels = Personnel::where('isActive', 1)
-        ->orderBy('id', 'DESC')
+        $personnels = Personnel::orderBy('id', 'DESC')
         ->get();
         $personnels->load('type','user','qualifications', 'formations', 'certifications');
 

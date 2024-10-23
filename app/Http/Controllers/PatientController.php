@@ -325,15 +325,15 @@ return response()->json([
  *         )
  *     ),
  *     @OA\Response(
-*         response=404,
-*         description="Personnel non trouvé",
-*         @OA\JsonContent(
-*             @OA\Property(property="status", type="string", example="error"),
-*             @OA\Property(property="message", type="string", example="Patient non trouvé")
-*         )
-*      )
-* )
-*/
+ *         response=404,
+ *         description="Personnel non trouvé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Patient non trouvé")
+ *         )
+ *      )
+ * )
+ */
 public function show($id)
 {
     $patient = $this->patientService->getPatientWithMedicalRecord($id);

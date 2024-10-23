@@ -43,7 +43,7 @@ Route::get('patients/salle-attente-list', [PatientController::class, 'listSalleA
 Route::resource('patients', PatientController::class);
 Route::get('patients', [PatientController::class, 'listPatients']);
 Route::post('patients/create-consultation',[ConsultationController::class,'consulterPatient']);
-Route::get('consultations',[ConsultationController::class,'index']);
+Route::resource('consultations', ConsultationController::class);
 Route::get('patients/enAttente/services/{service_id}', [PatientController::class, 'listSalleAttenteByService']);
 Route::post('patients/addAdmission',[AdmissionController::class, 'store']);
 Route::post('patients/addSortie',[SortieController::class, 'store']);
