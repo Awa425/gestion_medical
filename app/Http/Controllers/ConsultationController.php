@@ -38,16 +38,16 @@ class ConsultationController extends BaseController
  *     )
  * )
  */
-    public function index()
-    {
-             
-                $consultations = Consultation::with(['patient', 'medecin'])
-                ->orderBy('id','desc')
-                ->get();
-                $consultations->load('patient.dossierMedical', 'medecin');
-                return FormatData::formatResponse(message: 'Liste des consultations', data: $consultations);
-        
-    }
+public function index()
+{
+            
+            $consultations = Consultation::with(['patient', 'medecin'])
+            ->orderBy('id','desc')
+            ->get();
+            $consultations->load('patient.dossierMedical', 'medecin');
+            return FormatData::formatResponse(message: 'Liste des consultations', data: $consultations);
+    
+}
 
 
 
