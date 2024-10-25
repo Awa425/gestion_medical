@@ -44,8 +44,8 @@ class ConsultationController extends BaseController
                 $consultations = Consultation::with(['patient', 'medecin'])
                 ->orderBy('id','desc')
                 ->get();
-                $consultations;
-                return FormatData::formatResponse(message: 'Liste des patients dans en attente', data: $consultations);
+                $consultations->load('patient.dossierMedical', 'medecin');
+                return FormatData::formatResponse(message: 'Liste des consultations', data: $consultations);
         
     }
 

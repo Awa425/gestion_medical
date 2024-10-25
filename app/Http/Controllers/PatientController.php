@@ -13,6 +13,33 @@ use Illuminate\Validation\Rule;
 class PatientController extends Controller
 {
     public function __construct(protected PatientService $patientService){}
+    /**
+ * @OA\Get(
+ *     path="/api/patients-dossiers",
+ *     summary="liste patients",
+ *     description="Liste de tous les patients avec leurs dossier medical.",
+ *     operationId="listPatientsDossier",
+ *     tags={"patients"},
+ *     security={{"sanctumAuth":{}}},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Données récupérées avec succès.",
+ *         @OA\JsonContent(type="object", @OA\Property(property="data", type="string"))
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Non autorisé")
+ *         )
+ *     )
+ * )
+ */
+    public function getPatientWithMedical()
+    {
+        return Patient::with('dossierMedical')->get();
+    }
 
 /**
  * @OA\Get(
