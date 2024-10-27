@@ -4,6 +4,8 @@ namespace App\Services;
 use App\Models\Consultation;
 use App\Models\DossierMedical;
 use App\Models\Patient;
+use App\Models\Personnel;
+use App\Models\Service;
 use Illuminate\Support\Facades\DB;
 
 class ConsultationService{
@@ -55,6 +57,55 @@ class ConsultationService{
         return $consultation->load('medecin', 'patient.dossierMedical');;
     });
 }
+public function updateConsultation($id, array $data)
+{
+    return DB::transaction(function() use ($id, $data) {
+        // Récupérer la consultation existante
+        $consultation = Consultation::findOrFail($id);
+        
+        // Récupérer le patient
+        $patient = Patient::findOrFail($consultation['patient_id']);
+        $medecin = Personnel::findOrFail($consultation['medecin_id']);
+        $service = Service::findOrFail($consultation['service_id']);
+        // dd($service);
+
+        // Mettre à jour les informations du dossier médical si elles sont présentes
+        if (isset($data['dossierMedical'])) {
+            $dossierMedical = DossierMedical::where('patient_id', $patient->id)->first();
+            if ($dossierMedical) {
+                $dossierMedical->update([
+                    'numero_dossier' => $data['dossierMedical']['numero_dossier'] ?? $dossierMedical->numero_dossier,
+                    'antecedents' => $data['dossierMedical']['antecedents'] ?? $dossierMedical->antecedents,
+                    'diagnostics' => $data['dossierMedical']['diagnostics'] ?? $dossierMedical->diagnostics,
+                    'traitements' => $data['dossierMedical']['traitements'] ?? $dossierMedical->traitements,
+                    'prescriptions' => $data['dossierMedical']['prescriptions'] ?? $dossierMedical->prescriptions,
+                ]);
+            } else {
+                // Si le dossier médical n'existe pas, on le crée
+                $dossierMedical = DossierMedical::create([
+                    'numero_dossier' => $data['dossierMedical']['numero_dossier'] ?? null,
+                    'antecedents' => $data['dossierMedical']['antecedents'] ?? [],
+                    'diagnostics' => $data['dossierMedical']['diagnostics'] ?? [],
+                    'traitements' => $data['dossierMedical']['traitements'] ?? [],
+                    'prescriptions' => $data['dossierMedical']['prescriptions'] ?? [],
+                    'patient_id' => $patient->id,
+                ]);
+            }
+        }
+        // Mettre à jour les informations de la consultation
+        $consultation->update([
+            'libelle' => $data['libelle'] ?? $consultation->libelle,
+            'medecin_id' =>   $data['medecin_id'] ?? $medecin->id,
+            'service_id' =>  $data['service_id'] ?? $service->id,
+            'patient_id' =>  $data['patient_id'] ?? $patient->id,
+            'notes' => $data['notes'] ?? $consultation->notes,
+            'date_consultation' => $data['date_consultation'] ?? $consultation->date_consultation,
+        ]);
+
+        return $consultation->load('medecin', 'patient.dossierMedical','service');
+    });
+}
+
 
 public function createConsultation(array $data)
 {
@@ -63,6 +114,7 @@ public function createConsultation(array $data)
         $consultation = Consultation::create([
             'patient_id' => $data['patient_id'],
             'medecin_id' => $data['medecin_id'],
+            'service_id' => $data['service_id'],
             'libelle'=> $data['libelle'],
             'date_consultation' => now(),
             'notes' => $data['notes'] ?? null,
@@ -103,7 +155,7 @@ public function createConsultation(array $data)
             ]);
         }
 
-        return $consultation->load('patient', 'medecin');
+        return $consultation->load('patient', 'medecin','service');
     });
 }
 

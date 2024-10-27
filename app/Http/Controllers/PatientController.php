@@ -13,7 +13,7 @@ use Illuminate\Validation\Rule;
 class PatientController extends Controller
 {
     public function __construct(protected PatientService $patientService){}
-    /**
+/**
  * @OA\Get(
  *     path="/api/patients-dossiers",
  *     summary="liste patients",
@@ -36,10 +36,10 @@ class PatientController extends Controller
  *     )
  * )
  */
-    public function getPatientWithMedical()
-    {
-        return Patient::with('dossierMedical')->get();
-    }
+public function getPatientWithMedical()
+{
+    return Patient::with('dossierMedical')->get();
+}
 
 /**
  * @OA\Get(
@@ -268,6 +268,95 @@ public function storeWaitingRoom(Request $request){
         'salle_attente' => $result['salle_attente'],
     ], 201);
 }
+
+/**
+ * @OA\Put(
+ *      path="/api/patients/salle_attentes/{id}",
+ *      operationId="updatesalle_attentes",
+ *      tags={"salle_attente"},
+ *      summary="Modifier les infos d'une salle attente",
+ *      description="Modifier les infos d'une salle attente.",  
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID du passagers à mettre à jour",
+ *         @OA\Schema(type="integer")
+ *     ),
+ *      @OA\RequestBody(
+ *          required=true,
+ *          @OA\JsonContent(ref="#/components/schemas/Patient")
+ *      ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Depanneur mis à jour avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="success"),
+ *             @OA\Property(property="message", type="string", example="Infos salle mis à jour avec succès"),
+ *             @OA\Property(property="data", type="object", ref="#/components/schemas/Patient")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Requête invalide",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Validation error")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Non autorisé")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Conducteur non trouvé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Utilisateur non trouvé")
+ *         )
+ *     )
+ * )
+ */
+public function updateWaitingRoom(Request $request, $patientId)
+{
+    try {
+        $validatedData = $request->validate([
+            'nom' => 'nullable|string',
+            'prenom' => 'nullable|string',
+            'date_naissance' => 'nullable|date',
+            'adresse' => 'nullable|string',
+            'telephone' => 'nullable|string',
+            'email' => 'nullable|email',
+            'matricule' => [
+                'required',
+                'string',
+                Rule::unique('patients')->ignore($patientId),
+            ],
+            'sexe' => 'nullable|in:M,F',
+            'groupe_sanguin' => 'nullable|string|max:3',
+            'service_id' => 'required|exists:services,id',
+        ]);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        return response()->json([
+            'message' => 'Erreur de validation',
+            'erreurs' => $e->errors(),
+        ], 422);
+    }
+
+    $result = $this->patientService->updateWaitingRoom($patientId, $validatedData);
+
+    return response()->json([
+        'message' => 'Informations du patient mises à jour avec succès.',
+        'patient' => $result['patient'],
+        'salle_attente' => $result['salle_attente'],
+    ], 200);
+}
+
 
 
 public function update(Request $request, Patient $patient)

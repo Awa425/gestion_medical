@@ -41,10 +41,9 @@ class ConsultationController extends BaseController
 public function index()
 {
             
-            $consultations = Consultation::with(['patient', 'medecin'])
+            $consultations = Consultation::with(['patient', 'medecin','service'])
             ->orderBy('id','desc')
             ->get();
-            $consultations->load('patient.dossierMedical', 'medecin');
             return FormatData::formatResponse(message: 'Liste des consultations', data: $consultations);
     
 }
@@ -78,6 +77,7 @@ public function consulterPatient(Request $request)
     $validatedData = $request->validate([
         'patient_id' => 'required|exists:patients,id',
         'medecin_id' => 'required|exists:personnels,id',
+        'service_id' => 'required|exists:services,id',
         'notes' => 'nullable|string',
         'libelle' => 'nullable|string',
         'dossierMedical.numero_dossier' => 'nullable|string',
@@ -90,6 +90,7 @@ public function consulterPatient(Request $request)
     $consultation = $this->consultationService->createConsultation([
         'patient_id' => $validatedData['patient_id'],
         'medecin_id' => $validatedData['medecin_id'],
+        'service_id' => $validatedData['service_id'],
         'notes' => $validatedData['notes'] ?? null,
         'libelle' => $validatedData['libelle'] ?? null,
         'dossierMedical' => $request->get('dossierMedical')
@@ -100,6 +101,85 @@ public function consulterPatient(Request $request)
         'consultation' => $consultation,
     ], 201);
 }
+
+/**
+ * @OA\Put(
+ *      path="/api/patients/consultation/{id}/update",
+ *      operationId="updateConsultation",
+ *      tags={"dossier_medical & Consultation"},
+ *      summary="Modifier les infos d'une consultation",
+ *      description="Modifier les infos d'une consultation.",
+ *      security={{"bearerAuth":{}}},  
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID consultation à mettre à jour",
+ *         @OA\Schema(type="integer")
+ *     ),
+ *      @OA\RequestBody(
+ *          required=true,
+ *          @OA\JsonContent(ref="#/components/schemas/Consultation")
+ *      ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Utilisateur mis à jour avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="success"),
+ *             @OA\Property(property="message", type="string", example="Personnel mis à jour avec succès"),
+ *             @OA\Property(property="data", type="object", ref="#/components/schemas/Consultation")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Requête invalide",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Validation error")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Non autorisé")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Utilisateur non trouvé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Utilisateur non trouvé")
+ *         )
+ *     )
+ * )
+ */
+public function updateConsultation(Request $request, $id)
+{
+    $validatedData = $request->validate([
+        'patient_id' => 'nullable|exists:patients,id',
+        'medecin_id' => 'nullable|exists:personnels,id',
+        'service_id' => 'nullable|exists:services,id',
+        'notes' => 'nullable|string',
+        'libelle' => 'nullable|string',
+        'dossierMedical.numero_dossier' => 'nullable|string',
+        'dossierMedical.antecedents' => 'nullable|array',
+        'dossierMedical.diagnostics' => 'nullable|array',
+        'dossierMedical.traitements' => 'nullable|array',
+        'dossierMedical.prescriptions' => 'nullable|array',
+    ]);
+
+    // Appel au service pour mettre à jour la consultation
+    $consultation = $this->consultationService->updateConsultation($id, $validatedData);
+
+    return response()->json([
+        'message' => 'Consultation mise à jour avec succès.',
+        'consultation' => $consultation,
+    ], 200);
+}
+
 
 
     public function store(Request $request)

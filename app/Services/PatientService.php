@@ -140,4 +140,49 @@ class PatientService{
             return $patient->load('dossierMedical');
         });
     }
+
+    public function updateWaitingRoom($id, array $data)
+    {
+        return DB::transaction(function() use ($id, $data) {
+            // Récupérer le patient par son ID
+            $patient = Patient::findOrFail($id);
+    
+            // Mettre à jour les informations du patient
+            $patient->update([
+                'nom' => $data['nom'] ?? $patient->nom,
+                'prenom' => $data['prenom'] ?? $patient->prenom,
+                'adresse' => $data['adresse'] ?? $patient->adresse,
+                'telephone' => $data['telephone'] ?? $patient->telephone,
+                'date_naissance' => $data['date_naissance'] ?? $patient->date_naissance,
+                'email' => $data['email'] ?? $patient->email,
+                'sexe' => $data['sexe'] ?? $patient->sexe,
+                'groupe_sanguin' => $data['groupe_sanguin'] ?? $patient->groupe_sanguin,
+                'matricule' => $data['matricule'] ?? $patient->matricule,
+            ]);
+    
+            // Vérifier si le patient est dans la salle d'attente pour ce service
+            $salleAttente = SalleAttente::where('patient_id', $patient->id)
+                                        ->where('service_id', $data['service_id'])
+                                        ->first();
+    
+            if ($salleAttente) {
+                // Mettre à jour l'état de la salle d'attente si nécessaire
+                $salleAttente->update([
+                    'etat' => $data['etat'] ?? $salleAttente->etat,
+                    'date_entree' => $data['date_entree'] ?? $salleAttente->date_entree,
+                ]);
+            } else {
+                // Si le patient n'est pas dans la salle d'attente, on le rajoute
+                $salleAttente = SalleAttente::create([
+                    'patient_id' => $patient->id,
+                    'service_id' => $data['service_id'],
+                    'date_entree' => $data['date_entree'] ?? now(),
+                    'etat' => $data['etat'] ?? 'en attente',
+                ]);
+            }
+    
+            return ['patient' => $patient, 'salle_attente' => $salleAttente];
+        });
+    }
+    
 }

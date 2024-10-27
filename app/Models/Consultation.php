@@ -12,6 +12,7 @@ class Consultation extends Model
     protected $fillable = [
         'patient_id',
         'medecin_id',
+        'service_id',
         'dossier_medical_id', 
         "libelle",
         "date_consultation",
@@ -27,6 +28,11 @@ class Consultation extends Model
     public function medecin()
     {
         return $this->belongsTo(Personnel::class, 'medecin_id');
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service_id');
     }
 
     public function diagnostics()
