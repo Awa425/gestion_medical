@@ -52,11 +52,18 @@ public function index()
 
 /**
  * @OA\Post(
- *      path="/api/patients/create-consultation",
+ *      path="/api/patients/create-consultation/salle-attente/{id}",
  *      operationId="consulterPatient",
  *      tags={"dossier_medical & Consultation"},
  *      summary="Consulter, mettre a jour dossier patient",
  *      description="Consulter et modifier dossier medical d'un patient.", 
+ *    @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID ligne salle attente",
+ *         @OA\Schema(type="integer")
+ *     ),
  *      @OA\RequestBody(
  *          required=true,
  *          @OA\JsonContent(ref="#/components/schemas/Consultation")
@@ -72,12 +79,10 @@ public function index()
  *      )
  * )
  */
-public function consulterPatient(Request $request)
+public function consulterPatient(Request $request, $salleAttenteId)
 {
     $validatedData = $request->validate([
-        'patient_id' => 'required|exists:patients,id',
         'medecin_id' => 'required|exists:personnels,id',
-        'service_id' => 'required|exists:services,id',
         'notes' => 'nullable|string',
         'libelle' => 'nullable|string',
         'dossierMedical.numero_dossier' => 'nullable|string',
@@ -87,14 +92,7 @@ public function consulterPatient(Request $request)
         'dossierMedical.prescriptions' => 'nullable|array',
     ]);
 
-    $consultation = $this->consultationService->createConsultation([
-        'patient_id' => $validatedData['patient_id'],
-        'medecin_id' => $validatedData['medecin_id'],
-        'service_id' => $validatedData['service_id'],
-        'notes' => $validatedData['notes'] ?? null,
-        'libelle' => $validatedData['libelle'] ?? null,
-        'dossierMedical' => $request->get('dossierMedical')
-    ]);
+    $consultation = $this->consultationService->createConsultation($salleAttenteId, $validatedData);
 
     return response()->json([
         'message' => 'Consultation créée avec succès.',

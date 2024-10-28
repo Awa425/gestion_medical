@@ -34,18 +34,6 @@ namespace App\Docs;
  *         type="integer",
  *         description="Medecin associée",
  *         example="59" 
- *     ),
- *      @OA\Property(
- *         property="patient_id",
- *         type="integer",
- *         description="Patient consulté",
- *         example="1" 
- *     ),
- *      @OA\Property(
- *         property="service_id",
- *         type="integer",
- *         description="Service a aller",
- *         example="1" 
  *     )
  * )
  */

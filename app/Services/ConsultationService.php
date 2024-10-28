@@ -5,6 +5,7 @@ use App\Models\Consultation;
 use App\Models\DossierMedical;
 use App\Models\Patient;
 use App\Models\Personnel;
+use App\Models\SalleAttente;
 use App\Models\Service;
 use Illuminate\Support\Facades\DB;
 
@@ -107,21 +108,26 @@ public function updateConsultation($id, array $data)
 }
 
 
-public function createConsultation(array $data)
+public function createConsultation($salleAttenteId, array $data)
 {
-      return DB::transaction(function() use ($data) {
+      return DB::transaction(function() use ($salleAttenteId ,$data) {
+        $salleAttente = SalleAttente::findOrFail($salleAttenteId);
+        $service = Service::findOrFail($salleAttente->service_id);
+        $patient = Patient::with('dossierMedical')->find($salleAttente->patient_id);
+       
         // Création de la consultation
         $consultation = Consultation::create([
-            'patient_id' => $data['patient_id'],
+            'patient_id' => $patient->id,
+            'service_id' => $service->id,
             'medecin_id' => $data['medecin_id'],
-            'service_id' => $data['service_id'],
             'libelle'=> $data['libelle'],
             'date_consultation' => now(),
             'notes' => $data['notes'] ?? null,
         ]);
 
         // Mise à jour ou création du dossier médical du patient
-        $dossierMedical = DossierMedical::where('patient_id', $data['patient_id'])->first();
+        // $dossierMedical = DossierMedical::where('patient_id', $patient->id,)->first();
+        $dossierMedical=$patient['dossierMedical'];
         
         if ($dossierMedical) {
             // Si le dossier médical existe, on le met à jour

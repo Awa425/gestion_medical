@@ -181,7 +181,7 @@
                 }
             }
         },
-        "/api/patients/create-consultation": {
+        "/api/patients/create-consultation/salle-attente/{id}": {
             "post": {
                 "tags": [
                     "dossier_medical & Consultation"
@@ -189,6 +189,17 @@
                 "summary": "Consulter, mettre a jour dossier patient",
                 "description": "Consulter et modifier dossier medical d'un patient.",
                 "operationId": "consulterPatient",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID ligne salle attente",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1682,16 +1693,6 @@
                         "description": "Medecin associée",
                         "type": "integer",
                         "example": "59"
-                    },
-                    "patient_id": {
-                        "description": "Patient consulté",
-                        "type": "integer",
-                        "example": "1"
-                    },
-                    "service_id": {
-                        "description": "Service a aller",
-                        "type": "integer",
-                        "example": "1"
                     }
                 },
                 "type": "object"
