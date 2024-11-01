@@ -10,6 +10,7 @@ use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\RendezVousController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SalleAttenteController;
 use App\Http\Controllers\SalleController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SortieController;
@@ -28,35 +29,38 @@ Route::get('users', [UserController::class, 'index']);
 Route::get('types', [TypePersonnelController::class, 'index']);
 Route::get('categories', [CategorieController::class, 'index']);
 
+// Personnel
 Route::resource('roles', RoleController::class);
-
 Route::resource('personnels', PersonnelController::class);
 Route::resource('type-personnels', TypePersonnelController::class);
 Route::get('medecin-list', [PersonnelController::class, 'medecinList']);
+Route::get('medecins/service/{id}', [PersonnelController::class, 'medecinsByService']);
+Route::resource('services', ServiceController::class);
 
-
-Route::post('salleAttente', [PatientController::class, 'storeWaitingRoom']);
-
-// Route::put('patients/{id}/dossier', [PatientController::class, 'createDossier']);
+// Patient et dossier
+Route::resource('patients', PatientController::class);
 Route::put('dossier/{id}', [DossierMedicalController::class, 'updateDossier']);
 Route::get('patients-dossiers', [PatientController::class, 'getPatientWithMedical']);
 Route::get('patients/salle-attente-list', [PatientController::class, 'listSalleAttente']);
 Route::put('patients/salle_attentes/{id}', [PatientController::class, 'updateWaitingRoom']);
-Route::resource('patients', PatientController::class);
+Route::post('salleAttente', [PatientController::class, 'storeWaitingRoom']);
 Route::get('patients', [PatientController::class, 'listPatients']);
+Route::get('patients/enAttente/services/{service_id}', [PatientController::class, 'listSalleAttenteByService']);
+Route::get('salle-attente/service{id}', [SalleAttenteController::class, 'salleAttenteByService']);
 Route::post('patients/create-consultation',[ConsultationController::class,'consulterPatient']);
 Route::put('patients/consultation/{id}/update',[ConsultationController::class,'updateConsultation']);
 
-Route::resource('consultations', ConsultationController::class);
-Route::get('patients/enAttente/services/{service_id}', [PatientController::class, 'listSalleAttenteByService']);
+// Admission sortie et transfere
 Route::post('patients/addAdmission',[AdmissionController::class, 'store']);
 Route::post('patients/addSortie',[SortieController::class, 'store']);
 Route::post('patients/addTransfert',[TransfereController::class, 'store']);
+Route::resource('consultations', ConsultationController::class);
 
+// Rendez-vous
 Route::resource('rendezVous',RendezVousController::class);
 Route::put('annuler/rendezVous/{id}',[RendezVousController::class, 'annuler']);
 
-Route::resource('services', ServiceController::class);
+
 
 // Acces private
 Route::middleware('auth:sanctum')->group( function () {

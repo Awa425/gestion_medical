@@ -967,6 +967,47 @@
                 }
             }
         },
+        "/api/medecins/service/{id}": {
+            "get": {
+                "tags": [
+                    "personnels"
+                ],
+                "summary": "liste des medecins dans un service",
+                "description": "Liste de tous les medecins dans un service.",
+                "operationId": "listMedecinByService",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID service",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Données récupérées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé, token invalide ou manquant."
+                    }
+                }
+            }
+        },
         "/api/personnels/{id}": {
             "get": {
                 "tags": [
@@ -1405,6 +1446,47 @@
                 }
             }
         },
+        "/api/salle-attente/service{id}": {
+            "get": {
+                "tags": [
+                    "salle_attente"
+                ],
+                "summary": "Salle attente by service",
+                "description": "Salle attente by service.",
+                "operationId": "salleAttenteByService",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID service",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Données récupérées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé, token invalide ou manquant."
+                    }
+                }
+            }
+        },
         "/api/services": {
             "get": {
                 "tags": [
@@ -1699,11 +1781,6 @@
             "DossierMedical": {
                 "description": "Dossier médical du patient",
                 "properties": {
-                    "numero_dossier": {
-                        "description": "Numéro du dossier médical",
-                        "type": "string",
-                        "example": "AB-C123"
-                    },
                     "antecedents": {
                         "description": "Liste des antécédents du patient",
                         "type": "array",
@@ -1898,6 +1975,10 @@
                     },
                     "user": {
                         "$ref": "#/components/schemas/User"
+                    },
+                    "service_id": {
+                        "description": "Service affecté",
+                        "type": "integer"
                     }
                 },
                 "type": "object"

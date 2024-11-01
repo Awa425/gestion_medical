@@ -66,14 +66,48 @@ class PersonnelController extends BaseController
  *     )
  * )
  */
-    public function medecinList()
-    {
-        $medecins = Personnel::where('type_personnel_id', 1)
-        ->get(); 
-        $medecins->load('type','user');
+public function medecinList()
+{
+    $medecins = Personnel::where('type_personnel_id', 1)
+    ->get(); 
+    $medecins->load('type','user');
 
-        return FormatData::formatResponse(message: 'Liste des medecins', data: $medecins);
-    }
+    return FormatData::formatResponse(message: 'Liste des medecins', data: $medecins);
+}
+
+/**
+ * @OA\Get(
+ *     path="/api/medecins/service/{id}",
+ *     summary="liste des medecins dans un service",
+ *     description="Liste de tous les medecins dans un service.",
+ *     operationId="listMedecinByService",
+ *     tags={"personnels"},
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID service",
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Données récupérées avec succès.",
+ *         @OA\JsonContent(type="object", @OA\Property(property="data", type="string"))
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé, token invalide ou manquant."
+ *     )
+ * )
+ */
+public function medecinsByService($id_service)
+{
+    $medecins = Personnel::where('service_id', $id_service)
+    ->get(); 
+    $medecins->load('type','user','service');
+
+    return FormatData::formatResponse(message: 'Liste des medecins dans un service donné', data: $medecins);
+}
 
 /**
  * @OA\Post(
@@ -99,50 +133,52 @@ class PersonnelController extends BaseController
  * )
  */
 
-    public function store(Request $request){
+public function store(Request $request){
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'prenom' => 'required',
-            'telephone' => 'nullable',
-            'datte_naissance' => 'nullable',
-            'lieu_naissance' => 'nullable',
-            'adresse' => 'nullable',
-            'matricule' => 'nullable',
-            'CNI' => 'nullable',
-            'datte_embauche' => 'date',
-            'type_personnel_id' => 'exists:type_personnels,id',
-        ]);
+    $validator = Validator::make($request->all(), [
+        'name' => 'required',
+        'prenom' => 'required',
+        'telephone' => 'nullable',
+        'datte_naissance' => 'nullable',
+        'lieu_naissance' => 'nullable',
+        'adresse' => 'nullable',
+        'matricule' => 'nullable',
+        'CNI' => 'nullable',
+        'datte_embauche' => 'date',
+        'type_personnel_id' => 'exists:type_personnels,id',
+        'service_id'=>'exists:services,id'
+    ]);
 
-        if($validator->fails()){
-            return response()->json(['Error' => 'Erreur de validation'], 404);      
-        }
-
-        $personnel = $this->personnelService->createPersonnelWithDetails([
-            'personnel' => $request->only([
-                'name', 
-                'prenom', 
-                'datte_naissance', 
-                'lieu_naissance', 
-                'adresse', 
-                'telephone', 
-                'email', 
-                'CNI', 
-                'matricule', 
-                'date_embauche',
-                'type_personnel_id'
-            ]), 
-            'user' => $request->get('user'),
-            'qualifications' => $request->get('qualifications'),
-            'formations' => $request->get('formations'),
-            'certifications' => $request->get('certifications'),
-        ]);  
-
-        return response()->json([
-            'message' => 'Personnel créé avec succès.',
-            'personnel' => $personnel,
-        ], 201);
+    if($validator->fails()){
+        return response()->json(['Error' => 'Erreur de validation'], 404);      
     }
+
+    $personnel = $this->personnelService->createPersonnelWithDetails([
+        'personnel' => $request->only([
+            'name', 
+            'prenom', 
+            'datte_naissance', 
+            'lieu_naissance', 
+            'adresse', 
+            'telephone', 
+            'email', 
+            'CNI', 
+            'matricule', 
+            'date_embauche',
+            'type_personnel_id',
+            'service_id',
+        ]), 
+        'user' => $request->get('user'),
+        'qualifications' => $request->get('qualifications'),
+        'formations' => $request->get('formations'),
+        'certifications' => $request->get('certifications'),
+    ]);  
+
+    return response()->json([
+        'message' => 'Personnel créé avec succès.',
+        'personnel' => $personnel,
+    ], 201);
+}
 
 /**
  * @OA\Put(
@@ -213,7 +249,8 @@ class PersonnelController extends BaseController
             'CNI', 
             'matricule', 
             'date_embauche',
-            'type_personnel_id'
+            'type_personnel_id',
+            'service_id'
         ]),
         'user' => $request->get('user'),
         'qualifications' => $request->get('qualifications'),

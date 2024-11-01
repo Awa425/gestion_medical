@@ -15,7 +15,11 @@ class Service extends Model
         "isActive"
     ];
 
-        public function admissions()
+    public function medecin()
+    {
+        return $this->hasMany(Personnel::class);
+    }
+    public function admissions()
     {
         return $this->hasMany(Admission::class);
     }

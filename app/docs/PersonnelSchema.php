@@ -75,6 +75,11 @@ namespace App\Docs;
  *         property="user",
  *         ref="#/components/schemas/User",
  *         description="User personnel associée"
+ *     ),
+ *     @OA\Property(
+ *         property="service_id",
+ *         type="integer",
+ *         description="Service affecté"
  *     )
  * )
  */

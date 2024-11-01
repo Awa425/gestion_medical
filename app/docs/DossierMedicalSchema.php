@@ -6,12 +6,6 @@ namespace App\Docs;
  *     type="object",
  *     description="Dossier médical du patient",
  *     @OA\Property(
- *         property="numero_dossier",
- *         type="string",
- *         description="Numéro du dossier médical",
- *         example="AB-C123"
- *     ),
- *     @OA\Property(
  *         property="antecedents",
  *         type="array",
  *         @OA\Items(

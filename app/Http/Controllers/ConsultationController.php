@@ -41,7 +41,7 @@ class ConsultationController extends BaseController
 public function index()
 {
             
-            $consultations = Consultation::with(['patient', 'medecin','service'])
+            $consultations = Consultation::with(['patient.dossierMedical', 'medecin','service'])
             ->orderBy('id','desc')
             ->get();
             return FormatData::formatResponse(message: 'Liste des consultations', data: $consultations);
@@ -171,7 +171,6 @@ public function updateConsultation(Request $request, $id)
         'dossierMedical.prescriptions' => 'nullable|array',
     ]);
 
-    // Appel au service pour mettre à jour la consultation
     $consultation = $this->consultationService->updateConsultation($id, $validatedData);
 
     return response()->json([

@@ -11,14 +11,12 @@ use Illuminate\Support\Facades\DB;
 class PersonnelService{
     private function generateMatricule()
     {
-        // Générer un matricule unique, par exemple PERS suivi de l'ID ou d'un timestamp
         $prefix = "PERS_";
         $timestamp = now()->format('YmdHis');
         
-        return $prefix . $timestamp . rand(100, 999);
+        return $prefix . $timestamp ;
     }
 
-// Creation de personnel avec ou sans les details(users, qualification, formation ou certification)
     public function createPersonnelWithDetails(array $data){
          
             return DB::transaction(function() use ($data) {
@@ -27,25 +25,21 @@ class PersonnelService{
 
                 $data['personnel']['matricule'] = $matricule;
                 
-                // Créer le personnel
                 $personnel = Personnel::create($data['personnel']);
 
-                // Si les informations d'utilisateur sont fournies, créer l'utilisateur
                 if (isset($data['user'])) {
                     $userData = $data['user'];
                     $user=User::create([
                         'email' => $data['user']['email'],
                         'password' => bcrypt($data['user']['password']),
-                        'personnel_id' => $personnel->id, // Liaison avec le personnel
+                        'personnel_id' => $personnel->id,
                     ]);
                     
-                    // Assigner les rôles à l'utilisateur
                     if (isset($userData['roles'])) {
                         $user->roles()->sync($userData['roles']);
                     }
                 } 
     
-                // Assigner ou créer les qualifications
                 if (isset($data['qualifications'])) {
                     foreach ($data['qualifications'] as $qualificationData) {
                         $qualification = Qualification::firstOrCreate(
@@ -54,13 +48,11 @@ class PersonnelService{
 
                         );
     
-                        // Lier la qualification au personnel
                         $personnel->qualifications()->attach($qualification->id, [
                             'date_obtention' => $qualificationData['date_obtention'] ?? null,
                         ]);
                     }
                 }
-                // Assigner ou créer les formations
                 if (isset($data['formations'])) {
                     foreach ($data['formations'] as $formationData) {
                         $formation = Formation::firstOrCreate(
@@ -72,14 +64,12 @@ class PersonnelService{
                             ]
                             );
                             
-                            // Lier la formation au personnel
                             $personnel->formations()->attach($formation->id, [
                                 'date_inscription' => $formationData['date_inscription'] ?? null
                             ]);                 
                     }
                 }
 
-                 // Assigner ou créer les certification
                  if (isset($data['certifications'])) {
                     foreach ($data['certifications'] as $certificationData) { 
                         $certification = Certification::firstOrCreate(
@@ -90,20 +80,18 @@ class PersonnelService{
                                 'date_expiration' => $certificationData['date_expiration'] ?? null,
                             ]
                         );
-                        // Lier la formation au personnel
                         $personnel->certifications()->attach($certification->id, [
                             'date_obtention' => $certificationData['date_obtention'] ?? null
                         ]);
                     }
                 }
     
-                return $personnel->load('type','user');
+                return $personnel->load('type','user','service');
             });
     
         
     }
 
-    // Méthode pour mettre à jour un personnel 
     public function updatePersonnelWithDetails(Personnel $personnel, array $data)
     {  
         return DB::transaction(function() use ($personnel, $data) {
@@ -206,7 +194,7 @@ class PersonnelService{
                 }
             }
 
-            return $personnel->load('user','qualifications', 'formations', 'certifications');
+            return $personnel->load('user','service','qualifications', 'formations', 'certifications');
         });
     }
 

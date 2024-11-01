@@ -21,13 +21,19 @@ class Personnel extends Model
         'lieu_naissance', 
         'email', 
         'type_personnel_id', 
-        'date_embauche', 
+        'date_embauche',
+        'service_id', 
         'isActive'
     ];
 
     public function user()
     {
         return $this->hasOne(User::class);
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service_id');
     }
 
     public function type()
