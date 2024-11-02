@@ -70,37 +70,7 @@ public function listPatients()
     return FormatData::formatResponse(message: 'Liste des patients', data: $patients);
 }
 
-/**
- * @OA\Get(
- *     path="/api/patients/salle-attente-list",
- *     summary="liste patients",
- *     description="Liste de tous les patients dans la salle d'attente.",
- *     operationId="listPatientsEnAttente",
- *     tags={"salle_attente"},
- *     security={{"sanctumAuth":{}}},
- *     @OA\Response(
- *         response=200,
- *         description="Données récupérées avec succès.",
- *         @OA\JsonContent(type="object", @OA\Property(property="data", type="string"))
- *     ),
- *     @OA\Response(
- *         response=401,
- *         description="Non autorisé",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="string", example="error"),
- *             @OA\Property(property="message", type="string", example="Non autorisé")
- *         )
- *     )
- * )
- */
-public function listSalleAttente()
-{      
-        $patients = SalleAttente::with(['patient', 'service'])
-        ->where('etat', 'en attente')
-        ->get();
-        $patients;
-        return FormatData::formatResponse(message: 'Liste des patients dans en attente', data: $patients);
-}
+
 
 /**
  * @OA\Get(

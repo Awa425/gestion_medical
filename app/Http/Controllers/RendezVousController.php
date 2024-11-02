@@ -33,7 +33,7 @@ class RendezVousController extends Controller
 public function index()
 {
     $rv=RendezVous::all();
-    return response()->json($rv);
+    return response()->json($rv->load('service','medecin','patient'));
 }
 
  /**

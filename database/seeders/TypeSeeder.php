@@ -24,4 +24,5 @@ class TypeSeeder extends Seeder
             ['libelle'=> TypeServiceProvider::CAISSIER, 'categorie_id'=>$personnelAdmin],
         ]);
     }
+    
 }

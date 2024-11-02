@@ -9,14 +9,45 @@ use App\Utils\FormatData;
 use Illuminate\Http\Request;
 
 class SalleAttenteController extends BaseController
-{
-  
 
+{
     public function __construct( protected SalleAttenteService $salleAttenteService) {}
+  /**
+ * @OA\Get(
+ *     path="/api/listSalleAttente",
+ *     summary="liste patients",
+ *     description="Liste de tous les patients dans la salle d'attente.",
+ *     operationId="listPatientsEnAttenteTest",
+ *     tags={"salle_attente"},
+ *     security={{"sanctumAuth":{}}},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Données récupérées avec succès.",
+ *         @OA\JsonContent(type="object", @OA\Property(property="data", type="string"))
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Non autorisé")
+ *         )
+ *     )
+ * )
+ */
+
+public function listSalleAttente()
+{    
+        $patients = SalleAttente::with(['patient', 'service'])
+        ->where('etat', 'en attente')
+        ->get();
+        $patients;
+        return FormatData::formatResponse(message: 'Liste des patients dans en attente', data: $patients);
+}
 
     /**
  * @OA\Get(
- *     path="/api/salle-attente/service{id}",
+ *     path="/api/salle-attente/service/{id}",
  *     summary="Salle attente by service",
  *     description="Salle attente by service.",
  *     operationId="salleAttenteByService",
