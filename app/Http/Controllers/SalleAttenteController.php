@@ -39,11 +39,43 @@ class SalleAttenteController extends BaseController
 public function listSalleAttente()
 {    
         $patients = SalleAttente::with(['patient', 'service'])
-        ->where('etat', 'en attente')
         ->get();
         $patients;
         return FormatData::formatResponse(message: 'Liste des patients dans en attente', data: $patients);
 }
+
+  /**
+ * @OA\Get(
+ *     path="/api/patient/enAttente",
+ *     summary="liste patients en attente",
+ *     description="Liste de tous les patients avec etat en attente.",
+ *     operationId="listPatientsEnAttenteWithEtatEnAttente",
+ *     tags={"salle_attente"},
+ *     security={{"sanctumAuth":{}}},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Données récupérées avec succès.",
+ *         @OA\JsonContent(type="object", @OA\Property(property="data", type="string"))
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Non autorisé")
+ *         )
+ *     )
+ * )
+ */
+
+ public function listPatientByEtatEnAttente()
+ {    
+         $patients = SalleAttente::with(['patient', 'service'])
+         ->where('etat', 'en attente')
+         ->get();
+         $patients;
+         return FormatData::formatResponse(message: 'Liste des patients dans en attente', data: $patients);
+ }
 
     /**
  * @OA\Get(

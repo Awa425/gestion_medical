@@ -1446,6 +1446,58 @@
                 ]
             }
         },
+        "/api/patient/enAttente": {
+            "get": {
+                "tags": [
+                    "salle_attente"
+                ],
+                "summary": "liste patients en attente",
+                "description": "Liste de tous les patients avec etat en attente.",
+                "operationId": "listPatientsEnAttenteWithEtatEnAttente",
+                "responses": {
+                    "200": {
+                        "description": "Données récupérées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumAuth": []
+                    }
+                ]
+            }
+        },
         "/api/salle-attente/service/{id}": {
             "get": {
                 "tags": [
