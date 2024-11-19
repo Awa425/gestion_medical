@@ -15,7 +15,7 @@ class SalleAttenteController extends BaseController
   /**
  * @OA\Get(
  *     path="/api/listSalleAttente",
- *     summary="liste patients",
+ *     summary="liste patient en attente",
  *     description="Liste de tous les patients dans la salle d'attente.",
  *     operationId="listPatientsEnAttenteTest",
  *     tags={"salle_attente"},
@@ -47,7 +47,7 @@ public function listSalleAttente()
   /**
  * @OA\Get(
  *     path="/api/patient/enAttente",
- *     summary="liste patients en attente",
+ *     summary="liste de tous les patients enregistré dans la salle attente",
  *     description="Liste de tous les patients avec etat en attente.",
  *     operationId="listPatientsEnAttenteWithEtatEnAttente",
  *     tags={"salle_attente"},

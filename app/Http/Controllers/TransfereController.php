@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transfere;
 use App\Services\TransfertService;
 use Illuminate\Http\Request;
 
@@ -9,6 +10,31 @@ class TransfereController extends Controller
 {
     public function __construct(private TransfertService $transfertService){}
 
+            /**
+     * @OA\Get(
+     *     path="/api/transfert",
+     *     summary="liste des transferts",
+     *     description="Liste des transfert.",
+     *     operationId="listTousLesTransferts",
+     *     tags={"dossier_medical & Consultation"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Données récupérées avec succès.",
+     *         @OA\JsonContent(type="object", @OA\Property(property="data", type="string"))
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Non autorisé, token invalide ou manquant."
+     *     )
+     * )
+     */
+    public function index()
+    {
+    $transfert = Transfere::with('dossierMedical.patient', 'fromService','toService')
+    ->orderBy('id', 'DESC')
+    ->get();
+    return response()->json($transfert);
+    }
     /**
  * @OA\Post(
  *      path="/api/patients/addTransfert",

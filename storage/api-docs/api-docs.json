@@ -19,6 +19,83 @@
         }
     ],
     "paths": {
+        "/api/admissions": {
+            "get": {
+                "tags": [
+                    "dossier_medical & Consultation"
+                ],
+                "summary": "liste des admissions",
+                "description": "Liste des admissions.",
+                "operationId": "listTousLesAdmissions",
+                "responses": {
+                    "200": {
+                        "description": "Données récupérées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé, token invalide ou manquant."
+                    }
+                }
+            }
+        },
+        "/api/admissions/en-cours": {
+            "post": {
+                "tags": [
+                    "dossier_medical & Consultation"
+                ],
+                "summary": "Admissions en cours",
+                "description": "Recuperer l'admissions en cours du patient",
+                "operationId": "AdmissionsEnCours",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "patient_id": {
+                                        "description": "ID du patient",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Données récupérées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé, token invalide ou manquant."
+                    }
+                }
+            }
+        },
         "/api/patients/addAdmission": {
             "post": {
                 "tags": [
@@ -812,6 +889,97 @@
                 ]
             }
         },
+        "/api/detail-complet/patient/{id}": {
+            "get": {
+                "tags": [
+                    "patients"
+                ],
+                "summary": "Get detail complet patient",
+                "description": "Afficher les infos complet d'un patient.",
+                "operationId": "detailCompletPatient",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du patient à afficher ses detail complet",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Personnel trouvé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Patient trouvé avec succès"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Patient"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Personnel non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Patient non trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/personnels": {
             "get": {
                 "tags": [
@@ -1399,7 +1567,7 @@
                 "tags": [
                     "salle_attente"
                 ],
-                "summary": "liste patients",
+                "summary": "liste patient en attente",
                 "description": "Liste de tous les patients dans la salle d'attente.",
                 "operationId": "listPatientsEnAttenteTest",
                 "responses": {
@@ -1451,7 +1619,7 @@
                 "tags": [
                     "salle_attente"
                 ],
-                "summary": "liste patients en attente",
+                "summary": "liste de tous les patients enregistré dans la salle attente",
                 "description": "Liste de tous les patients avec etat en attente.",
                 "operationId": "listPatientsEnAttenteWithEtatEnAttente",
                 "responses": {
@@ -1629,6 +1797,36 @@
                         "sanctumAuth": []
                     }
                 ]
+            }
+        },
+        "/api/transfert": {
+            "get": {
+                "tags": [
+                    "dossier_medical & Consultation"
+                ],
+                "summary": "liste des transferts",
+                "description": "Liste des transfert.",
+                "operationId": "listTousLesTransferts",
+                "responses": {
+                    "200": {
+                        "description": "Données récupérées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé, token invalide ou manquant."
+                    }
+                }
             }
         },
         "/api/patients/addTransfert": {

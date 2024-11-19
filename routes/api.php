@@ -49,14 +49,17 @@ Route::get('salle-attente/service/{id}', [SalleAttenteController::class, 'salleA
 Route::get('listSalleAttente', [SalleAttenteController::class, 'listSalleAttente']);
 
 Route::get('patient/enAttente', [SalleAttenteController::class, 'listPatientByEtatEnAttente']);
+Route::get('detail-complet/patient/{id}', [PatientController::class, 'detailCompletPatient']);
 Route::post('patients/create-consultation',[ConsultationController::class,'consulterPatient']);
 Route::put('patients/consultation/{id}/update',[ConsultationController::class,'updateConsultation']);
 
 // Admission sortie et transfere
 Route::post('patients/addAdmission',[AdmissionController::class, 'store']);
+Route::post('admissions/en-cours',[AdmissionController::class, 'getAdmissionEnCours']);
 Route::post('patients/addSortie',[SortieController::class, 'store']);
 Route::post('patients/addTransfert',[TransfereController::class, 'store']);
 Route::resource('consultations', ConsultationController::class);
+Route::resource('admissions', AdmissionController::class);
 
 // Rendez-vous
 Route::resource('rendezVous',RendezVousController::class);

@@ -13,6 +13,7 @@ use Illuminate\Validation\Rule;
 class PatientController extends Controller
 {
     public function __construct(protected PatientService $patientService){}
+
 /**
  * @OA\Get(
  *     path="/api/patients-dossiers",
@@ -69,8 +70,6 @@ public function listPatients()
     $patients = Patient::all();
     return FormatData::formatResponse(message: 'Liste des patients', data: $patients);
 }
-
-
 
 /**
  * @OA\Get(
@@ -424,6 +423,56 @@ public function show($id)
 {
     $patient = $this->patientService->getPatientWithMedicalRecord($id);
     return response()->json(['patient' => $patient], 200);
+}
+
+/**
+ * @OA\Get(
+ *      path="/api/detail-complet/patient/{id}",
+ *      operationId="detailCompletPatient",
+ *      tags={"patients"},
+ *      summary="Get detail complet patient",
+ *      description="Afficher les infos complet d'un patient.",
+ *      security={{"bearerAuth":{}}},  
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID du patient à afficher ses detail complet",
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Personnel trouvé avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="success"),
+ *             @OA\Property(property="message", type="string", example="Patient trouvé avec succès"),
+ *             @OA\Property(property="data", type="object", ref="#/components/schemas/Patient")
+ *      )
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Non autorisé")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Personnel non trouvé",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="error"),
+ *             @OA\Property(property="message", type="string", example="Patient non trouvé")
+ *         )
+ *      )
+ * )
+ */
+public function detailCompletPatient($id)
+{
+    $trajet = Patient::with('dossierMedical','consultations.service','consultations.medecin')->findOrFail($id);
+    return response()->json($trajet);
+    
+   
 }
 
 }
