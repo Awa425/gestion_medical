@@ -28,17 +28,17 @@ class DossierMedical extends Model
 
     public function admissions()
     {
-        return $this->hasMany(Admission::class);
+        return $this->hasMany(Admission::class,'dossierMedical_id');
     }
 
     public function transferts()
     {
-        return $this->hasMany(Transfere::class);
+        return $this->hasMany(Transfere::class,'dossierMedical_id');
     }
 
     public function sorties()
     {
-        return $this->hasMany(Sortie::class);
+        return $this->hasMany(Sortie::class,'dossierMedical_id');
     }
 
     // le dossier peut être mis à jour lors des consultations

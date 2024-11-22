@@ -39,7 +39,7 @@ class PatientController extends Controller
  */
 public function getPatientWithMedical()
 {
-    return Patient::with('dossierMedical')->get();
+    return Patient::with('dossierMedical','consultations','dossierMedical.admissions','dossierMedical.transferts')->get();
 }
 
 /**
