@@ -14,8 +14,16 @@ class salle extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'libelle',
-        'nombre_lits',
-    ];
+    protected $fillable = ['nom', 'capacite', 'disponible', 'service_id'];
+
+      public function service()
+      {
+          return $this->belongsTo(Service::class);
+      }
+  
+      public function admissions()
+      {
+          return $this->hasMany(Admission::class);
+      }
+
 }

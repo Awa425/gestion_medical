@@ -1707,6 +1707,289 @@
                 }
             }
         },
+        "/api/salles": {
+            "get": {
+                "tags": [
+                    "salles"
+                ],
+                "summary": "liste des salles",
+                "description": "Liste de tous les salles.",
+                "operationId": "listSalles",
+                "responses": {
+                    "200": {
+                        "description": "Données récupérées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé, token invalide ou manquant."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "salles"
+                ],
+                "summary": "Créer un nouveau salle",
+                "description": "Enregistre un nouveau salle dans la base de données.",
+                "operationId": "createSalle",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Salle"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Salle"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/salles/{id}": {
+            "get": {
+                "tags": [
+                    "salles"
+                ],
+                "summary": "Get One by Id",
+                "description": "Afficher les infos d'une salle admission.",
+                "operationId": "GetOneSalleAdmission",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la salle à afficher",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Salle trouvé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Salle trouvé avec succès"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Salle"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Salle non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Salle non trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "salles"
+                ],
+                "summary": "Modifier les infos d'une salle",
+                "description": "Modifier les infos d'une salle.",
+                "operationId": "updateSalles",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la salle à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Salle"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Salle mis à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Salle mis à jour avec succès"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Salle"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requête invalide",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Salle non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Salle non trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/services": {
             "get": {
                 "tags": [
@@ -2389,6 +2672,33 @@
                 },
                 "type": "object"
             },
+            "Salle": {
+                "title": "Salle",
+                "description": "Gestion des salles",
+                "properties": {
+                    "service_id": {
+                        "description": "Service associée",
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "nom": {
+                        "description": "Nom de la salle",
+                        "type": "string",
+                        "example": "A1"
+                    },
+                    "capacite": {
+                        "description": "Nombre de place",
+                        "type": "string",
+                        "example": "5"
+                    },
+                    "disponible": {
+                        "description": "Disponibilite de la salle",
+                        "type": "boolean",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
             "Service": {
                 "title": "Services",
                 "description": "Les service de l'hopital",
@@ -2546,6 +2856,10 @@
         {
             "name": "roles",
             "description": "roles"
+        },
+        {
+            "name": "salles",
+            "description": "salles"
         },
         {
             "name": "Services",

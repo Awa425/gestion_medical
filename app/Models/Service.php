@@ -47,6 +47,11 @@ class Service extends Model
     {
         return $this->hasMany(RendezVous::class);
     }
+
+    public function salles()
+{
+    return $this->hasMany(Salle::class);
+}
     public function specialites(): HasMany
     {
         return $this->hasMany(Specialite::class);

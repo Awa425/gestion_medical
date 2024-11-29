@@ -47,7 +47,6 @@ Route::get('patients', [PatientController::class, 'listPatients']);
 Route::get('patients/enAttente/services/{service_id}', [PatientController::class, 'listSalleAttenteByService']);
 Route::get('salle-attente/service/{id}', [SalleAttenteController::class, 'salleAttenteByService']);
 Route::get('listSalleAttente', [SalleAttenteController::class, 'listSalleAttente']);
-
 Route::get('patient/enAttente', [SalleAttenteController::class, 'listPatientByEtatEnAttente']);
 Route::get('detail-complet/patient/{id}', [PatientController::class, 'detailCompletPatient']);
 Route::post('patients/create-consultation',[ConsultationController::class,'consulterPatient']);
@@ -65,8 +64,8 @@ Route::resource('admissions', AdmissionController::class);
 Route::resource('rendezVous',RendezVousController::class);
 Route::put('annuler/rendezVous/{id}',[RendezVousController::class, 'annuler']);
 
-
-
+// Salle
+Route::apiResource('salles', SalleController::class);
 // Acces private
 Route::middleware('auth:sanctum')->group( function () {
     Route::post('password/change', [AuthController::class, 'changePassword']);
