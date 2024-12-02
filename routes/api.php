@@ -55,6 +55,8 @@ Route::put('patients/consultation/{id}/update',[ConsultationController::class,'u
 // Admission sortie et transfere
 Route::post('patients/addAdmission',[AdmissionController::class, 'store']);
 Route::post('admissions/en-cours',[AdmissionController::class, 'getAdmissionEnCours']);
+Route::put('patients/admission/{id}/update',[AdmissionController::class, 'update']);
+
 Route::post('patients/addSortie',[SortieController::class, 'store']);
 Route::post('patients/addTransfert',[TransfereController::class, 'store']);
 Route::resource('consultations', ConsultationController::class);

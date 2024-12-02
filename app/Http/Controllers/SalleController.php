@@ -69,6 +69,8 @@ class SalleController extends BaseController
         ]);
 
         $salle = Salle::create($validated);
+        $salle->lits_restants=$request->capacite;
+        $salle->save();
 
         return response()->json(['message' => 'Salle créée avec succès', 'salle' => $salle], 201);
     }

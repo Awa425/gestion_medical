@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Admission extends Model
 {
     use HasFactory;
-    protected $fillable = ['dossierMedical_id','consultation_id', 'service_id', 'date_admission', 'motif_admission', 'etat_admission'];
+    protected $fillable = ['dossierMedical_id','consultation_id', 'service_id','salle_id', 'date_admission', 'motif_admission', 'etat_admission'];
 
     public function dossierMedical()
     {
@@ -28,5 +28,10 @@ class Admission extends Model
     public function sortie(){
         return $this->hasOne(Sortie::class);
 
+    }
+
+    public function salle()
+    {
+        return $this->belongsTo(Salle::class,'salle_id');
     }
 }

@@ -21,4 +21,9 @@
 ` php artisan l5-swagger:generate`
 ` http://localhost:8000/api/documentation#/`
 
+# Seeder : 
+` php artisan db:seed --class CategorySeeder`
+` php artisan db:seed --class TypeSeeder`
+` php artisan db:seed --class RoleSeeder`
+
 

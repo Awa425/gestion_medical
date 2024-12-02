@@ -23,6 +23,12 @@ namespace App\Docs;
  *         type="integer",
  *         description="Service",
  *         example="2"
+ *     ),
+ *     @OA\Property(
+ *         property="salle_id",
+ *         type="integer",
+ *         description="Salle",
+ *         example="1"
  *     )
  * )
  */

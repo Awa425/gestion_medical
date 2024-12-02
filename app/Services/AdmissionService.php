@@ -18,12 +18,13 @@ class AdmissionService
             $admission = Admission::create([
                 'dossierMedical_id' => $data['dossierMedical_id'],
                 'service_id' => $data['service_id'],
+                'salle_id' => $data['salle_id'],
                 'date_admission' =>  $data['date_admission'] ?? now(),
                 'motif_admission' => $data['motif_admission'],
                 'etat_admission' => 'en cours',
             ]);
 
-            return $admission->load('dossierMedical', 'service');
+            return $admission->load('dossierMedical', 'service','salle');
         });
     }
 

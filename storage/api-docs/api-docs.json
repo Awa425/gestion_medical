@@ -22,7 +22,7 @@
         "/api/admissions": {
             "get": {
                 "tags": [
-                    "dossier_medical & Consultation"
+                    "Admission & sortie & transfert"
                 ],
                 "summary": "liste des admissions",
                 "description": "Liste des admissions.",
@@ -52,7 +52,7 @@
         "/api/admissions/en-cours": {
             "post": {
                 "tags": [
-                    "dossier_medical & Consultation"
+                    "Admission & sortie & transfert"
                 ],
                 "summary": "Admissions en cours",
                 "description": "Recuperer l'admissions en cours du patient",
@@ -99,7 +99,7 @@
         "/api/patients/addAdmission": {
             "post": {
                 "tags": [
-                    "dossier_medical & Consultation"
+                    "Admission & sortie & transfert"
                 ],
                 "summary": "Ajout admission patient",
                 "description": "Admission patient.",
@@ -134,6 +134,122 @@
                         "sanctumAuth": []
                     }
                 ]
+            }
+        },
+        "/api/patients/admission/{id}/update": {
+            "put": {
+                "tags": [
+                    "Admission & sortie & transfert"
+                ],
+                "summary": "Modifier les infos d'une admission",
+                "description": "Modifier les infos d'une admission.",
+                "operationId": "updateAdmission",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de admission à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Admission"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Admission mis à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Infos Admission mis à jour avec succès"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Admission"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requête invalide",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Admission non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Admission non trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/login": {
@@ -2045,7 +2161,7 @@
         "/api/patients/addSortie": {
             "post": {
                 "tags": [
-                    "dossier_medical & Consultation"
+                    "Admission & sortie & transfert"
                 ],
                 "summary": "Ajout sortie patient",
                 "description": "Sortie patient.",
@@ -2203,6 +2319,11 @@
                         "description": "Service",
                         "type": "integer",
                         "example": "2"
+                    },
+                    "salle_id": {
+                        "description": "Salle",
+                        "type": "integer",
+                        "example": "1"
                     }
                 },
                 "type": "object"
@@ -2826,8 +2947,8 @@
     },
     "tags": [
         {
-            "name": "dossier_medical & Consultation",
-            "description": "dossier_medical & Consultation"
+            "name": "Admission & sortie & transfert",
+            "description": "Admission & sortie & transfert"
         },
         {
             "name": "login",
@@ -2836,6 +2957,10 @@
         {
             "name": "reset Password",
             "description": "reset Password"
+        },
+        {
+            "name": "dossier_medical & Consultation",
+            "description": "dossier_medical & Consultation"
         },
         {
             "name": "patients",
