@@ -36,6 +36,57 @@ class SalleController extends BaseController
             $salles = Salle::with('service')->get();
             return response()->json($salles);
         }
+
+    /**
+     * @OA\Get(
+     *      path="/api/salle/service/{id}",
+     *      operationId="GetSaleesByService",
+     *      tags={"salles"},
+     *      summary="Get salles by service",
+     *      description="Afficher les infos des salles d'une service.",
+     *      security={{"bearerAuth":{}}},  
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Id de la service",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Personnel trouvé avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Salles trouvé avec succès"),
+     *             @OA\Property(property="data", type="object", ref="#/components/schemas/Salle")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Non autorisé",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Non autorisé")
+     *         )
+     *     ),
+     *     @OA\Response(
+    *         response=404,
+    *         description="Personnel non trouvé",
+    *         @OA\JsonContent(
+    *             @OA\Property(property="status", type="string", example="error"),
+    *             @OA\Property(property="message", type="string", example="Salles non trouvé")
+    *         )
+    *     )
+    * )
+    */
+        public function salleByService($serviceId)
+        {
+        $saleByService = Salle::with('service')
+        ->where('service_id', $serviceId)
+        ->orderBy('id', 'DESC')
+        ->get();
+        return response()->json($saleByService);
+        }
     
         /**
  * @OA\Post(

@@ -68,6 +68,7 @@ Route::put('annuler/rendezVous/{id}',[RendezVousController::class, 'annuler']);
 
 // Salle
 Route::apiResource('salles', SalleController::class);
+Route::get('salle/service/{id}',[SalleController::class,'salleByService']);
 // Acces private
 Route::middleware('auth:sanctum')->group( function () {
     Route::post('password/change', [AuthController::class, 'changePassword']);
