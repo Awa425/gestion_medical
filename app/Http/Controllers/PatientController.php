@@ -469,10 +469,9 @@ public function show($id)
  */
 public function detailCompletPatient($id)
 {
-    $trajet = Patient::with('dossierMedical','consultations.service','consultations.medecin')->findOrFail($id);
+    $trajet = Patient::with('dossierMedical.admissions.service','dossierMedical.transferts','dossierMedical.admissions.sortie','consultations.service','consultations.medecin')->findOrFail($id);
     return response()->json($trajet);
     
    
 }
-
 }

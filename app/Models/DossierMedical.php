@@ -30,7 +30,7 @@ class DossierMedical extends Model
     {
         return $this->hasMany(Admission::class,'dossierMedical_id');
     }
-
+              
     public function transferts()
     {
         return $this->hasMany(Transfere::class,'dossierMedical_id');
