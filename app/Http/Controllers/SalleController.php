@@ -230,20 +230,49 @@ class SalleController extends BaseController
  *     )
  * )
  */
-    public function update(Request $request, $id)
-    {
-        $validated = $request->validate([
-            'nom' => 'sometimes|required|string|unique:salles,nom,' . $id,
-            'capacite' => 'sometimes|required|integer|min:1',
-            'service_id' => 'sometimes|required|exists:services,id',
-            'disponible' => 'sometimes|required|boolean',
-        ]);
+public function update(Request $request, $id)
+{
+    // Récupérer la salle existante
+    $salle = Salle::findOrFail($id);
 
-        $salle = Salle::findOrFail($id);
-        $salle->update($validated);
+    // Initialiser les valeurs actuelles
+    $ancienneCapacite = $salle->capacite;
+    $litsOccupes = $salle->capacite - $salle->lits_restants;
 
-        return response()->json(['message' => 'Salle mise à jour avec succès', 'salle' => $salle]);
+    // Vérifier si la requête contient une modification de la capacité
+    if ($request->has('capacite')) {
+        $nouvelleCapacite = $request->input('capacite');
+
+        // Valider que la nouvelle capacité est suffisante pour les lits occupés
+        if ($nouvelleCapacite < $litsOccupes) {
+            return response()->json([
+                'message' => "La nouvelle capacité ($nouvelleCapacite) ne peut pas être inférieure au nombre de lits occupés ($litsOccupes).",
+            ], 400);
+        }
+
+        // Mettre à jour les lits restants
+        $salle->lits_restants += ($nouvelleCapacite - $ancienneCapacite);
+
+        // Mettre à jour la capacité
+        $salle->capacite = $nouvelleCapacite;
     }
+
+    // Vérifier si un autre champ doit être mis à jour (comme le nom)
+    if ($request->has('nom')) {
+        $salle->nom = $request->input('nom');
+    }
+    if ($request->has('service_id')) {
+        $salle->service_id = $request->input('service_id');
+    }
+
+    // Sauvegarder les modifications
+    $salle->save();
+
+    return response()->json([
+        'message' => 'Salle mise à jour avec succès.',
+        'salle' => $salle,
+    ], 200);
+}
 
     public function destroy($id)
     {
