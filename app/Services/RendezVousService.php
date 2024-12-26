@@ -1,8 +1,10 @@
 <?php
 namespace App\Services;
 
+use App\Mail\RendezVousCreeMail;
 use App\Models\RendezVous;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class RendezVousService
 {
@@ -12,7 +14,7 @@ class RendezVousService
         $this->verifierDisponibilite($data['medecin_id'], $data['date_heure']);
 
         // Créer le rendez-vous
-        return RendezVous::create([
+        $rendezVous= RendezVous::create([
             'patient_id' => $data['patient_id'],
             'medecin_id' => $data['medecin_id'],
             'service_id' => $data['service_id'],
@@ -20,6 +22,11 @@ class RendezVousService
             'motif' => $data['motif'],
             'statut' => 'programmé',
         ]);
+
+        $patient = $rendezVous->patient;
+        Mail::to($patient->email)->send(new RendezVousCreeMail($rendezVous));
+        
+        return $rendezVous;
     }
 
     public function verifierDisponibilite($medecin_id, $date_heure)

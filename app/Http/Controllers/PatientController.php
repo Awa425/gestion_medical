@@ -156,7 +156,6 @@ public function store(Request $request)
         'email' => 'nullable|email|unique:patients',
         'sexe' => 'nullable|in:M,F',
         'groupe_sanguin' => 'nullable|string|max:3',
-        'matricule'=>'required|string'
     ]);
 
     $patient = $this->patientService->createPatient([
@@ -168,8 +167,7 @@ public function store(Request $request)
             'telephone', 
             'email', 
             'sexe', 
-            'groupe_sanguin', 
-            'matricule'
+            'groupe_sanguin'
         ]), 
         'dossierMedical' => $request->get('dossierMedical'),
     ]);

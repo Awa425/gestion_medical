@@ -22,8 +22,9 @@
 ` http://localhost:8000/api/documentation#/`
 
 # Seeder : 
-` php artisan db:seed --class CategorySeeder`
+` php artisan db:seed --class CategorieSeeder`
 ` php artisan db:seed --class TypeSeeder`
 ` php artisan db:seed --class RoleSeeder`
+` php artisan db:seed --class ServiceSeeder`
 
 

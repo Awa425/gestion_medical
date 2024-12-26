@@ -7,9 +7,19 @@ use App\Models\SalleAttente;
 use Illuminate\Support\Facades\DB;
 
 class PatientService{
+    private function generateMatricule()
+    {
+        $prefix = "PAT_";
+        $timestamp = now()->format('YmdHis');
+        
+        return $prefix . $timestamp ;
+    }
     public function createPatient(array $data)
     {
         return DB::transaction(function() use ($data) {
+
+            $matricule = $this->generateMatricule();
+            $data['patient']['matricule'] = $matricule;
            
             // Création du patient
             $patient = Patient::create($data['patient']);

@@ -33,7 +33,7 @@ class AdmissionController extends Controller
      */
     public function index()
     {
-    $admission = Admission::with('dossierMedical.patient')
+    $admission = Admission::with('dossierMedical.patient','service','salle')
     ->orderBy('id', 'DESC')
     ->get();
     return response()->json($admission);
