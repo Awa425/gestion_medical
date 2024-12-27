@@ -209,13 +209,7 @@ public function storeWaitingRoom(Request $request){
         'date_naissance' => 'nullable|date',
         'adresse' => 'nullable|string',
         'telephone' => 'nullable|string',
-        'email' => 'nullable|email',  
-        'matricule' => [
-            'required',
-            'string',
-            // Ignorer le matricule s'il appartient déjà à un patient existant
-            Rule::unique('patients')->ignore($request->get('matricule'), 'matricule')
-        ],          
+        'email' => 'nullable|email',          
         'sexe' => 'nullable|in:M,F',
         'groupe_sanguin' => 'nullable|string|max:3',
         'service_id' => 'required|exists:services,id',

@@ -21,7 +21,7 @@ class TypeSeeder extends Seeder
         TypePersonnel::insert([
             ['libelle'=> TypeServiceProvider::MEDECIN, 'categorie_id'=>$personnelAdmin],
             ['libelle'=> TypeServiceProvider::INFIRMIER, 'categorie_id'=>$personnelMedecin],
-            ['libelle'=> TypeServiceProvider::CAISSIER, 'categorie_id'=>$personnelAdmin],
+            ['libelle'=> TypeServiceProvider::SECRETAIRE, 'categorie_id'=>$personnelAdmin],
         ]);
     }
     

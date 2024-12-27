@@ -43,12 +43,9 @@ class PatientService{
     public function storeWaitingRoom(array $data){
         
         return DB::transaction(function() use ($data) {
-            // Vérifier si le patient existe déjà
-            $patient = Patient::where('matricule', $data['matricule'])
-                                ->first();
 
-            // Si le patient n'existe pas, on le crée
-            if (!$patient) {
+                $matricule = $this->generateMatricule();
+
                 $patient = Patient::create([
                     'nom' => $data['nom'],
                     'prenom' => $data['prenom'],
@@ -58,9 +55,9 @@ class PatientService{
                     'email' => $data['email'] ?? null,
                     'sexe' => $data['sexe'] ?? null,
                     'groupe_sanguin' => $data['groupe_sanguin'] ?? null,
-                    'matricule' => $data['matricule']??null
+                    'matricule' => $matricule
                 ]);
-            }
+         
 
             // Vérifier si le patient est déjà dans la salle d'attente pour ce service
             $salleAttente = SalleAttente::where('patient_id', $patient->id)

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('patients', function (Blueprint $table) {
-            $table->string('matricule')->unique();
+            $table->string('matricule')->unique()->nullable();
             $table->boolean('isActive')->default(true);
         });
     }
