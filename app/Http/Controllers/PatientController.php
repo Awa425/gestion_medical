@@ -211,8 +211,10 @@ public function storeWaitingRoom(Request $request){
         'telephone' => 'nullable|string',
         'email' => 'nullable|email',  
         'matricule' => [
+            'sometimes',
+            'nullable',
             'string',
-            // Ignorer le matricule s'il appartient déjà à un patient existant
+            // Rule::unique('patients', 'matricule'),
             Rule::unique('patients')->ignore($request->get('matricule'), 'matricule')
         ],          
         'sexe' => 'nullable|in:M,F',
@@ -225,7 +227,6 @@ public function storeWaitingRoom(Request $request){
         'erreurs' => $e->errors(),
     ], 422);
     }
-    // Appel au service pour enregistrer le patient
     $result = $this->patientService->storeWaitingRoom($validatedData);
 
     return response()->json([
