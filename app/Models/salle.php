@@ -14,7 +14,7 @@ class salle extends Model
      *
      * @var array
      */
-    protected $fillable = ['nom', 'capacite', 'lits_restants' ,'disponible', 'service_id'];
+    protected $fillable = ['nom', 'capacite', 'lits_restants' ,'disponible', 'service_id','type'];
 
       public function service()
       {

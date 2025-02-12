@@ -7,9 +7,10 @@ use Illuminate\Support\ServiceProvider;
 class CategorieServiceProvider extends ServiceProvider
 {
 
-    const PERSONNEL_ADMINISTRATIF = "personnel administratif";
-    const PERSONNEL_SANTE = "personnel sante";
-    const PERSONNEL_SOUTIENT = "personnel soutient";
+    const ADMINISTRATIF = "ADMINISTRATIF";
+    const SANTE = "SANTE";
+    const SOUTIENT = "SOUTIENT";
+    const SECURITE = "SECURITE";
     /**
      * Register services.
      */

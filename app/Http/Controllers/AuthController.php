@@ -45,7 +45,7 @@ public function login(Request $request)
         $user = Auth::user();
         
         // Charger les relations souhaitées (ex. rôles, personnel, etc.)
-        $user->load('roles', 'personnel', 'personnel.qualifications', 'personnel.formations', 'personnel.certifications');
+        $user->load('roles', 'personnel.service', 'personnel.qualifications', 'personnel.formations', 'personnel.certifications');
 
         // Vérifier si l'utilisateur doit changer son mot de passe
         if ($user->must_change_password) {

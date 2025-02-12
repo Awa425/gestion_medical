@@ -17,6 +17,7 @@ class TransfereController extends Controller
      *     description="Liste des transfert.",
      *     operationId="listTousLesTransferts",
      *     tags={"dossier_medical & Consultation"},
+     *      security={{"bearerAuth":{}}},
      *     @OA\Response(
      *         response=200,
      *         description="Données récupérées avec succès.",

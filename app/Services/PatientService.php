@@ -47,7 +47,7 @@ class PatientService{
           if (isset($data['email'])) {
               $patient = Patient::where('email', $data['email'])
               ->first();
-          }
+          }else  $patient=null;
 
           if (isset($data['matricule'])) {
             $patient = Patient::where('matricule', $data['matricule'])
@@ -74,7 +74,7 @@ class PatientService{
             // Vérifier si le patient est déjà dans la salle d'attente pour ce service
             $salleAttente = SalleAttente::where('patient_id', $patient->id)
                                         ->where('service_id', $data['service_id'])
-                                        ->where('etat', 'en attente')
+                                        // ->where('etat', 'en attente')
                                         ->first();                                        
 
             // Si le patient n'est pas déjà dans la salle d'attente, l'ajouter

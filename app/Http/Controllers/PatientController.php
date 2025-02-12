@@ -78,6 +78,7 @@ public function listPatients()
  *      tags={"salle_attente"},
  *      summary="Liste des patient dans en service",
  *      description="Liste des patient dans en service",
+ *      security={{"bearerAuth":{}}},
  *     @OA\Parameter(
  *         name="service_id",
  *         in="path",
@@ -214,7 +215,6 @@ public function storeWaitingRoom(Request $request){
             'sometimes',
             'nullable',
             'string',
-            // Rule::unique('patients', 'matricule'),
             Rule::unique('patients')->ignore($request->get('matricule'), 'matricule')
         ],          
         'sexe' => 'nullable|in:M,F',
@@ -243,6 +243,7 @@ public function storeWaitingRoom(Request $request){
  *      tags={"salle_attente"},
  *      summary="Modifier les infos d'une salle attente",
  *      description="Modifier les infos d'une salle attente.",  
+ *      security={{"bearerAuth":{}}},
  *     @OA\Parameter(
  *         name="id",
  *         in="path",
@@ -323,8 +324,6 @@ public function updateWaitingRoom(Request $request, $patientId)
         'salle_attente' => $result['salle_attente'],
     ], 200);
 }
-
-
 
 public function update(Request $request, Patient $patient)
 {
@@ -467,9 +466,7 @@ public function show($id)
  */
 public function detailCompletPatient($id)
 {
-    $trajet = Patient::with('dossierMedical.admissions.service','dossierMedical.transferts','dossierMedical.admissions.sortie','consultations.service','consultations.medecin')->findOrFail($id);
-    return response()->json($trajet);
-    
-   
+    $trajet = Patient::with('dossierMedical.admissions.service','dossierMedical.transferts.fromService','dossierMedical.transferts.toService','dossierMedical.admissions.sortie','consultations.service','consultations.medecin','rendezVous.service','rendezVous.medecin')->findOrFail($id);
+    return response()->json($trajet); 
 }
 }

@@ -11,6 +11,8 @@ class RoleServiceProvider extends ServiceProvider
     const ADMIN = "ADMIN";
     const MEDECIN = "MEDECIN";
     const INFIRMIER = "INFIRMIER";
+    const ASSISTANT = "ASSISTANT";
+    const SECRETAIRE = "SECRETAIRE";
     const CAISSIER = "CAISSIER";
     const SECURITE = "SECURITE";
     const AMBULANCIER = "AMBULANCIER";

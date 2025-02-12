@@ -14,6 +14,7 @@ class RoleController extends Controller
  *     description="Liste des roles.",
  *     operationId="listRoles",
  *     tags={"roles"},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Response(
  *         response=200,
  *         description="Données récupérées avec succès.",

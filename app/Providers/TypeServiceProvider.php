@@ -7,20 +7,11 @@ use Illuminate\Support\ServiceProvider;
 class TypeServiceProvider extends ServiceProvider
 {
 
-    const MEDECIN = "medecin";
-    const INFIRMIER = "infirmier";
-    const AIDE_SOIGNANT = "aide soignant";
-    const PARAMEDICAUX = "paramedicaux";
-    const BRANCARDIER = "brancardier";
-    const AMBULANCIER = "ambulancier";
-    const TECHNICIEN_DE_SURFACE = "technicien de surface";
-    const SECRETAIRE = "secretaire";
-    const COMPTABLE = "comptable";
-    const CAISSIER = "caissier";
-    const AGENT_SECURITE = "agent securite";
-    const ACCUEIL = "accueil";
-    const DG = "dg";
-    const DRG = "drg";
+    const PERSONNEL_ADMINISTRATIF = "PERSONNEL_ADMINISTRATIF";
+    const PERSONNEL_SANTE = "PERSONNEL_SANTE";
+    const PERSONNEL_SECURITE = "PERSONNEL_SECURITE";
+    const PERSONNEL_SOUTIENT = "PERSONNEL_SOUTIENT";
+   
     /**
      * Register services.
      */

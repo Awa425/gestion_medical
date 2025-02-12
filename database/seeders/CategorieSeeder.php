@@ -15,9 +15,10 @@ class CategorieSeeder extends Seeder
     public function run(): void
     {
         Categorie::insert([
-            ['libelle'=> CategorieServiceProvider::PERSONNEL_ADMINISTRATIF],
-            ['libelle'=> CategorieServiceProvider::PERSONNEL_SANTE],
-            ['libelle'=> CategorieServiceProvider::PERSONNEL_SOUTIENT],
+            ['libelle'=> CategorieServiceProvider::ADMINISTRATIF],
+            ['libelle'=> CategorieServiceProvider::SANTE],
+            ['libelle'=> CategorieServiceProvider::SECURITE],
+            ['libelle'=> CategorieServiceProvider::SOUTIENT],
         ]);
     }
 }

@@ -43,7 +43,7 @@ class PersonnelController extends BaseController
     {
         $personnels = Personnel::orderBy('id', 'DESC')
         ->get();
-        $personnels->load('type','user','qualifications', 'formations', 'certifications');
+        $personnels->load('type','user.roles','service','qualifications', 'formations', 'certifications');
 
         return FormatData::formatResponse(message: 'Liste du personnels', data: $personnels);
     }
@@ -55,6 +55,7 @@ class PersonnelController extends BaseController
  *     description="Liste de tous les medecins.",
  *     operationId="listMedecin",
  *     tags={"personnels"},
+ *     security={{"sanctumAuth":{}}},
  *     @OA\Response(
  *         response=200,
  *         description="Données récupérées avec succès.",
@@ -70,7 +71,7 @@ public function medecinList()
 {
     $medecins = Personnel::where('type_personnel_id', 1)
     ->get(); 
-    $medecins->load('type','user');
+    $medecins->load('type','user.roles');
 
     return FormatData::formatResponse(message: 'Liste des medecins', data: $medecins);
 }
@@ -81,6 +82,7 @@ public function medecinList()
  *     summary="liste des medecins dans un service",
  *     description="Liste de tous les medecins dans un service.",
  *     operationId="listMedecinByService",
+ *      security={{"bearerAuth":{}}},
  *     tags={"personnels"},
  *     @OA\Parameter(
  *         name="id",
@@ -104,7 +106,7 @@ public function medecinsByService($id_service)
 {
     $medecins = Personnel::where('service_id', $id_service)
     ->get(); 
-    $medecins->load('type','user','service');
+    $medecins->load('type','user.roles','service');
 
     return FormatData::formatResponse(message: 'Liste des medecins dans un service donné', data: $medecins);
 }
@@ -185,9 +187,10 @@ public function store(Request $request){
  *      path="/api/personnels/{id}",
  *      operationId="updatePersonnel",
  *      tags={"personnels"},
+ *      security={{"bearerAuth":{}}},  
  *      summary="Modifier les infos d'un membre du personnel",
  *      description="Modifier les infos d'un membre du personnel.",
- *      security={{"bearerAuth":{}}},  
+ *      security={{"bearerAuth":{}}},
  *     @OA\Parameter(
  *         name="id",
  *         in="path",
@@ -252,7 +255,7 @@ public function store(Request $request){
             'type_personnel_id',
             'service_id'
         ]),
-        'user' => $request->get('user'),
+        'user' => $request->get('user.roles'),
         'qualifications' => $request->get('qualifications'),
         'formations' => $request->get('formations'),
         'certifications' => $request->get('certifications'),
@@ -314,7 +317,7 @@ public function store(Request $request){
             return $this->sendError('Personnel not found.');
         }
 
-        return $personnel->load('user','qualifications', 'formations', 'certifications');
+        return $personnel->load('user.roles','qualifications', 'formations', 'certifications');
 
     }
 

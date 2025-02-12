@@ -25,6 +25,12 @@ namespace App\Docs;
  *         example="5"
  *     ),
  *     @OA\Property(
+ *         property="type",
+ *         type="string",
+ *         description="Type de salle",
+ *         example="chambre"
+ *     ),
+ *     @OA\Property(
  *         property="disponible",
  *         type="boolean",
  *         description="Disponibilite de la salle",

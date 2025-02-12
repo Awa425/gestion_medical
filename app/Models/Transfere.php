@@ -17,7 +17,7 @@ class Transfere extends Model
 
     public function fromService()
     {
-        return $this->belongsTo(Service::class, 'from_service_id');
+        return $this->belongsTo(Service::class, 'from_service_id'); 
     }
 
     public function toService()

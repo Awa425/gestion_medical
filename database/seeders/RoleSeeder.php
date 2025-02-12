@@ -16,8 +16,9 @@ class RoleSeeder extends Seeder
     {
         Role::insert([
             ['libelle'=> RoleServiceProvider::ADMIN],
-            ['libelle'=> RoleServiceProvider::SUPER_ADMIN],
+            ['libelle'=> RoleServiceProvider::ASSISTANT],
             ['libelle'=> RoleServiceProvider::MEDECIN],
+            ['libelle'=> RoleServiceProvider::SECRETAIRE],
         ]);
     }
 }

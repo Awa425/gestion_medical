@@ -23,6 +23,7 @@ class ConsultationController extends BaseController
  *     description="Liste de tous les consultations.",
  *     operationId="listConsultation",
  *     tags={"dossier_medical & Consultation"},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Response(
  *         response=200,
  *         description="Données récupérées avec succès.",
@@ -57,6 +58,7 @@ public function index()
  *      tags={"dossier_medical & Consultation"},
  *      summary="Consulter, mettre a jour dossier patient",
  *      description="Consulter et modifier dossier medical d'un patient.", 
+ *      security={{"bearerAuth":{}}},
  *      @OA\RequestBody(
  *          required=true,
  *          @OA\JsonContent(ref="#/components/schemas/Consultation")
@@ -181,22 +183,22 @@ public function updateConsultation(Request $request, $id)
 
 
 
-    public function store(Request $request)
-    { 
+public function store(Request $request)
+{ 
 
-        
-        // Appel au service pour créer la consultation avec le patient
-        $consultation = $this->consultationService->createOrUpdateConsultation([
-            'patient' => $request->get('patient'),
-            'patient_id' => $request->get('patient_id'), // Si le patient existe
-            'dossierMedical' => $request->get('dossierMedical'),
-            'consultation' => $request->get('consultation'),
-        ]);
+    
+    // Appel au service pour créer la consultation avec le patient
+    $consultation = $this->consultationService->createOrUpdateConsultation([
+        'patient' => $request->get('patient'),
+        'patient_id' => $request->get('patient_id'), // Si le patient existe
+        'dossierMedical' => $request->get('dossierMedical'),
+        'consultation' => $request->get('consultation'),
+    ]);
 
-        return response()->json([
-            'message' => 'Consultation créée avec succès.',
-            'consultation' => $consultation,
-        ], 201);
+    return response()->json([
+        'message' => 'Consultation créée avec succès.',
+        'consultation' => $consultation,
+    ], 201);
 }
 
    
@@ -206,7 +208,7 @@ public function updateConsultation(Request $request, $id)
         $consultation = Consultation::find($id);
   
         if (is_null($consultation)) {
-            return $this->sendError('Specialite not found.');
+            return $this->sendError('Consultation not found.');
         }
    
         return $this->sendResponse(new ConsultationResource($consultation), 'Consultation retrieved successfully.');

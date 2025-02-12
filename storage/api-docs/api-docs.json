@@ -46,7 +46,12 @@
                     "401": {
                         "description": "Non autorisé, token invalide ou manquant."
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/admissions/en-cours": {
@@ -93,7 +98,12 @@
                     "401": {
                         "description": "Non autorisé, token invalide ou manquant."
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/patients/addAdmission": {
@@ -249,7 +259,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/login": {
@@ -371,7 +386,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/patients/create-consultation": {
@@ -406,7 +426,12 @@
                     "400": {
                         "description": "Erreur de validation"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/patients/consultation/{id}/update": {
@@ -755,7 +780,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/salleAttente": {
@@ -911,7 +941,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/patients/{id}": {
@@ -1196,7 +1231,12 @@
                     "401": {
                         "description": "Non autorisé, token invalide ou manquant."
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctumAuth": []
+                    }
+                ]
             }
         },
         "/api/medecins/service/{id}": {
@@ -1237,7 +1277,12 @@
                     "401": {
                         "description": "Non autorisé, token invalide ou manquant."
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/personnels/{id}": {
@@ -1566,7 +1611,12 @@
                     "401": {
                         "description": "Non autorisé, token invalide ou manquant."
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "post": {
                 "tags": [
@@ -1599,7 +1649,285 @@
                     "400": {
                         "description": "Erreur de validation"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rendezVous/{id}": {
+            "get": {
+                "tags": [
+                    "rendez-vous"
+                ],
+                "summary": "Get One rendez-vous by Id",
+                "description": "Afficher les infos d'un rendez-vous.",
+                "operationId": "GetOneRendezVous",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du rendez-vous à afficher",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Personnel trouvé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Rendez-vous trouvé avec succès"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/RendezVous"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Rendez vous non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Rendez vous non trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rendezVous/patient/{patient_id}": {
+            "get": {
+                "tags": [
+                    "rendez-vous"
+                ],
+                "summary": "Liste des rendez-vous d'un patient",
+                "description": "Liste des rendez-vous d'un patient",
+                "operationId": "GetRendezVousByPatient",
+                "parameters": [
+                    {
+                        "name": "patient_id",
+                        "in": "path",
+                        "description": "ID du patient",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste rendez-vous ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Patient trouvé avec succès"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/RendezVous"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Rendey vous trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Rendey vous trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rendezVous/medecin/{medecin_id}": {
+            "get": {
+                "tags": [
+                    "rendez-vous"
+                ],
+                "summary": "Liste des rendez-vous d'un medecin",
+                "description": "Liste des rendez-vous d'un medecin",
+                "operationId": "GetRendezVousByMedecin",
+                "parameters": [
+                    {
+                        "name": "medecin_id",
+                        "in": "path",
+                        "description": "ID du medecin",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste rendez-vous ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "medecin trouvé avec succès"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/RendezVous"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Non autorisé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Rendey vous trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Rendey vous trouvé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/annuler/rendezVous/{id}": {
@@ -1645,7 +1973,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/roles": {
@@ -1675,7 +2008,12 @@
                     "401": {
                         "description": "Non autorisé, token invalide ou manquant."
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/listSalleAttente": {
@@ -1820,7 +2158,12 @@
                     "401": {
                         "description": "Non autorisé, token invalide ou manquant."
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/salles": {
@@ -2316,7 +2659,12 @@
                     "401": {
                         "description": "Non autorisé, token invalide ou manquant."
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/patients/addTransfert": {
@@ -2426,12 +2774,12 @@
                     "email": {
                         "description": "Login",
                         "type": "string",
-                        "example": "admin@hospital.com"
+                        "example": "user1@hopital.com"
                     },
                     "password": {
                         "description": "Mot de passe",
                         "type": "string",
-                        "example": "password123"
+                        "example": "passer"
                     }
                 },
                 "type": "object"
@@ -2902,6 +3250,11 @@
                         "description": "Nombre de place",
                         "type": "string",
                         "example": "5"
+                    },
+                    "type": {
+                        "description": "Type de salle",
+                        "type": "string",
+                        "example": "chambre"
                     },
                     "disponible": {
                         "description": "Disponibilite de la salle",

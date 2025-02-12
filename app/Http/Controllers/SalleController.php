@@ -88,7 +88,7 @@ class SalleController extends BaseController
         return response()->json($saleByService);
         }
     
-        /**
+/**
  * @OA\Post(
  *      path="/api/salles",
  *      operationId="createSalle",
@@ -117,6 +117,8 @@ class SalleController extends BaseController
             'nom' => 'required|string|unique:salles',
             'capacite' => 'required|integer|min:1',
             'service_id' => 'required|exists:services,id',
+            'type' => 'required|string', 
+
         ]);
 
         $salle = Salle::create($validated);
@@ -126,6 +128,8 @@ class SalleController extends BaseController
         return response()->json(['message' => 'Salle créée avec succès', 'salle' => $salle], 201);
     }
 
+
+
 /**
  * @OA\Get(
  *      path="/api/salles/{id}",
@@ -133,7 +137,8 @@ class SalleController extends BaseController
  *      tags={"salles"},
  *      summary="Get One by Id",
  *      description="Afficher les infos d'une salle admission.",
- *      security={{"bearerAuth":{}}},  
+ *      security={{"bearerAuth":{}}}, 
+ *      security={{"bearerAuth":{}}}, 
  *     @OA\Parameter(
  *         name="id",
  *         in="path",

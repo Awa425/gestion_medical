@@ -24,7 +24,7 @@ class RendezVousService
         ]);
 
         $patient = $rendezVous->patient;
-        Mail::to($patient->email)->send(new RendezVousCreeMail($rendezVous));
+        // Mail::to($patient->email)->send(new RendezVousCreeMail($rendezVous));
         
         return $rendezVous;
     }

@@ -22,7 +22,7 @@ class RendezVous extends Model
     // Relation avec Patient
     public function patient()
     {
-        return $this->belongsTo(Patient::class);
+        return $this->belongsTo(Patient::class,'patient_id');
     }
 
     // Relation avec Médecin
@@ -35,4 +35,6 @@ class RendezVous extends Model
     {
         return $this->belongsTo(Service::class,'service_id');
     }
+
+    
 }

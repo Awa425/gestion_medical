@@ -22,11 +22,12 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('login', [AuthController::class, 'login']);
-
+Route::resource('personnels', PersonnelController::class);
+Route::apiResource('salles', SalleController::class);
 
 
 // Acces private
-Route::middleware('auth:sanctum')->group( function () {
+Route::middleware(['auth:sanctum', 'CheckSession'])->group( function () {
     Route::post('password/change', [AuthController::class, 'changePassword']);
     Route::resource('dossierMedical', DossierMedicalController::class);
     Route::get('users', [UserController::class, 'index']);
@@ -35,7 +36,6 @@ Route::middleware('auth:sanctum')->group( function () {
 
     // Personnel
     Route::resource('roles', RoleController::class);
-    Route::resource('personnels', PersonnelController::class);
     Route::resource('type-personnels', TypePersonnelController::class);
     Route::get('medecin-list', [PersonnelController::class, 'medecinList']);
     Route::get('medecins/service/{id}', [PersonnelController::class, 'medecinsByService']);
@@ -66,13 +66,14 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::resource('consultations', ConsultationController::class);
     Route::resource('admissions', AdmissionController::class);
 
-    // Rendez-vous
-    Route::resource('rendezVous',RendezVousController::class);
-    Route::put('annuler/rendezVous/{id}',[RendezVousController::class, 'annuler']);
-
     // Salle
-    Route::apiResource('salles', SalleController::class);
     Route::get('salle/service/{id}',[SalleController::class,'salleByService']);
+
+    // Rendez-vous
+    Route::put('annuler/rendezVous/{id}',[RendezVousController::class, 'annuler']);
+    Route::resource('rendezVous',RendezVousController::class);
+    Route::get('rendezVous/patient/{patient_id}',[RendezVousController::class,'listRendezVousByPatient']);
+    Route::get('rendezVous/medecin/{medecin_id}',[RendezVousController::class,'listRendezVousByMedecin']);
 
 });
 

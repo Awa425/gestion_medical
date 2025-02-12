@@ -39,6 +39,7 @@ class SalleAttenteController extends BaseController
 public function listSalleAttente()
 {    
         $patients = SalleAttente::with(['patient', 'service'])
+        ->where('etat','en attente')
         ->get();
         $patients;
         return FormatData::formatResponse(message: 'Liste des patients dans en attente', data: $patients);
@@ -84,6 +85,7 @@ public function listSalleAttente()
  *     description="Salle attente by service.",
  *     operationId="salleAttenteByService",
  *     tags={"salle_attente"},
+ *     security={{"bearerAuth":{}}},
  *    @OA\Parameter(
  *         name="id",
  *         in="path",

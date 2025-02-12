@@ -20,6 +20,7 @@ class AdmissionController extends Controller
      *     description="Liste des admissions.",
      *     operationId="listTousLesAdmissions",
      *     tags={"Admission & sortie & transfert"},
+     *      security={{"bearerAuth":{}}},
      *     @OA\Response(
      *         response=200,
      *         description="Données récupérées avec succès.",
@@ -46,6 +47,7 @@ class AdmissionController extends Controller
      *     description="Recuperer l'admissions en cours du patient",
      *     operationId="AdmissionsEnCours",
      *     tags={"Admission & sortie & transfert"},
+     *      security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
     *         required=true,
     *         @OA\JsonContent(
@@ -171,6 +173,7 @@ class AdmissionController extends Controller
  *      tags={"Admission & sortie & transfert"},
  *      summary="Modifier les infos d'une admission",
  *      description="Modifier les infos d'une admission.",  
+*      security={{"bearerAuth":{}}},
  *     @OA\Parameter(
  *         name="id",
  *         in="path",

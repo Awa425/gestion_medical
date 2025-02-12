@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('service_id');
             $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade');
             $table->timestamp('date_entree')->default(now());
-            $table->string('etat')->default('en attente'); // 'en attente', 'en consultation', etc.
+            $table->string('etat')->default('en attente'); // 'en attente', 'consulter', non consulter etc.
             $table->timestamps();
         });
     }
