@@ -27,7 +27,7 @@ Route::apiResource('salles', SalleController::class);
 
 
 // Acces private
-Route::middleware(['auth:sanctum', 'CheckSession'])->group( function () {
+Route::middleware(['auth:sanctum'])->group( function () {
     Route::post('password/change', [AuthController::class, 'changePassword']);
     Route::resource('dossierMedical', DossierMedicalController::class);
     Route::get('users', [UserController::class, 'index']);

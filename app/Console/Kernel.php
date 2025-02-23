@@ -28,5 +28,5 @@ class Kernel extends ConsoleKernel
     protected $routeMiddleware = [
         'checkSession' => \App\Http\Middleware\CheckSession::class,
     ];
-    
+
 }
