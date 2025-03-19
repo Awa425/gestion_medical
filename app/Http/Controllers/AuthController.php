@@ -48,14 +48,17 @@ public function login(Request $request)
         $user->load('roles', 'personnel.service', 'personnel.qualifications', 'personnel.formations', 'personnel.certifications');
 
         // Vérifier si l'utilisateur doit changer son mot de passe
-        if ($user->must_change_password) {
-            return response()->json([
-                'message' => 'Vous devez changer votre mot de passe pour pouvoir continuer.',
-                'token' => $user->createToken('hospital personnel user')->plainTextToken,
-                'must_change_password' => true,
-                'user' => $user, // Inclure les informations de l'utilisateur
-            ], 200);
+        if ($user->personnel_id!=null) {
+            if ($user->must_change_password) {
+                return response()->json([
+                    'message' => 'Vous devez changer votre mot de passe pour pouvoir continuer.',
+                    'token' => $user->createToken('hospital personnel user')->plainTextToken,
+                    'must_change_password' => true,
+                    'user' => $user, // Inclure les informations de l'utilisateur
+                ], 200);
+            }
         }
+        
 
         // Générer le token et inclure les informations de l'utilisateur
         $success['token'] = $user->createToken('hospital personnel user')->plainTextToken;
@@ -113,4 +116,6 @@ public function login(Request $request)
             'data' => $user
         ], 200);
     }
+
+    
 }

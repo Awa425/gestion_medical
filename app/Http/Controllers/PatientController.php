@@ -167,10 +167,12 @@ public function store(Request $request)
             'adresse', 
             'telephone', 
             'email', 
+            'password',
             'sexe', 
             'groupe_sanguin'
         ]), 
         'dossierMedical' => $request->get('dossierMedical'),
+        
     ]);
 
     return response()->json([

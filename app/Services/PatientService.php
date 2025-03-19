@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Models\DossierMedical;
 use App\Models\Patient;
 use App\Models\SalleAttente;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class PatientService{
@@ -15,14 +16,20 @@ class PatientService{
         return $prefix . $timestamp ;
     }
     public function createPatient(array $data)
-    {
+    { 
         return DB::transaction(function() use ($data) {
-
             $matricule = $this->generateMatricule();
             $data['patient']['matricule'] = $matricule;
            
             // Création du patient
             $patient = Patient::create($data['patient']);
+            if (isset($data['patient']['email']) && isset($data['patient']['password'])) {
+                $user = User::create([
+                    'email'=>$data['patient']['email'],
+                    'password'=>bcrypt($data['patient']['password']),
+                    'patient_id'=>$patient->id
+                ]);
+            }
             
             // Si les données du dossier médical sont présentes, on crée le dossier
             if (isset($data['dossierMedical'])) {
@@ -32,7 +39,7 @@ class PatientService{
                     'diagnostics' =>  $data['dossierMedical']['diagnostics'],
                     'traitements' =>  $data['dossierMedical']['traitements'],
                     'prescriptions' =>  $data['dossierMedical']['prescriptions'],
-                    'patient_id' => $patient->id, // Liaison avec le patient
+                    'patient_id' => $patient->id, 
                 ]);
             }
 

@@ -12,6 +12,7 @@ class Patient extends Model
         'nom', 'prenom', 'date_naissance', 'adresse', 
         'telephone', 'email', 'sexe', 'groupe_sanguin','matricule'
     ];
+    protected $hidden = ['password'];
 
     public function dossierMedical()
     {
@@ -30,5 +31,13 @@ class Patient extends Model
     public function rendezVous()
     {
         return $this->hasMany(RendezVous::class, 'patient_id');
+    }
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
     }
 }

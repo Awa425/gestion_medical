@@ -6,11 +6,13 @@ use App\Http\Requests\PersonnelRequest;
 use App\Http\Requests\UpdatePersonnelRequest;
 use App\Http\Resources\PersonnelResource;
 use App\Models\Certification;
+use App\Models\Disponibilite;
 use App\Models\Formation;
 use App\Models\Personnel;
 use App\Models\Qualification;
 use App\Services\PersonnelService;
 use App\Utils\FormatData;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -374,4 +376,206 @@ public function store(Request $request){
         ], 200);
       
     }
+
+    /**
+ * @OA\Post(
+ *     path="/api/disponibilites",
+ *     summary="Enregistrer les disponibilités d'un médecin",
+ *     tags={"Disponibilites"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"medecin_id", "date", "heures"},
+ *             @OA\Property(property="medecin_id", type="integer", example=1),
+ *             @OA\Property(property="date", type="string", format="date", example="2025-03-11"),
+ *             @OA\Property(property="heures", type="array",
+ *                 @OA\Items(type="string", format="time", example="09:00")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response=201, description="Disponibilités enregistrées"),
+ *     @OA\Response(response=400, description="Données invalides")
+ * )
+ */
+    public function ajoutCreneauxHoraire(Request $request)
+    {
+        $validated = $request->validate([
+            'medecin_id' => 'required|exists:personnels,id',
+            'date' => 'required|date',
+            'heures' => 'required|array', // Tableau d'heures
+            'heures.*' => 'date_format:H:i', // Vérifie que chaque heure est bien formatée
+        ]);
+        // dd('ok');
+        foreach ($validated['heures'] as $heure) {
+            Disponibilite::updateOrCreate(
+                ['medecin_id' => $validated['medecin_id'], 'date' => $validated['date'], 'heure' => $heure],
+                ['est_disponible' => true]
+            );
+        }
+
+        return response()->json(['message' => 'Créneaux horaire enregister'], 201);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/creneaux/generer",
+     *     summary="Générer automatiquement les créneaux horaires d'un médecin",
+     *     tags={"Disponibilites"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"medecin_id", "date", "heure_debut", "heure_fin", "intervalle"},
+     *             @OA\Property(property="medecin_id", type="integer", example=1),
+     *             @OA\Property(property="date", type="string", format="date", example="2025-03-11"),
+     *             @OA\Property(property="heure_debut", type="string", format="time", example="08:00"),
+     *             @OA\Property(property="heure_fin", type="string", format="time", example="18:00"),
+     *             @OA\Property(property="intervalle", type="integer", example=30)
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Créneaux générés avec succès"),
+     *     @OA\Response(response=400, description="Données invalides")
+     * )
+     */
+    public function genererDisponibilites(Request $request)
+    {
+        $validated = $request->validate([
+            'medecin_id' => 'required|exists:personnels,id',
+            'date' => 'required|date',
+            'heure_debut' => 'required|date_format:H:i',
+            'heure_fin' => 'required|date_format:H:i',
+            'intervalle' => 'required|integer|min:10'
+        ]);
+
+        $debut = Carbon::parse($validated['heure_debut']);
+        $fin = Carbon::parse($validated['heure_fin']);
+        $intervalle = $validated['intervalle'];
+        
+        $heures = [];
+        while ($debut->lessThan($fin)) {
+            $heures[] = $debut->format('H:i');
+            $debut->addMinutes($intervalle);
+        }
+
+        foreach ($heures as $heure) {
+            Disponibilite::updateOrCreate(
+                ['medecin_id' => $validated['medecin_id'], 'date' => $validated['date'], 'heure' => $heure],
+                ['est_disponible' => true]
+            );
+        }
+
+        return response()->json(['message' => 'Créneaux générés avec succès', 'heures' => $heures], 201);
+    }
+
+
+    /**
+     * @OA\Get(
+     *     path="/api/disponibilites",
+     *     summary="Heures disponible pour un medecin",
+     *     description="Liste des heure disponible pour un medecin.",
+     *     operationId="creneaux horaire",
+     *      security={{"bearerAuth":{}}},
+     *     tags={"Disponibilites"},
+ *     @OA\Parameter(
+ *         name="date",
+ *         in="query",
+ *         required=true,
+ *         @OA\Schema(type="string", format="date", example="2025-03-11")
+ *     ),
+ *     @OA\Parameter(
+ *         name="medecin_id",
+ *         in="query",
+ *         required=true,
+ *         @OA\Schema(type="integer", example=1)
+ *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Données récupérées avec succès.",
+     *         @OA\JsonContent(type="object", @OA\Property(property="data", type="string"))
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Non autorisé, token invalide ou manquant."
+     *     )
+     * )
+     */
+    public function getHorairesDisponibles(Request $request)
+    {
+        $validated = $request->validate([
+            'date' => 'required|date',
+            'medecin_id' => 'required|exists:personnels,id'
+        ]);
+    
+        $disponibilites = Disponibilite::where('medecin_id', $validated['medecin_id'])
+                            ->where('date', $validated['date'])
+                            ->where('est_disponible', true)
+                            ->pluck('heure');
+    
+        return response()->json(['horaires' => $disponibilites]);
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/api/creneaux/{id}",
+     *     summary="Modifier un créneau généré",
+     *     tags={"Disponibilites"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID du créneau à modifier",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"date", "heure", "est_disponible", "medecin_id"},
+     *             @OA\Property(property="date", type="string", format="date", example="2025-03-11"),
+     *             @OA\Property(property="heure", type="string", format="time", example="10:00"),
+     *             @OA\Property(property="est_disponible", type="boolean", example=true),
+     *             @OA\Property(property="medecin_id", type="integer", example=2)
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Créneau modifié avec succès"),
+     *     @OA\Response(response=404, description="Créneau non trouvé"),
+     *     @OA\Response(response=422, description="Un créneau existe déjà pour cette date et heure")
+     * )
+     */
+
+
+    public function modifierCreaneau(Request $request, $id)
+    {
+        // Validation des données
+        $validated = $request->validate([
+            'date' => 'date',
+            'heure' => 'date_format:H:i',
+            'est_disponible' => 'boolean',
+            'medecin_id' => 'exists:personnels,id', // S'assurer que le médecin existe
+        ]);
+
+        // Vérifier si le créneau existe
+        $creneau = Disponibilite::find($id);
+        if (!$creneau) {
+            return response()->json(['message' => 'Créneau non trouvé'], 404);
+        }
+
+        // Vérifier si un autre créneau existe déjà pour ce médecin à la même date et heure
+        $existe = Disponibilite::where('medecin_id', $validated['medecin_id'])
+            ->where('date', $validated['date'])
+            ->where('heure', $validated['heure'])
+            ->where('id', '!=', $id) // Exclure le créneau en cours de modification
+            ->exists();
+
+        if ($existe) {
+            return response()->json(['message' => 'Un créneau existe déjà pour cette date et heure'], 422);
+        }
+
+        // Mise à jour du créneau
+        $creneau->update($validated);
+
+        return response()->json([
+            'message' => 'Créneau modifié avec succès',
+            'creneau' => $creneau
+        ]);
+            }
+
 }

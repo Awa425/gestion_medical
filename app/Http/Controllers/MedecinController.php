@@ -71,4 +71,6 @@ class MedecinController extends BaseController
     }
 
     
+
+    
 }

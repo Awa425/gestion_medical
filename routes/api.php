@@ -19,27 +19,34 @@ use App\Http\Controllers\TypePersonnelController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Session;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::resource('personnels', PersonnelController::class);
 Route::apiResource('salles', SalleController::class);
 
+Route::resource('services', ServiceController::class);
+Route::get('disponibilites', [PersonnelController::class, 'getHorairesDisponibles']);
+Route::post('creneaux/generer', [PersonnelController::class, 'genererDisponibilites']);
+Route::put('creneaux/{id}', [PersonnelController::class, 'modifierCreaneau']);
+Route::get('medecins/service/{id}', [PersonnelController::class, 'medecinsByService']);
+Route::resource('rendezVous',RendezVousController::class);
 
 // Acces private
 Route::middleware(['auth:sanctum'])->group( function () {
+    Session::put('last_activity', time());
     Route::post('password/change', [AuthController::class, 'changePassword']);
     Route::resource('dossierMedical', DossierMedicalController::class);
     Route::get('users', [UserController::class, 'index']);
     Route::get('types', [TypePersonnelController::class, 'index']);
     Route::get('categories', [CategorieController::class, 'index']);
-
+    
     // Personnel
     Route::resource('roles', RoleController::class);
     Route::resource('type-personnels', TypePersonnelController::class);
     Route::get('medecin-list', [PersonnelController::class, 'medecinList']);
-    Route::get('medecins/service/{id}', [PersonnelController::class, 'medecinsByService']);
-    Route::resource('services', ServiceController::class);
+    Route::post('disponibilites', [PersonnelController::class, 'ajoutCreneauxHoraire']);
+    
 
     // Patient et dossier
     Route::resource('patients', PatientController::class);
@@ -71,7 +78,6 @@ Route::middleware(['auth:sanctum'])->group( function () {
 
     // Rendez-vous
     Route::put('annuler/rendezVous/{id}',[RendezVousController::class, 'annuler']);
-    Route::resource('rendezVous',RendezVousController::class);
     Route::get('rendezVous/patient/{patient_id}',[RendezVousController::class,'listRendezVousByPatient']);
     Route::get('rendezVous/medecin/{medecin_id}',[RendezVousController::class,'listRendezVousByMedecin']);
 

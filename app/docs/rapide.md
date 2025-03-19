@@ -1,3 +1,17 @@
+# Apres avoir cloner le projet, effectuer ces etapes suivantes:
+`Renseigner le fichier .env`
+# Lanver les Seeders : 
+` php artisan db:seed --class CategorieSeeder`
+` php artisan db:seed --class TypeSeeder`
+` php artisan db:seed --class RoleSeeder`
+` php artisan db:seed --class ServiceSeeder`
+# Generer la documentation du swagger pour tester
+` php artisan l5-swagger:generate`
+` http://localhost:8000/api/documentation#/`
+# No application encryption key has been specified (Buggg).
+` php artisan key:generate`
+
+
 # php artisan make:model product
 
 # composer create-project laravel/laravel your-api-name
@@ -12,7 +26,6 @@
 
 # Route::resource('products', ProductController::class);
 
-# fatal: unable to access 'https://github.com/Awa425/gestion_medical.git/': Could not resolve host: github.com
 
 # Pour supprimer tous les console.log : 
 ` Chercher ca dans la recherche globale et supprimer ou remplacer par vide console\.log\(.*?\);?` 
@@ -22,18 +35,13 @@
 
 ` git config --global --unset http.proxy`
 
-# Generer la documentation du swagger
-` php artisan l5-swagger:generate`
-` http://localhost:8000/api/documentation#/`
 
-# Seeder : 
-` php artisan db:seed --class CategorieSeeder`
-` php artisan db:seed --class TypeSeeder`
-` php artisan db:seed --class RoleSeeder`
-` php artisan db:seed --class ServiceSeeder`
 
-# Pour tester manuellement une commande nom_commande ='patients:update-status', les commande se trouve dans App/console/commands
+# Pour tester manuellement une commande crone : nom_commande ='patients:update-status', les commande se trouve dans App/console/commands
 ` php artisan patients:update-status`
 
 # Build : 
 ` ng build --configuration production --base-href /medical/`
+
+
+896F4B94-42B2-4312-B6D6-8A9CB611D6CA/20250225185325

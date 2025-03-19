@@ -1584,6 +1584,238 @@
                 ]
             }
         },
+        "/api/disponibilites": {
+            "get": {
+                "tags": [
+                    "Disponibilites"
+                ],
+                "summary": "Heures disponible pour un medecin",
+                "description": "Liste des heure disponible pour un medecin.",
+                "operationId": "creneaux horaire",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2025-03-11"
+                        }
+                    },
+                    {
+                        "name": "medecin_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Données récupérées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé, token invalide ou manquant."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Disponibilites"
+                ],
+                "summary": "Enregistrer les disponibilités d'un médecin",
+                "operationId": "e1386f360d6dbb853f03fbaa9efceb9b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "medecin_id",
+                                    "date",
+                                    "heures"
+                                ],
+                                "properties": {
+                                    "medecin_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-03-11"
+                                    },
+                                    "heures": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "time",
+                                            "example": "09:00"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Disponibilités enregistrées"
+                    },
+                    "400": {
+                        "description": "Données invalides"
+                    }
+                }
+            }
+        },
+        "/api/creneaux/generer": {
+            "post": {
+                "tags": [
+                    "Disponibilites"
+                ],
+                "summary": "Générer automatiquement les créneaux horaires d'un médecin",
+                "operationId": "a527ac8ca8b012650d1b3756de811b55",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "medecin_id",
+                                    "date",
+                                    "heure_debut",
+                                    "heure_fin",
+                                    "intervalle"
+                                ],
+                                "properties": {
+                                    "medecin_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-03-11"
+                                    },
+                                    "heure_debut": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "08:00"
+                                    },
+                                    "heure_fin": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "18:00"
+                                    },
+                                    "intervalle": {
+                                        "type": "integer",
+                                        "example": 30
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Créneaux générés avec succès"
+                    },
+                    "400": {
+                        "description": "Données invalides"
+                    }
+                }
+            }
+        },
+        "/api/creneaux/{id}": {
+            "put": {
+                "tags": [
+                    "Disponibilites"
+                ],
+                "summary": "Modifier un créneau généré",
+                "operationId": "4192c0f1e19d3c93ff472ab2e0af1570",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du créneau à modifier",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "date",
+                                    "heure",
+                                    "est_disponible",
+                                    "medecin_id"
+                                ],
+                                "properties": {
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-03-11"
+                                    },
+                                    "heure": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "10:00"
+                                    },
+                                    "est_disponible": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "medecin_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Créneau modifié avec succès"
+                    },
+                    "404": {
+                        "description": "Créneau non trouvé"
+                    },
+                    "422": {
+                        "description": "Un créneau existe déjà pour cette date et heure"
+                    }
+                }
+            }
+        },
         "/api/rendezVous": {
             "get": {
                 "tags": [
@@ -2871,6 +3103,35 @@
                 },
                 "type": "object"
             },
+            "Disponibilite": {
+                "title": "Disponibilite",
+                "description": "Modèle de disponibilité d'un médecin",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "medecin_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-03-11"
+                    },
+                    "heure": {
+                        "type": "string",
+                        "format": "time",
+                        "example": "09:00"
+                    },
+                    "est_disponible": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
             "DossierMedical": {
                 "description": "Dossier médical du patient",
                 "properties": {
@@ -3417,6 +3678,10 @@
         {
             "name": "personnels",
             "description": "personnels"
+        },
+        {
+            "name": "Disponibilites",
+            "description": "Disponibilites"
         },
         {
             "name": "rendez-vous",

@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class CheckSession
 {
@@ -16,8 +17,19 @@ class CheckSession
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check()) {
-            return response()->json(['message' => 'Session expirée'], 401);
+        if (Auth::check()) {
+            $lastActivity = Session::get('last_activity');
+            $sessionLifetime = config('session.lifetime') * 60; // Convert minutes to seconds
+            
+            if (time() - $lastActivity > $sessionLifetime) {
+                Auth::logout();
+                Session::flush();
+                return redirect()->route('login')->with('message', 'You have been logged out due to inactivity.');
+            }
+            
+            Session::put('last_activity', time());
         }
-        return $next($request);    }
+        
+        return $next($request); 
+    }
 }
