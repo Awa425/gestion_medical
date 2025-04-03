@@ -1748,6 +1748,52 @@
                 }
             }
         },
+        "/api/creneaux": {
+            "get": {
+                "tags": [
+                    "Disponibilites"
+                ],
+                "summary": "Heures disponible pour un medecin",
+                "description": "Liste des heure disponible pour un medecin.",
+                "operationId": "Liste des heures de rv",
+                "parameters": [
+                    {
+                        "name": "medecin_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Données récupérées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé, token invalide ou manquant."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/creneaux/{id}": {
             "put": {
                 "tags": [

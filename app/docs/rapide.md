@@ -1,16 +1,21 @@
 # Apres avoir cloner le projet, effectuer ces etapes suivantes:
 `Renseigner le fichier .env`
+# Lancer cmposer install
+` composer install`
 # Lanver les Seeders : 
 ` php artisan db:seed --class CategorieSeeder`
 ` php artisan db:seed --class TypeSeeder`
 ` php artisan db:seed --class RoleSeeder`
 ` php artisan db:seed --class ServiceSeeder`
+# No application encryption key has been specified (Buggg).
+` php artisan key:generate`
 # Generer la documentation du swagger pour tester
 ` php artisan l5-swagger:generate`
 ` http://localhost:8000/api/documentation#/`
-# No application encryption key has been specified (Buggg).
-` php artisan key:generate`
 
+
+
+# php artisan migrate
 
 # php artisan make:model product
 
@@ -18,7 +23,6 @@
 
 # php artisan make:migration create_products_table
 
-# php artisan migrate
 
 # php artisan make:controller ProductController
 

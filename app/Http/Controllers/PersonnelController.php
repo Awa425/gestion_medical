@@ -378,25 +378,25 @@ public function store(Request $request){
     }
 
     /**
- * @OA\Post(
- *     path="/api/disponibilites",
- *     summary="Enregistrer les disponibilités d'un médecin",
- *     tags={"Disponibilites"},
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\JsonContent(
- *             required={"medecin_id", "date", "heures"},
- *             @OA\Property(property="medecin_id", type="integer", example=1),
- *             @OA\Property(property="date", type="string", format="date", example="2025-03-11"),
- *             @OA\Property(property="heures", type="array",
- *                 @OA\Items(type="string", format="time", example="09:00")
- *             )
- *         )
- *     ),
- *     @OA\Response(response=201, description="Disponibilités enregistrées"),
- *     @OA\Response(response=400, description="Données invalides")
- * )
- */
+     * @OA\Post(
+     *     path="/api/disponibilites",
+     *     summary="Enregistrer les disponibilités d'un médecin",
+     *     tags={"Disponibilites"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"medecin_id", "date", "heures"},
+     *             @OA\Property(property="medecin_id", type="integer", example=1),
+     *             @OA\Property(property="date", type="string", format="date", example="2025-03-11"),
+     *             @OA\Property(property="heures", type="array",
+     *                 @OA\Items(type="string", format="time", example="09:00")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Disponibilités enregistrées"),
+     *     @OA\Response(response=400, description="Données invalides")
+     * )
+     */
     public function ajoutCreneauxHoraire(Request $request)
     {
         $validated = $request->validate([
@@ -405,15 +405,14 @@ public function store(Request $request){
             'heures' => 'required|array', // Tableau d'heures
             'heures.*' => 'date_format:H:i', // Vérifie que chaque heure est bien formatée
         ]);
-        // dd('ok');
         foreach ($validated['heures'] as $heure) {
-            Disponibilite::updateOrCreate(
+          $dispo =  Disponibilite::updateOrCreate(
                 ['medecin_id' => $validated['medecin_id'], 'date' => $validated['date'], 'heure' => $heure],
                 ['est_disponible' => true]
             );
         }
 
-        return response()->json(['message' => 'Créneaux horaire enregister'], 201);
+        return response()->json(['message' => 'Créneaux horaire enregister', $dispo], 201);
     }
 
     /**
@@ -475,18 +474,18 @@ public function store(Request $request){
      *     operationId="creneaux horaire",
      *      security={{"bearerAuth":{}}},
      *     tags={"Disponibilites"},
- *     @OA\Parameter(
- *         name="date",
- *         in="query",
- *         required=true,
- *         @OA\Schema(type="string", format="date", example="2025-03-11")
- *     ),
- *     @OA\Parameter(
- *         name="medecin_id",
- *         in="query",
- *         required=true,
- *         @OA\Schema(type="integer", example=1)
- *     ),
+    *     @OA\Parameter(
+    *         name="date",
+    *         in="query",
+    *         required=true,
+    *         @OA\Schema(type="string", format="date", example="2025-03-11")
+    *     ),
+    *     @OA\Parameter(
+    *         name="medecin_id",
+    *         in="query",
+    *         required=true,
+    *         @OA\Schema(type="integer", example=1)
+    *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Données récupérées avec succès.",
@@ -505,12 +504,52 @@ public function store(Request $request){
             'medecin_id' => 'required|exists:personnels,id'
         ]);
     
-        $disponibilites = Disponibilite::where('medecin_id', $validated['medecin_id'])
-                            ->where('date', $validated['date'])
-                            ->where('est_disponible', true)
-                            ->pluck('heure');
+        $disponibilites = Disponibilite::with('medecin') // Charge la relation medecin
+        ->where('medecin_id', $validated['medecin_id'])
+        ->where('date', $validated['date'])
+        ->where('est_disponible', true)
+        ->get(); // Récupère toutes les disponibilités
+
+    return response()->json(['Horaire' => $disponibilites]);
+    }
+
+        /**
+     * @OA\Get(
+     *     path="/api/creneaux",
+     *     summary="Heures disponible pour un medecin",
+     *     description="Liste des heure disponible pour un medecin.",
+     *     operationId="Liste des heures de rv",
+     *      security={{"bearerAuth":{}}},
+     *     tags={"Disponibilites"},
+    *     @OA\Parameter(
+    *         name="medecin_id",
+    *         in="query",
+    *         required=true,
+    *         @OA\Schema(type="integer", example=1)
+    *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Données récupérées avec succès.",
+     *         @OA\JsonContent(type="object", @OA\Property(property="data", type="string"))
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Non autorisé, token invalide ou manquant."
+     *     )
+     * )
+     */
+    public function getHorairesByMedecin(Request $request)
+    {
+        $validated = $request->validate([
+            'medecin_id' => 'required|exists:personnels,id'
+        ]);
     
-        return response()->json(['horaires' => $disponibilites]);
+        $disponibilites = Disponibilite::with('medecin')
+        ->where('medecin_id', $validated['medecin_id'])
+        ->where('est_disponible', true)
+        ->get(); 
+
+    return response()->json(['horaire' => $disponibilites]);
     }
 
     /**

@@ -27,10 +27,12 @@ Route::apiResource('salles', SalleController::class);
 
 Route::resource('services', ServiceController::class);
 Route::get('disponibilites', [PersonnelController::class, 'getHorairesDisponibles']);
+Route::get('creneaux', [PersonnelController::class, 'getHorairesByMedecin']);
 Route::post('creneaux/generer', [PersonnelController::class, 'genererDisponibilites']);
 Route::put('creneaux/{id}', [PersonnelController::class, 'modifierCreaneau']);
 Route::get('medecins/service/{id}', [PersonnelController::class, 'medecinsByService']);
 Route::resource('rendezVous',RendezVousController::class);
+Route::post('disponibilites', [PersonnelController::class, 'ajoutCreneauxHoraire']);
 
 // Acces private
 Route::middleware(['auth:sanctum'])->group( function () {
@@ -45,7 +47,6 @@ Route::middleware(['auth:sanctum'])->group( function () {
     Route::resource('roles', RoleController::class);
     Route::resource('type-personnels', TypePersonnelController::class);
     Route::get('medecin-list', [PersonnelController::class, 'medecinList']);
-    Route::post('disponibilites', [PersonnelController::class, 'ajoutCreneauxHoraire']);
     
 
     // Patient et dossier

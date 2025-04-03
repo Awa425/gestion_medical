@@ -65,5 +65,9 @@ class Personnel extends Model
     {
         return $this->hasMany(Consultation::class);
     }
+    public function horaire()
+    {
+        return $this->hasMany(Disponibilite::class);
+    }
 
 }
