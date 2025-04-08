@@ -33,6 +33,7 @@ Route::put('creneaux/{id}', [PersonnelController::class, 'modifierCreaneau']);
 Route::get('medecins/service/{id}', [PersonnelController::class, 'medecinsByService']);
 Route::resource('rendezVous',RendezVousController::class);
 Route::post('disponibilites', [PersonnelController::class, 'ajoutCreneauxHoraire']);
+Route::resource('patients', PatientController::class);
 
 // Acces private
 Route::middleware(['auth:sanctum'])->group( function () {
@@ -50,7 +51,6 @@ Route::middleware(['auth:sanctum'])->group( function () {
     
 
     // Patient et dossier
-    Route::resource('patients', PatientController::class);
     Route::put('dossier/{id}', [DossierMedicalController::class, 'updateDossier']);
     Route::get('patients-dossiers', [PatientController::class, 'getPatientWithMedical']);
     Route::put('patients/salle_attentes/{id}', [PatientController::class, 'updateWaitingRoom']);
