@@ -150,7 +150,7 @@ public function createConsultation(array $data)
             ]);
         }
 
-        $salle_attente = SalleAttente::where('patient_id', $data['patient_id'])->first();
+        $salle_attente = SalleAttente::where('patient_id', $data['patient_id'])->first(); 
         $salle_attente['etat']='consulter';
         $salle_attente->update(['etat'=>'consulter']);
         // dd($salle_attente);

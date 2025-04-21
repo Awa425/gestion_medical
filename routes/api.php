@@ -22,17 +22,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
 Route::post('login', [AuthController::class, 'login']);
-Route::resource('personnels', PersonnelController::class);
-Route::apiResource('salles', SalleController::class);
-
-Route::resource('services', ServiceController::class);
-Route::get('disponibilites', [PersonnelController::class, 'getHorairesDisponibles']);
-Route::get('creneaux', [PersonnelController::class, 'getHorairesByMedecin']);
-Route::post('creneaux/generer', [PersonnelController::class, 'genererDisponibilites']);
-Route::put('creneaux/{id}', [PersonnelController::class, 'modifierCreaneau']);
-Route::get('medecins/service/{id}', [PersonnelController::class, 'medecinsByService']);
-Route::resource('rendezVous',RendezVousController::class);
-Route::post('disponibilites', [PersonnelController::class, 'ajoutCreneauxHoraire']);
 Route::resource('patients', PatientController::class);
 
 // Acces private
@@ -48,7 +37,8 @@ Route::middleware(['auth:sanctum'])->group( function () {
     Route::resource('roles', RoleController::class);
     Route::resource('type-personnels', TypePersonnelController::class);
     Route::get('medecin-list', [PersonnelController::class, 'medecinList']);
-    
+    Route::resource('personnels', PersonnelController::class);
+    Route::get('medecins/service/{id}', [PersonnelController::class, 'medecinsByService']);
 
     // Patient et dossier
     Route::put('dossier/{id}', [DossierMedicalController::class, 'updateDossier']);
@@ -76,12 +66,23 @@ Route::middleware(['auth:sanctum'])->group( function () {
 
     // Salle
     Route::get('salle/service/{id}',[SalleController::class,'salleByService']);
+    Route::apiResource('salles', SalleController::class);
 
     // Rendez-vous
     Route::put('annuler/rendezVous/{id}',[RendezVousController::class, 'annuler']);
     Route::get('rendezVous/patient/{patient_id}',[RendezVousController::class,'listRendezVousByPatient']);
     Route::get('rendezVous/medecin/{medecin_id}',[RendezVousController::class,'listRendezVousByMedecin']);
+    Route::resource('rendezVous',RendezVousController::class);
 
+    // Service ou specialité
+    Route::resource('services', ServiceController::class);
+
+    // Disponibilité et Creneaux
+    Route::get('disponibilites', [PersonnelController::class, 'getHorairesDisponibles']);
+    Route::get('creneaux', [PersonnelController::class, 'getHorairesByMedecin']);
+    Route::post('creneaux/generer', [PersonnelController::class, 'genererDisponibilites']);
+    Route::put('creneaux/{id}', [PersonnelController::class, 'modifierCreaneau']);
+    Route::post('disponibilites', [PersonnelController::class, 'ajoutCreneauxHoraire']);
 });
 
 

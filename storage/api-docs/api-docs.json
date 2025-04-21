@@ -273,30 +273,56 @@
                     "login"
                 ],
                 "summary": "Se connecter",
-                "description": "Se connecter.",
+                "description": "Permet de se connecter avec un email ou un numéro de téléphone, et un mot de passe.",
                 "operationId": "login",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Auth"
+                                "required": [
+                                    "identifiant",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "identifiant": {
+                                        "description": "Email ou numéro de téléphone de l'utilisateur",
+                                        "type": "string",
+                                        "example": "exemple@email.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "passer"
+                                    }
+                                },
+                                "type": "object"
                             }
                         }
                     }
                 },
                 "responses": {
-                    "201": {
-                        "description": "Succès",
+                    "200": {
+                        "description": "Connexion réussie",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Auth"
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
                     },
-                    "400": {
+                    "401": {
+                        "description": "Identifiants incorrects"
+                    },
+                    "422": {
                         "description": "Erreur de validation"
                     }
                 }

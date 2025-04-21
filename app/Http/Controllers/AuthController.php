@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -14,65 +15,84 @@ class AuthController extends Controller
  *      operationId="login",
  *      tags={"login"},
  *      summary="Se connecter",
- *      description="Se connecter.", 
+ *      description="Permet de se connecter avec un email ou un numéro de téléphone, et un mot de passe.", 
  *      @OA\RequestBody(
  *          required=true,
- *          @OA\JsonContent(ref="#/components/schemas/Auth")
+ *          @OA\JsonContent(
+ *              type="object",
+ *              required={"identifiant", "password"},
+ *              @OA\Property(
+ *                  property="identifiant",
+ *                  type="string",
+ *                  example="exemple@email.com",
+ *                  description="Email ou numéro de téléphone de l'utilisateur"
+ *              ),
+ *              @OA\Property(
+ *                  property="password",
+ *                  type="string",
+ *                  example="passer"
+ *              )
+ *          )
  *      ),
-
  *      @OA\Response(
- *          response=201,
- *          description="Succès",
- *          @OA\JsonContent(ref="#/components/schemas/Auth")
+ *          response=200,
+ *          description="Connexion réussie",
+ *          @OA\JsonContent(
+ *              type="object",
+ *              @OA\Property(property="token", type="string"),
+ *              @OA\Property(property="data", type="object")
+ *          )
  *      ),
  *      @OA\Response( 
- *          response=400,
+ *          response=401,
+ *          description="Identifiants incorrects"
+ *      ),
+ *      @OA\Response( 
+ *          response=422,
  *          description="Erreur de validation"
  *      )
  * )
  */
-public function login(Request $request)
-{
-    // Validation des identifiants
-    $credentials = $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
 
-    // Tentative d'authentification
-    if (Auth::attempt($credentials)) {
-        // Récupérer l'utilisateur connecté
-        $user = Auth::user();
-        
-        // Charger les relations souhaitées (ex. rôles, personnel, etc.)
-        $user->load('roles', 'personnel.service', 'personnel.qualifications', 'personnel.formations', 'personnel.certifications');
-
-        // Vérifier si l'utilisateur doit changer son mot de passe
-        if ($user->personnel_id!=null) {
-            if ($user->must_change_password) {
-                return response()->json([
-                    'message' => 'Vous devez changer votre mot de passe pour pouvoir continuer.',
-                    'token' => $user->createToken('hospital personnel user')->plainTextToken,
-                    'must_change_password' => true,
-                    'user' => $user, // Inclure les informations de l'utilisateur
-                ], 200);
-            }
-        }
-        
-
-        // Générer le token et inclure les informations de l'utilisateur
-        $success['token'] = $user->createToken('hospital personnel user')->plainTextToken;
-        $success['data'] = $user;
-
-        return response()->json([
-            'token' => $success['token'],
-            'data' => $success['data'], // Renvoyer les informations de l'utilisateur avec ses relations
-        ], 200);
-    }
-
-    // Si l'authentification échoue
-    return response()->json(['message' => 'login ou password incorrect'], 401);
-}
+ public function login(Request $request)
+ {
+     // Validation des identifiants
+     $credentials = $request->validate([
+         'identifiant' => 'required', // Peut être email ou téléphone
+         'password' => 'required',
+     ]);
+ 
+     // Recherche de l'utilisateur par email ou téléphone
+     $user = User::where('email', $credentials['identifiant'])
+                 ->orWhere('telephone', $credentials['identifiant'])
+                 ->first();
+ 
+     // Vérifie si l'utilisateur existe et si le mot de passe est correct
+     if (!$user || !Hash::check($credentials['password'], $user->password)) {
+         return response()->json(['message' => 'Identifiants incorrects'], 401);
+     }
+ 
+     // Chargement des relations nécessaires
+     $user->load('roles', 'personnel.service', 'personnel.qualifications', 'personnel.formations', 'personnel.certifications');
+ 
+     // Vérifie si l'utilisateur est un personnel et doit changer son mot de passe
+     if ($user->personnel_id !== null && $user->must_change_password) {
+         return response()->json([
+             'message' => 'Vous devez changer votre mot de passe pour pouvoir continuer.',
+             'token' => $user->createToken('hospital personnel user')->plainTextToken,
+             'must_change_password' => true,
+             'user' => $user,
+         ], 200);
+     }
+ 
+     // Génère le token
+     $token = $user->createToken('hospital user')->plainTextToken;
+ 
+     return response()->json([
+         'token' => $token,
+         'data' => $user,
+     ], 200);
+ }
 
 
  /**

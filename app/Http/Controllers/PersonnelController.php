@@ -402,8 +402,8 @@ public function store(Request $request){
         $validated = $request->validate([
             'medecin_id' => 'required|exists:personnels,id',
             'date' => 'required|date',
-            'heures' => 'required|array', // Tableau d'heures
-            'heures.*' => 'date_format:H:i', // Vérifie que chaque heure est bien formatée
+            'heures' => 'required|array', 
+            'heures.*' => 'date_format:H:i', 
         ]);
         foreach ($validated['heures'] as $heure) {
           $dispo =  Disponibilite::updateOrCreate(
@@ -512,6 +512,7 @@ public function store(Request $request){
 
     return response()->json(['Horaire' => $disponibilites]);
     }
+    
 
         /**
      * @OA\Get(
